@@ -1,16 +1,18 @@
 package com.qzwx.myapplication
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -27,9 +29,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,17 +43,60 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen() {
-    Column(
+    val context = LocalContext.current // 获取当前的Context
+    LazyColumn(
         modifier = Modifier
-            .background(Color.Gray)
+            .background(colorResource(id = R.color.zise))
             .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+            .padding(8.dp)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        ImageCarousel()
-        Spacer(modifier = Modifier.height(16.dp))
-        CardList()
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            ImageCarousel()
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "这是一些功能的入口:",
+                style = MaterialTheme.typography.bodyMedium.copy(color = Color.LightGray),
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            CardList()
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "下面是一些可能有用的网址：",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.LightGray,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            // 添加按钮-进入所有网址页面【下】开始---------------------------
+            Button(
+                onClick = {
+                    val intent = Intent(context, AllWebActivity::class.java)
+                    context.startActivity(intent)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp)
+                    .height(48.dp) // 按钮高度
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.svg_web), // 按钮图片
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp) // 图片大小
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "点我进入",
+                        style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                    )
+                }
+            }//所有网址进入的页面按钮【上】结束----------------------
+
+        }
     }
 }
 

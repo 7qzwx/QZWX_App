@@ -1,5 +1,6 @@
 [versions]
 accompanistCoil = "0.24.13-rc"
+accompanistSystemuicontroller = "0.31.3-alpha"
 agp = "8.5.0"
 googleAccompanistPagerVersion = "0.30.0"
 googleAccompanistPagerIndicators = "0.30.0"
@@ -16,11 +17,13 @@ material = "1.10.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
 gridlayout = "1.0.0"
+navigationRuntimeKtx = "2.7.7"
 
 [libraries]
 accompanist-coil = { module = "com.google.accompanist:accompanist-coil", version.ref = "accompanistCoil" }
 accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistCoil" }
 accompanist-pager-indicators-v0300 = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "googleAccompanistPagerIndicators" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 com-google-accompanist-accompanist-pager2 = { module = "com.google.accompanist:accompanist-pager", version.ref = "googleAccompanistPagerVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -41,6 +44,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-gridlayout = { group = "androidx.gridlayout", name = "gridlayout", version.ref = "gridlayout" }
+androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

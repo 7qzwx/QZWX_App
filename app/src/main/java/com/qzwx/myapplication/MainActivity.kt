@@ -84,7 +84,7 @@ fun BottomNavigationBar(
         modifier = Modifier
             .height(56.dp) // 设置底部导航栏的高度
             .fillMaxWidth(), // 设置底部导航栏填满宽度
-        containerColor = Color.White, // 设置底部导航栏的背景颜色
+        containerColor = Color.Gray, // 设置底部导航栏的背景颜色
         tonalElevation = 5.dp // 设置导航栏的阴影高度
     ) {
         items.forEachIndexed { index, item ->
