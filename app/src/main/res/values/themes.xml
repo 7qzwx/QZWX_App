@@ -2,4 +2,11 @@
 <resources>
 
     <style name="Theme.MyApplication" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Calculator" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/pink_200</item>
+    </style>
+
+    <style name="Theme.Calculator" parent="Base.Theme.Calculator" />
 </resources>

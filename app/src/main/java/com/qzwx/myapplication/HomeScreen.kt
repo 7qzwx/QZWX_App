@@ -1,8 +1,10 @@
 package com.qzwx.myapplication
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -24,6 +26,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -152,6 +155,7 @@ fun CardList() {
 
 @Composable
 fun CardItem(imageResId: Int, description: String) {
+    val context = LocalContext.current // 获取当前的Context
     val customFontFamily = remember {
         FontFamily(
             Font(R.font.qzwx_kaiti)
@@ -162,7 +166,13 @@ fun CardItem(imageResId: Int, description: String) {
         modifier = Modifier
             .width(140.dp) // 调整卡片宽度
             .padding(8.dp) // 增加外边距
-            .shadow(8.dp, shape = RoundedCornerShape(12.dp)), // 调整阴影效果
+            .shadow(8.dp, shape = RoundedCornerShape(12.dp)) // 调整阴影效果
+            .clickable {
+                if (description == "计算器") {
+                    val intent = Intent(context, com.qzwx.myapplication.JiSuanQi::class.java)
+                    context.startActivity(intent)
+                }
+            }, // 添加点击事件处理
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
