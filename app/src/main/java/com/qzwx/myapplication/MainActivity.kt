@@ -114,18 +114,6 @@ fun BottomNavigationBar(
     }
 }
 
-// 主页内容的Composable函数
-@Composable
-fun HomeScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(text = "主页", style = MaterialTheme.typography.headlineMedium)
-        // 可以在这里添加更多主页的组件
-    }
-}
 
 // 音乐页内容的Composable函数
 @Composable

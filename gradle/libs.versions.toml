@@ -1,5 +1,8 @@
 [versions]
+accompanistCoil = "0.24.13-rc"
 agp = "8.5.0"
+googleAccompanistPagerVersion = "0.30.0"
+googleAccompanistPagerIndicators = "0.30.0"
 kotlin = "1.9.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
@@ -10,7 +13,11 @@ activityCompose = "1.8.0"
 composeBom = "2024.04.01"
 
 [libraries]
+accompanist-coil = { module = "com.google.accompanist:accompanist-coil", version.ref = "accompanistCoil" }
+accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistCoil" }
+accompanist-pager-indicators-v0300 = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "googleAccompanistPagerIndicators" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+com-google-accompanist-accompanist-pager2 = { module = "com.google.accompanist:accompanist-pager", version.ref = "googleAccompanistPagerVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
