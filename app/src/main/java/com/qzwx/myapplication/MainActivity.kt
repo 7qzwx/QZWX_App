@@ -44,7 +44,7 @@ fun MyApp() {
     // 定义底部导航栏的选项
     val items = listOf(
         BottomNavItem("主页", R.drawable.svg_all), // 自定义图标资源 ID
-        BottomNavItem("音乐", R.drawable.svg_music), // 自定义图标资源 ID
+        BottomNavItem("音乐", R.drawable.svg_music1), // 自定义图标资源 ID
         BottomNavItem("我的", R.drawable.svg_my) // 自定义图标资源 ID
     )
 
