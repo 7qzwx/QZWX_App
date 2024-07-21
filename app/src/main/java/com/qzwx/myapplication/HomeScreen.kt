@@ -62,7 +62,7 @@ fun HomeScreen() {
             CardList()
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "下面是一些可能有用的网址：",
+                text = "下面是一些可能用到的网址：",
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.LightGray,
                 modifier = Modifier.padding(bottom = 8.dp)
