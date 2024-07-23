@@ -3,7 +3,6 @@ package com.qzwx.diary
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -17,7 +16,6 @@ import com.qzwx.diary.ui.theme.QZWX_APPTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             QZWX_APPTheme {
                 MainScreen() // 加载主屏幕内容

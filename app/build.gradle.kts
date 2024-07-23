@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.android.application")
+    kotlin("android")
 }
 
 android {
@@ -11,7 +11,7 @@ android {
         applicationId = "com.qzwx.myapplication"
         minSdk = 24
         targetSdk = 34
-        versionCode = 2
+        versionCode = 7
         versionName = "5.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":Diary"))
     implementation (libs.com.google.accompanist.accompanist.pager2)
     implementation (libs.accompanist.pager.indicators)
     implementation (libs.com.google.accompanist.accompanist.pager2)

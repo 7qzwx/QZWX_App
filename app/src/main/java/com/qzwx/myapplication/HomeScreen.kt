@@ -215,9 +215,16 @@ fun CardItem(imageResId: Int, description: String) {
             .padding(8.dp) // 增加外边距
             .shadow(8.dp, shape = RoundedCornerShape(12.dp)) // 调整阴影效果
             .clickable {
-                if (description == "计算器") {
-                    val intent = Intent(context, com.qzwx.myapplication.JiSuanQi::class.java)
-                    context.startActivity(intent)
+                when (description) {
+                    "计算器" -> {
+                        val intent = Intent(context, com.qzwx.myapplication.JiSuanQi::class.java)
+                        context.startActivity(intent)
+                    }
+                    "日记本" -> {
+                        val intent = Intent(context, com.qzwx.diary.MainActivity::class.java)
+                        context.startActivity(intent)
+                    }
+                    // 你可以在这里处理其他卡片的点击事件
                 }
             }, // 添加点击事件处理
         shape = RoundedCornerShape(12.dp),
@@ -265,3 +272,4 @@ fun CardItem(imageResId: Int, description: String) {
         }
     }
 }
+

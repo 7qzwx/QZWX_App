@@ -1,18 +1,17 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.android.library") // 库模块插件
+    kotlin("android")
 }
 
 android {
-    namespace = "com.qzwx.diary"
+    namespace = "com.qzwx.diary" // 使用命名空间替代 applicationId
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.qzwx.diary"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+
+      
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -50,7 +49,7 @@ android {
 }
 
 dependencies {
-    implementation ("androidx.compose.material3:material3:1.2.1") // 适配你的Material3版本
+    implementation("androidx.compose.material3:material3:1.2.1") // 适配你的 Material3 版本
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
