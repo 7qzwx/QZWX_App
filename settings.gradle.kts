@@ -23,3 +23,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "QZWX_APP"
 include(":app")
+include(":Diary")
