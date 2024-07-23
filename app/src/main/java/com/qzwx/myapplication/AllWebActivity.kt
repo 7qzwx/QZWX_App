@@ -48,7 +48,8 @@ fun AllWebScreen() {
         LinkItem("https://sharedchat.cn/", R.drawable.svg_gpt, "国内免费使用GPT3.5-4o"),
         LinkItem("https://chatglm.cn/main/alltoolsdetail", R.drawable.svg_zhipuqingyan, "智谱清言（国内AI）"),
         LinkItem("https://www.github.com", R.drawable.svg_github, "GitHub"),
-        LinkItem("https://musicjx.com", R.drawable.svg_music, "音乐下载，在线播放①"),
+        LinkItem("https://yandex.com/",R.drawable.svg_sousuo,"俄罗斯所搜引擎"),
+        LinkItem("https://musicjx.com",R.drawable.svg_music, "音乐下载，在线播放①"),
         LinkItem("https://flac.life", R.drawable.svg_music, "音乐下载，在线播放②"),
         LinkItem("https://www.gequbao.com", R.drawable.svg_music, "音乐下载，在线播放③"),
         LinkItem("https://music.itzo.cn", R.drawable.svg_music, "音乐下载，在线播放④"),
@@ -56,7 +57,7 @@ fun AllWebScreen() {
         LinkItem("https://cupfox.app/", R.drawable.svg_chabeihu, "茶杯狐【看电影】"),
         LinkItem("https://www.p9yy.com/", R.drawable.svg_yinghshi, "P9影视【看电影✔】"),
         LinkItem("https://ddys.one/", R.drawable.svg_yinghshi, "低端影视【看电影】"),
-        LinkItem("https://dianyi.ng/", R.drawable.svg_yinghshi, "电影先生【看电影】"),
+        LinkItem("https://dianyi.ng/", R.drawable.svg_yinghshi, "电影先生【看电影√】"),
         LinkItem("https://keai.cm/", R.drawable.svg_yinghshi, "可爱TV【看电影】"),
         LinkItem("https://www.haituw.com/", R.drawable.svg_yinghshi, "海兔影视【看电影】"),
         LinkItem("https://24pindao.tv/", R.drawable.svg_yinghshi, "美剧频道"),
@@ -67,6 +68,7 @@ fun AllWebScreen() {
         LinkItem("http://buding22.com/", R.drawable.svg_dongman, "布丁动漫"),
         LinkItem("https://m.agedm.org/#/", R.drawable.svg_dongman, "AGE动漫"),
         LinkItem("https://www.fre321.com/anime/s", R.drawable.svg_dongman, "动漫搜索")
+
 
     )
 
