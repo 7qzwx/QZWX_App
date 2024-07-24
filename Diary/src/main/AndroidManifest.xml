@@ -1,16 +1,27 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"   xmlns:tools="http://schemas.android.com/tools">
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <application
         android:allowBackup="true"
-        tools:replace="android:icon"
         android:icon="@mipmap/ico_applogo"
-
         android:roundIcon="@mipmap/ico_applogo_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApplication">
+        android:theme="@style/Theme.MyApplication"
+        tools:replace="android:icon">
+        <activity
+            android:name=".XieBianQian"
+            android:exported="false"
+            android:label="@string/title_activity_xie_bian_qian"
+            android:theme="@style/Theme.MyApplication" />
+        <activity
+            android:name=".XieRiJi"
+            android:exported="false"
+            android:label="@string/title_activity_dian_di"
+            android:theme="@style/Theme.MyApplication" />
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false" />
     </application>
+
 </manifest>

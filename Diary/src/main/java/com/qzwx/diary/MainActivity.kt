@@ -1,5 +1,6 @@
 package com.qzwx.diary
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import com.qzwx.diary.ui.theme.QZWX_APPTheme
 
 class MainActivity : ComponentActivity() {
@@ -48,11 +50,21 @@ fun MainScreen() {
                 }
             )
         },
+        //中间悬浮＋号
         floatingActionButton = {
             if (isFabExpanded) {
+                // 获取当前上下文
+                val context = LocalContext.current
+
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    // 增加点滴的悬浮按钮
                     FloatingActionButton(
-                        onClick = { /* TODO: Handle add dabble */ },
+                        onClick = {
+                            // 创建一个 Intent 用于启动 XieRiJi Activity
+                            val intent = Intent(context, XieRiJi::class.java)
+                            // 启动 XieRiJi Activity
+                            context.startActivity(intent)
+                        },
                         modifier = Modifier.size(56.dp)
                     ) {
                         Icon(
@@ -62,8 +74,14 @@ fun MainScreen() {
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
+                    // 增加便签的悬浮按钮
                     FloatingActionButton(
-                        onClick = { /* TODO: Handle add note */ },
+                        onClick = {
+                            // 创建一个 Intent 用于启动 XieRiJi Activity
+                            val intent = Intent(context, XieBianQian::class.java)
+                            // 启动 XieRiJi Activity
+                            context.startActivity(intent)
+                        },
                         modifier = Modifier.size(56.dp)
                     ) {
                         Icon(
@@ -75,6 +93,7 @@ fun MainScreen() {
                 }
             }
         },
+
         floatingActionButtonPosition = FabPosition.Center,
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -129,13 +148,7 @@ fun BottomNavigationBar(selectedItem: Int, onItemSelected: (Int) -> Unit) {
     }
 }
 
-@Composable
-fun DabblesScreen() {
-    // 定义点滴页面内容
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("这是点滴页面内容")
-    }
-}
+
 
 @Composable
 fun CalendarScreen() {
@@ -145,13 +158,7 @@ fun CalendarScreen() {
     }
 }
 
-@Composable
-fun NotesScreen() {
-    // 定义便签页面内容
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("这是便签页面内容")
-    }
-}
+
 
 @Composable
 fun FavoritesScreen() {
