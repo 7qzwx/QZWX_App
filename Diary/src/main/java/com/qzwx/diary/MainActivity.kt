@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
+import com.qzwx.diary.ui.XieRiJi
 import com.qzwx.diary.ui.theme.QZWX_APPTheme
 
 class MainActivity : ComponentActivity() {
@@ -50,7 +51,7 @@ fun MainScreen() {
                 }
             )
         },
-        //中间悬浮＋号
+        // 中间悬浮＋号
         floatingActionButton = {
             if (isFabExpanded) {
                 // 获取当前上下文
@@ -77,9 +78,9 @@ fun MainScreen() {
                     // 增加便签的悬浮按钮
                     FloatingActionButton(
                         onClick = {
-                            // 创建一个 Intent 用于启动 XieRiJi Activity
+                            // 创建一个 Intent 用于启动 XieBianQian Activity
                             val intent = Intent(context, XieBianQian::class.java)
-                            // 启动 XieRiJi Activity
+                            // 启动 XieBianQian Activity
                             context.startActivity(intent)
                         },
                         modifier = Modifier.size(56.dp)
@@ -108,6 +109,7 @@ fun MainScreen() {
         }
     }
 }
+
 
 @Composable
 fun BottomNavigationBar(selectedItem: Int, onItemSelected: (Int) -> Unit) {

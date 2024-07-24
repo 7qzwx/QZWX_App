@@ -10,15 +10,15 @@
         android:theme="@style/Theme.MyApplication"
         tools:replace="android:icon">
         <activity
+            android:name=".ui.XieRiJi"
+            android:exported="false"
+            android:theme="@style/XUITheme.Phone"/>
+        <activity
             android:name=".XieBianQian"
             android:exported="false"
             android:label="@string/title_activity_xie_bian_qian"
             android:theme="@style/Theme.MyApplication" />
-        <activity
-            android:name=".XieRiJi"
-            android:exported="false"
-            android:label="@string/title_activity_dian_di"
-            android:theme="@style/Theme.MyApplication" />
+
         <activity
             android:name=".MainActivity"
             android:exported="false" />

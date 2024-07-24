@@ -7,13 +7,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.qzwx.diary.ui.XieRiJi
 
 @Composable
 fun DabblesScreen() {
@@ -26,7 +26,7 @@ fun DabblesScreen() {
         FloatingActionButton(
             onClick = {
                 // 创建一个 Intent 用于启动 XieRiJi Activity
-                val intent = Intent(context, XieRiJi::class.java)
+                val intent = Intent(context, com.qzwx.diary.ui.XieRiJi::class.java)
                 // 启动 XieRiJi Activity
                 context.startActivity(intent)
             },
