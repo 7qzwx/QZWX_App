@@ -12,13 +12,13 @@
         <activity
             android:name=".ui.XieRiJi"
             android:exported="false"
-            android:theme="@style/XUITheme.Phone"/>
+            android:label="@string/title_activity_xie_ri_ji"
+            android:theme="@style/Theme.MyApplication" />
         <activity
             android:name=".XieBianQian"
             android:exported="false"
             android:label="@string/title_activity_xie_bian_qian"
             android:theme="@style/Theme.MyApplication" />
-
         <activity
             android:name=".MainActivity"
             android:exported="false" />
