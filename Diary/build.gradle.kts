@@ -47,7 +47,8 @@ android {
 }
 
 dependencies {
-    implementation ("io.coil-kt:coil-compose:2.1.0")
+
+    implementation ("androidx.compose.material:material-icons-extended")
     // Google Material Components
     implementation("com.google.android.material:material:1.9.0")
 

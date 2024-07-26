@@ -3,8 +3,7 @@
     <style name="Theme.MyApplication" parent="android:Theme.Material.Light.NoActionBar">
     <!-- Primary brand color -->
     <item name="colorPrimary">@color/zise</item>
-        <item name="colorPrimaryDark">@color/purple_500</item>
-
+    <item name="colorPrimaryDark">@color/purple_500</item>
     <item name="colorPrimaryVariant">@color/zise</item>
     <item name="colorSecondary">@color/zise</item>
 

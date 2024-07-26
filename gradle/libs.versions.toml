@@ -22,6 +22,7 @@ phoenix = "1.2.3"
 roomCommon = "2.6.1"
 roomKtx = "2.6.1"
 waveview = "v0.9"
+uiTextDesktop = "1.6.8"
 
 [libraries]
 accompanist-coil = { module = "com.google.accompanist:accompanist-coil", version.ref = "accompanistCoil" }
@@ -53,6 +54,7 @@ androidx-room-common = { group = "androidx.room", name = "room-common", version.
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 phoenix = { module = "com.yalantis:phoenix", version.ref = "phoenix" }
 waveview = { module = "com.github.john990:WaveView", version.ref = "waveview" }
+androidx-ui-text-desktop = { group = "androidx.compose.ui", name = "ui-text-desktop", version.ref = "uiTextDesktop" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

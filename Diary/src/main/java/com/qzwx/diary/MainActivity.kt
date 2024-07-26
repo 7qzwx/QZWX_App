@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import com.qzwx.diary.ui.XieRiJi
-import com.qzwx.diary.ui.theme.QZWX_APPTheme
+import com.qzwx.diary.theme.QZWX_APPTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
