@@ -1,27 +1,29 @@
 package com.qzwx.diary.ui
 
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.view.ViewTreeObserver
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddReaction
-import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -36,6 +38,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.qzwx.diary.R
 import com.qzwx.diary.theme.QZWX_APPTheme
 import kotlinx.coroutines.delay
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -57,10 +60,12 @@ fun DiaryScreen() {
     var diaryTitle by remember { mutableStateOf("") }
     var diaryContent by remember { mutableStateOf("") }
     var keyboardHeight by remember { mutableStateOf(0) }
-    val systemUiController = rememberSystemUiController()
+    var showDialog by remember { mutableStateOf(false) }
+    var selectedUri by remember { mutableStateOf<Uri?>(null) }
 
+    val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(
-        color = Color(0xFFACB8F4) // 设置为透明，或你需要的颜色
+        color = Color(0xFF7A8FDA) // 系统状态栏颜色
     )
 
     LaunchedEffect(Unit) {
@@ -70,12 +75,17 @@ fun DiaryScreen() {
         }
     }
 
+    val selectFileLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            selectedUri = it
+            diaryContent += "\n\n[File inserted: ${it.path}]"
+        }
+    }
+
     val scrollState = rememberScrollState()
-    val keyboardController = LocalSoftwareKeyboardController.current
     val view = LocalView.current
     val density = LocalDensity.current.density
 
-    // 添加观察器以检测键盘可见性并调整填充
     DisposableEffect(view) {
         val callback = ViewTreeObserver.OnGlobalLayoutListener {
             val rect = android.graphics.Rect()
@@ -109,7 +119,6 @@ fun DiaryScreen() {
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            // 时间文本，带边框
             Box(
                 modifier = Modifier
                     .padding(bottom = 8.dp)
@@ -125,7 +134,6 @@ fun DiaryScreen() {
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-
 
             Text(
                 text = "---愿有一天，当你翻阅此篇日记之际，能够唤起那刻时光的点点滴滴---",
@@ -148,38 +156,13 @@ fun DiaryScreen() {
                 textStyle = MaterialTheme.typography.bodyLarge.copy(
                     fontFamily = FontFamily(Font(R.font.qzwx_cuti)) // 替换为你的字体资源ID
                 ),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(32.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color(0x63A5A8EF),
                     focusedLabelColor = Color.Black,
                     unfocusedLabelColor = Color.Black
                 )
             )
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Icon(
-                    imageVector = Icons.Default.AddReaction, // 使用Compose默认的心情图标
-                    contentDescription = "心情",
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .align(Alignment.CenterVertically),
-                    tint = Color(0xFF5AE4BD)
-                )
-
-                Icon(
-                    imageVector = Icons.Default.WbSunny, // 使用Compose默认的天气图标
-                    contentDescription = "天气",
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .align(Alignment.CenterVertically),
-                    tint = Color(0xFF5AE4BD)
-                )
-            }
 
             OutlinedTextField(
                 value = diaryContent,
@@ -199,7 +182,29 @@ fun DiaryScreen() {
                     unfocusedLabelColor = Color.Black
                 )
             )
+
+            // 显示插入的内容
+            selectedUri?.let { uri ->
+                // 处理图片显示
+                val inputStream: InputStream? = LocalContext.current.contentResolver.openInputStream(uri)
+                val imageBitmap = inputStream?.use { BitmapFactory.decodeStream(it) }?.asImageBitmap()
+
+                imageBitmap?.let {
+                    Image(
+                        bitmap = it,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                            .height(200.dp), // 设置图片高度
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
+                // 视频和音频插入暂未实现，可以根据需要进一步扩展
+            }
         }
+
         FloatingActionButton(
             onClick = { /* TODO: Handle Save action */ },
             modifier = Modifier
@@ -220,12 +225,28 @@ fun DiaryScreen() {
             )
         }
 
-
-
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text("选择插入内容") },
+                text = {
+                    Column {
+                        TextButton(onClick = {
+                            selectFileLauncher.launch("*/*")
+                            showDialog = false
+                        }) {
+                            Text("插入图片/视频/音频")
+                        }
+                    }
+                }, confirmButton = {
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("取消")
+                    }
+                }
+            )
+        }
     }
 }
-
-
 
 fun getCurrentTime(): String {
     val format = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())

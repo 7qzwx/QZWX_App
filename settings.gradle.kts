@@ -1,3 +1,5 @@
+import org.gradle.internal.impldep.org.gradleinternal.buildinit.plugins.internal.maven.Dependency
+
 pluginManagement {
     repositories {
         google {
@@ -25,3 +27,4 @@ dependencyResolutionManagement {
 rootProject.name = "QZWX_APP"
 include(":app")
 include(":Diary")
+

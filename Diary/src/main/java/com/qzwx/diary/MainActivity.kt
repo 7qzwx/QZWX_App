@@ -12,7 +12,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.qzwx.diary.ui.XieRiJi
 import com.qzwx.diary.theme.QZWX_APPTheme
 
@@ -33,6 +35,11 @@ fun MainScreen() {
     var selectedItem by remember { mutableStateOf(0) }
     // 控制浮动按钮的显示
     var isFabExpanded by remember { mutableStateOf(false) }
+
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(
+        color = Color(0xFFACB8F4) // 设置为透明，或你需要的颜色
+    )
 
     // 使用 Scaffold 布局，包含底部导航栏和内容区
     Scaffold(

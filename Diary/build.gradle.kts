@@ -47,7 +47,7 @@ android {
 }
 
 dependencies {
-
+    implementation ("androidx.activity:activity-ktx:1.3.1")
     implementation ("androidx.compose.material:material-icons-extended")
     // Google Material Components
     implementation("com.google.android.material:material:1.9.0")

@@ -50,6 +50,8 @@ android {
 }
 
 dependencies {
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
+    implementation ("androidx.core:core-ktx:1.7.0")// 使用最新的版本号
     implementation(project(":Diary"))
     implementation (libs.com.google.accompanist.accompanist.pager2)
     implementation (libs.accompanist.pager.indicators)
