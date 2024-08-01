@@ -1,68 +1,62 @@
 package com.qzwx.diary
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.qzwx.diary.data.DiaryEntry
 import com.qzwx.diary.data.DiaryViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun DianDiScreen(viewModel: DiaryViewModel) {
-    // 获取当前上下文
     val context = LocalContext.current
 
-    // 定义点滴页面内容
     Box(modifier = Modifier.fillMaxSize()) {
-        // 包裹 LazyColumn 的 Box，只占据页面的一部分
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 80.dp) // 预留底部空间，避免被悬浮按钮遮挡
+                .padding(bottom = 80.dp, start = 15.dp, end = 15.dp, top = 10.dp)
+                .border(BorderStroke(2.dp, color = Color(0xFFFDBBED)), shape = RoundedCornerShape(18.dp))
         ) {
             DiaryTitleList(viewModel)
         }
 
-        // 在页面右下角添加一个悬浮按钮
         FloatingActionButton(
             onClick = {
-                // 创建一个 Intent 用于启动 XieRiJi Activity
                 val intent = Intent(context, com.qzwx.diary.ui.XieRiJi::class.java)
-                // 启动 XieRiJi Activity
                 context.startActivity(intent)
             },
             modifier = Modifier
-                .align(Alignment.BottomEnd) // 设置悬浮按钮的位置为右下角
-                .padding(16.dp) // 设置悬浮按钮的内边距，以避免其贴边显示
-                .size(56.dp) // 设置悬浮按钮大小
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+                .size(56.dp)
         ) {
-            // 使用图片作为悬浮按钮的内容
             Icon(
-                painter = painterResource(id = R.drawable.svg_diandi), // 指定按钮的图片资源
-                contentDescription = "Floating Button" // 设置图片的描述文字（无障碍功能）
+                painter = painterResource(id = R.drawable.svg_diandi),
+                contentDescription = "Floating Button"
             )
         }
     }
@@ -70,56 +64,142 @@ fun DianDiScreen(viewModel: DiaryViewModel) {
 
 @Composable
 fun DiaryTitleList(viewModel: DiaryViewModel) {
-    // 使用 remember 关键字来确保正确管理状态
     val diaryEntries by viewModel.diaryEntries.observeAsState(initial = emptyList())
+    val context = LocalContext.current
 
-    // 使用 LazyColumn 来展示日记标题列表
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
     ) {
         items(diaryEntries) { diaryEntry ->
-            DiaryEntryCard(diaryEntry)
+            DiaryEntryCard(
+                diaryEntry = diaryEntry,
+                onDelete = { viewModel.deleteDiaryEntry(diaryEntry) },
+                onShare = { /* 分享逻辑 */ },
+                viewModel = viewModel
+            )
         }
     }
 }
 
 @Composable
-fun DiaryEntryCard(diaryEntry: DiaryEntry) {
-    // 获取当前上下文
+fun DiaryEntryCard(
+    diaryEntry: DiaryEntry,
+    onDelete: (DiaryEntry) -> Unit,
+    onShare: () -> Unit,
+    viewModel: DiaryViewModel
+) {
     val context = LocalContext.current
+    var showFirstDialog by remember { mutableStateOf(false) }
+    var showSecondDialog by remember { mutableStateOf(false) }
 
-    Card(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = 7.dp)
+            .border(BorderStroke(2.dp, color = Color(0xFF9898EE)), shape = RoundedCornerShape(8.dp))
             .clickable {
-                // 创建一个 Intent 用于启动查看日记内容的 Activity
                 val intent = Intent(context, com.qzwx.diary.ui.RiJiXiangQing::class.java).apply {
-                    putExtra("DIARY_ID", diaryEntry.id) // 假设你有一个日记 ID 字段
+                    putExtra("DIARY_ID", diaryEntry.id)
                 }
                 context.startActivity(intent)
-            },
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        shape = RoundedCornerShape(8.dp),
+            }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(7.dp)
         ) {
-            Text(
-                text = diaryEntry.title,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = diaryEntry.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.weight(1f)
+                )
+                // 保留编辑图标，但不实现点击事件
+                IconButton(onClick = { /* 编辑功能已被删除 */ }, modifier = Modifier.padding(0.dp)) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.svg_bianji),
+                        contentDescription = "编辑",
+                        modifier = Modifier.size(12.dp)
+                    )
+                }
+                // 删除按钮
+                IconButton(onClick = { showFirstDialog = true }, modifier = Modifier.padding(0.dp)) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.svg_shanchu),
+                        contentDescription = "删除",
+                        modifier = Modifier.size(12.dp)
+                    )
+                }
+                // 分享按钮
+                IconButton(onClick = { onShare() }, modifier = Modifier.padding(0.dp)) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.svg_fenxiang),
+                        contentDescription = "分享",
+                        modifier = Modifier.size(12.dp)
+                    )
+                }
+            }
             Text(
                 text = diaryEntry.content,
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         }
+    }
+
+    // 删除确认对话框
+    if (showFirstDialog) {
+        AlertDialog(
+            onDismissRequest = { showFirstDialog = false },
+            title = { Text("确认删除") },
+            text = { Text("您确定要删除这条日记吗？") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showFirstDialog = false
+                        showSecondDialog = true
+                    }
+                ) {
+                    Text("是")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showFirstDialog = false }) {
+                    Text("否")
+                }
+            }
+        )
+    }
+
+    // 第二次确认对话框
+    if (showSecondDialog) {
+        AlertDialog(
+            onDismissRequest = { showSecondDialog = false },
+            title = { Text("最终确认", color = Color.Red) },
+            text = { Text("七种文学警告：数据无价！你真的要删除吗？此操作不可逆！", color = Color.Red) },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.deleteDiaryEntry(diaryEntry)
+                        Toast.makeText(context, "日记已删除", Toast.LENGTH_SHORT).show()
+                        showSecondDialog = false
+                    },
+                ) {
+                    Text("是", color = Color.White)
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showSecondDialog = false }) {
+                    Text("否")
+                }
+            }
+        )
     }
 }

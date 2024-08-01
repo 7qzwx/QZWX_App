@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.qzwx.myapplication"
-        minSdk = 24
+        minSdk = 25
         targetSdk = 34
         versionCode = 7
         versionName = "5.2.0"

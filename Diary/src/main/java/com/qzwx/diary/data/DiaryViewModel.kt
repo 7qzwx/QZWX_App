@@ -23,6 +23,26 @@ class DiaryViewModel(application: Application) : AndroidViewModel(application) {
             diaryDao.insertDiary(diaryEntry)
         }
     }
+
+//    删除日记的方法
+fun deleteDiaryEntry(diaryEntry: DiaryEntry) {
+    viewModelScope.launch {
+        diaryDao.deleteDiary(diaryEntry) // 调用删除方法
+    }
+}
+
+    // 更新日记的方法
+    fun updateDiaryEntry(diaryId: Int, title: String, content: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val diaryEntry = diaryDao.getDiaryByIdNonLive(diaryId)
+            if (diaryEntry != null) {
+                diaryEntry.title = title
+                diaryEntry.content = content
+                diaryDao.updateDiary(diaryEntry)
+            }
+        }
+    }
+
     // 根据 ID 获取具体日记条目
     fun getDiaryEntryById(diaryId: Int): LiveData<DiaryEntry> {
         return diaryDao.getDiaryById(diaryId)

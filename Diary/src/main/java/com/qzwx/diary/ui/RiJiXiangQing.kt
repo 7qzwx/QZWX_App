@@ -1,7 +1,7 @@
-// 在 RiJiXiangQing.kt 文件中
 package com.qzwx.diary.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,13 +13,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -48,6 +48,9 @@ class RiJiXiangQing : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiaryDetailScreen(diaryId: Int, viewModel: DiaryViewModel) {
+    // 获取上下文
+    val context = LocalContext.current // 确保在此处获取上下文
+
     // 设置顶部系统状态栏
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = Color(0xFFACB8F4)) // 设置状态栏颜色
@@ -137,8 +140,9 @@ fun DiaryDetailScreen(diaryId: Int, viewModel: DiaryViewModel) {
                         modifier = Modifier.padding(bottom = 8.dp)
                     ) // 展示日记时间
                     Text(
+                        fontFamily = qzwx_cuti,
                         text = entry.title,
-                        style = MaterialTheme.typography.titleLarge.copy(fontFamily = selectedFont),
+                        style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.padding(bottom = 16.dp)
                     ) // 展示日记标题
                     Text(
@@ -160,8 +164,8 @@ fun DiaryDetailScreen(diaryId: Int, viewModel: DiaryViewModel) {
                             Text("选择字体")
                         }
                         Spacer(modifier = Modifier.height(8.dp))
-                        // 修改按钮
-                        Button(onClick = { /* TODO: 实现修改功能 */ }) {
+                        // 保留编辑图标但不实现点击事件
+                        Button(onClick = { /* 编辑功能已被删除 */ }) {
                             Text("修改")
                         }
                         Spacer(modifier = Modifier.height(8.dp))
