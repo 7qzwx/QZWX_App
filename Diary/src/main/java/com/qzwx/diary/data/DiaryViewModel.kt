@@ -1,9 +1,10 @@
 package com.qzwx.diary.data
 
-
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.qzwx.diary.data.AppDatabase
 import com.qzwx.diary.data.DiaryEntry
@@ -20,6 +21,20 @@ class DiaryViewModel(application: Application) : AndroidViewModel(application) {
     fun insertDiaryEntry(diaryEntry: DiaryEntry) {
         viewModelScope.launch(Dispatchers.IO) {
             diaryDao.insertDiary(diaryEntry)
+        }
+    }
+    // 根据 ID 获取具体日记条目
+    fun getDiaryEntryById(diaryId: Int): LiveData<DiaryEntry> {
+        return diaryDao.getDiaryById(diaryId)
+    }
+
+    // ViewModelFactory(在MainActivity中使用，别删！)
+    class DiaryViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(DiaryViewModel::class.java)) {
+                return DiaryViewModel(application) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 }

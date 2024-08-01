@@ -1,5 +1,6 @@
 package com.qzwx.diary
 
+import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,13 +15,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelProvider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.qzwx.diary.data.DiaryViewModel
 import com.qzwx.diary.ui.XieRiJi
 import com.qzwx.diary.theme.QZWX_APPTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val viewModel: DiaryViewModel = ViewModelProvider(this, DiaryViewModel.DiaryViewModelFactory(application)).get(DiaryViewModel::class.java)  //调用数据库在页面上可视初始化
+
         setContent {
             QZWX_APPTheme {
                 MainScreen() // 加载主屏幕内容
@@ -32,7 +38,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
     // 记录当前选中的导航项，初始值为 0（点滴）
-    var selectedItem by remember { mutableStateOf(0) }
+    var selectedItem by remember { mutableIntStateOf(0) }
     // 控制浮动按钮的显示
     var isFabExpanded by remember { mutableStateOf(false) }
 
@@ -108,7 +114,7 @@ fun MainScreen() {
         // 根据当前选中的导航项显示不同的内容
         Box(modifier = Modifier.padding(innerPadding)) {
             when (selectedItem) {
-                0 -> DabblesScreen() // 显示点滴内容
+                0 -> DianDiScreen(DiaryViewModel(Application())) // 显示点滴内容
                 1 -> CalendarScreen() // 显示日历内容
                 3 -> NotesScreen() // 显示便签内容
                 4 -> FavoritesScreen() // 显示收藏内容

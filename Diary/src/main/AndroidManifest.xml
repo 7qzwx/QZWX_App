@@ -2,9 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
 
@@ -15,6 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:replace="android:icon">
+        <activity
+            android:name=".ui.RiJiXiangQing"
+            android:exported="false"
+            android:label="@string/title_activity_ri_ji_xiang_qing"
+            android:theme="@style/Theme.MyApplication" />
         <activity
             android:name=".ui.XieRiJi"
             android:exported="false"
