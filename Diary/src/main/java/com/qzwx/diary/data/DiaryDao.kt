@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 
@@ -13,6 +14,10 @@ interface DiaryDao {
     // 插入一条新的日记记录
     @Insert
     suspend fun insertDiary(diaryEntry: DiaryEntry)
+
+    //批量插入日记数据
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertAll(entries: List<DiaryEntry>)
 
     // 删除一条日记记录
     @Delete

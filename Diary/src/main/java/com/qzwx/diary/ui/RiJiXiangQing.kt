@@ -134,6 +134,9 @@ fun DiaryDetailScreen(diaryId: Int, viewModel: DiaryViewModel) {
                         .align(Alignment.TopCenter), // 将内容对齐到顶部中心
                     horizontalAlignment = Alignment.CenterHorizontally // 确保内容水平居中
                 ) {
+                    Text(text = entry.riqi,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(bottom = 8.dp))//日期
                     Text(
                         text = entry.timestamp,
                         style = MaterialTheme.typography.titleMedium,
@@ -143,8 +146,20 @@ fun DiaryDetailScreen(diaryId: Int, viewModel: DiaryViewModel) {
                         fontFamily = qzwx_cuti,
                         text = entry.title,
                         style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(bottom = 16.dp)
+
                     ) // 展示日记标题
+                    // 字数统计
+                    Row(
+                        modifier = Modifier.fillMaxWidth(), // 让Row占满整个宽度
+                        verticalAlignment = Alignment.CenterVertically // 垂直居中
+                    ) {
+                        Text(
+                            text = "字数: ${entry.zishutongji}", // 添加“字数:”前缀
+                            fontFamily = qzwx_cuti, // 确保使用正确的字体
+                            style = MaterialTheme.typography.bodyLarge, // 使用 bodyLarge 风格
+                            modifier = Modifier.weight(1f) // 让字数统计占据剩余空间
+                        )
+                    }
                     Text(
                         text = entry.content,
                         style = MaterialTheme.typography.bodyLarge.copy(fontFamily = selectedFont),
