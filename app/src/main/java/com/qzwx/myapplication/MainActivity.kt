@@ -19,10 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.view.WindowInsetsControllerCompat
 import com.google.accompanist.pager.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.qzwx.myapplication.ui.theme.MyApplicationTheme
+import com.qzwx.diary.theme.QZWXTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -31,7 +30,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() // 启用边到边的布局
         setContent {
-            MyApplicationTheme {
+            QZWXTheme {
                 MyApp() // 设置应用的主要内容
             }
         }
@@ -181,7 +180,7 @@ class MainActivity : ComponentActivity() {
     @Preview(showBackground = true)
     @Composable
     fun MyAppPreview() {
-        MyApplicationTheme {
+        QZWXTheme {
             MyApp() // 预览MyApp的内容
         }
     }

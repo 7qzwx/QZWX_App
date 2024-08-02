@@ -31,7 +31,12 @@ interface DiaryDao {
     @Query("SELECT * FROM diary_entries")
     fun getAllDiaries(): LiveData<List<DiaryEntry>> // 返回 LiveData 类型
 
-//    通过id查询找到数据
+    // 查询所有日记记录，返回非 LiveData 类型
+    @Query("SELECT * FROM diary_entries")
+    suspend fun getAllDiariesNonLive(): List<DiaryEntry>
+
+
+    //    通过id查询找到数据
     @Query("SELECT * FROM diary_entries WHERE id = :diaryId")
     fun getDiaryById(diaryId: Int): LiveData<DiaryEntry>
 

@@ -1,6 +1,5 @@
 package com.qzwx.diary
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -10,13 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -28,7 +21,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.qzwx.diary.data.DiaryEntry
 import com.qzwx.diary.data.DiaryViewModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun DianDiScreen(viewModel: DiaryViewModel) {
@@ -41,7 +33,7 @@ fun DianDiScreen(viewModel: DiaryViewModel) {
                 .padding(bottom = 80.dp, start = 15.dp, end = 15.dp, top = 10.dp)
                 .border(BorderStroke(2.dp, color = Color(0xFFFDBBED)), shape = RoundedCornerShape(18.dp))
         ) {
-            DiaryTitleList(viewModel)
+            DiaryTitleList(viewModel) // 显示日记标题列表
         }
 
         FloatingActionButton(

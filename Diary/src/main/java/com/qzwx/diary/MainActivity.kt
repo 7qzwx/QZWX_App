@@ -1,5 +1,6 @@
 package com.qzwx.diary
 
+import RiLiScreen
 import android.app.Application
 import android.content.Intent
 import android.os.Bundle
@@ -18,8 +19,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.qzwx.diary.data.DiaryViewModel
+import com.qzwx.diary.theme.QZWXTheme
 import com.qzwx.diary.ui.XieRiJi
-import com.qzwx.diary.theme.QZWX_APPTheme
+import com.qzwx.diary.ui.XieBianQian
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +30,7 @@ class MainActivity : ComponentActivity() {
         val viewModel: DiaryViewModel = ViewModelProvider(this, DiaryViewModel.DiaryViewModelFactory(application)).get(DiaryViewModel::class.java)  //调用数据库在页面上可视初始化
 
         setContent {
-            QZWX_APPTheme {
+            QZWXTheme {
                 MainScreen() // 加载主屏幕内容
             }
         }
@@ -115,7 +117,7 @@ fun MainScreen() {
         Box(modifier = Modifier.padding(innerPadding)) {
             when (selectedItem) {
                 0 -> DianDiScreen(DiaryViewModel(Application())) // 显示点滴内容
-                1 -> CalendarScreen() // 显示日历内容
+                1 -> RiLiScreen() // 显示日历内容
                 3 -> NotesScreen() // 显示便签内容
                 4 -> FavoritesScreen() // 显示收藏内容
             }
@@ -166,16 +168,6 @@ fun BottomNavigationBar(selectedItem: Int, onItemSelected: (Int) -> Unit) {
 
 
 @Composable
-fun CalendarScreen() {
-    // 定义日历页面内容
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("这是日历页面内容")
-    }
-}
-
-
-
-@Composable
 fun FavoritesScreen() {
     // 定义收藏页面内容
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -187,7 +179,7 @@ fun FavoritesScreen() {
 @Composable
 fun MainScreenPreview() {
     // 预览主屏幕，包括底部导航栏和内容
-    QZWX_APPTheme {
+    QZWXTheme {
         MainScreen()
     }
 }

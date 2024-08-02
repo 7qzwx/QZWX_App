@@ -49,8 +49,12 @@ android {
 
 dependencies {
 
+    implementation ("com.google.android.material:material:1.9.0") // 或者更新的版本
+
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.ui.text.google.fonts)
     val room_version = "2.6.1"
         implementation("androidx.room:room-runtime:$room_version")
         annotationProcessor("androidx.room:room-compiler:$room_version")
@@ -78,7 +82,7 @@ dependencies {
 
 
 
-    implementation ("androidx.activity:activity-ktx:1.3.1")
+    implementation ("androidx.activity:activity-ktx:1.8.2")
     implementation ("androidx.compose.material:material-icons-extended")
     // Google Material Components
     implementation("com.google.android.material:material:1.9.0")
@@ -91,11 +95,11 @@ dependencies {
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.29.0-alpha")
 
     // Jetpack Compose libraries
-    implementation("androidx.compose.ui:ui:1.4.0")
+    implementation("androidx.compose.ui:ui:1.6.6")
     implementation("androidx.compose.material3:material3:1.2.1")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.4.0")
-    implementation("androidx.compose.foundation:foundation:1.4.0")
-    implementation("androidx.activity:activity-compose:1.8.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.6.6")
+    implementation("androidx.compose.foundation:foundation:1.6.6")
+    implementation("androidx.activity:activity-compose:1.8.2")
 
     // AndroidX libraries
     implementation(libs.androidx.core.ktx)

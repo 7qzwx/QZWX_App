@@ -7,6 +7,7 @@ import android.view.ViewTreeObserver
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -18,6 +19,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -33,12 +36,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.LiveData
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.qzwx.diary.MainActivity
 import com.qzwx.diary.R
 import com.qzwx.diary.data.DiaryEntry
 import com.qzwx.diary.data.DiaryViewModel
-import com.qzwx.diary.theme.QZWX_APPTheme
+import com.qzwx.diary.theme.QZWXTheme
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
@@ -49,7 +53,7 @@ class XieRiJi : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            QZWX_APPTheme {
+            QZWXTheme {
                 DiaryScreen(diaryViewModel)
             }
         }
@@ -69,6 +73,9 @@ fun DiaryScreen(diaryViewModel: DiaryViewModel) {
 
     val context = LocalContext.current
     var showDialog by remember { mutableStateOf(false) }
+    // 焦点状态和动画大小
+    var focusState by remember { mutableStateOf(false) }
+    val size by animateFloatAsState(targetValue = if (focusState) 1f else 0.5f)
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(
@@ -161,6 +168,7 @@ fun DiaryScreen(diaryViewModel: DiaryViewModel) {
                 textAlign = TextAlign.Center
             )
             //【2结束】【3开始】日记标题组件
+            // 日记标题组件
             OutlinedTextField(
                 value = diaryTitle,
                 onValueChange = { diaryTitle = it },
@@ -171,13 +179,16 @@ fun DiaryScreen(diaryViewModel: DiaryViewModel) {
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 7.dp, start = 37.dp, end = 37.dp),
+                    .padding(top = 7.dp, start = 7.dp, end = 7.dp)
+                    .scale(size) // 根据焦点状态调整缩放
+                    .onFocusChanged { focusState = it.isFocused }, // 监听焦点状态
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     containerColor = Color(0x63A5A8EF),
                     focusedLabelColor = Color.Black,
                     unfocusedLabelColor = Color.Black
                 )
-            )// 显示字数
+            )
+            //显示字数
             Text(
                 text = "字数: $wordCount",
                 style = MaterialTheme.typography.bodyMedium.copy(
@@ -276,7 +287,7 @@ fun getCurrentDate(): String {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    QZWX_APPTheme {
+    QZWXTheme {
         DiaryScreen(DiaryViewModel(Application()))
     }
 }

@@ -1,7 +1,6 @@
 package com.qzwx.myapplication
 
 import android.content.Intent
-import android.graphics.Paint.Align
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -24,7 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.qzwx.myapplication.ui.theme.MyApplicationTheme
+import com.qzwx.diary.theme.QZWXTheme
 
 // 数据类用于存储链接、图标和描述信息
 data class LinkItem(val url: String, val iconResId: Int, val description: String)
@@ -33,7 +32,7 @@ class AllWebActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApplicationTheme {
+            QZWXTheme {
                 AllWebScreen()
             }
         }
@@ -148,7 +147,7 @@ fun LinkItemView(link: String, iconResId: Int, description: String) {
 @Preview(showBackground = true)
 @Composable
 fun AllWebScreenPreview() {
-    MyApplicationTheme {
+    QZWXTheme {
         AllWebScreen()
     }
 }

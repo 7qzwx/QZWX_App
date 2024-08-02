@@ -15,23 +15,23 @@
         android:icon="@mipmap/ico_applogo"
         android:roundIcon="@mipmap/ico_applogo_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApplication"
+        android:theme="@style/QZWX_APP"
         tools:replace="android:icon">
         <activity
             android:name=".ui.RiJiXiangQing"
             android:exported="false"
             android:label="@string/title_activity_ri_ji_xiang_qing"
-            android:theme="@style/Theme.MyApplication" />
+            android:theme="@style/QZWX_APP" />
         <activity
             android:name=".ui.XieRiJi"
             android:exported="false"
             android:label="@string/title_activity_xie_ri_ji"
-            android:theme="@style/Theme.MyApplication" />
+            android:theme="@style/QZWX_APP" />
         <activity
-            android:name=".XieBianQian"
+            android:name=".ui.XieBianQian"
             android:exported="false"
             android:label="@string/title_activity_xie_bian_qian"
-            android:theme="@style/Theme.MyApplication" />
+            android:theme="@style/QZWX_APP" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
