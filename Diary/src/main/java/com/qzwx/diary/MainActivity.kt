@@ -119,7 +119,7 @@ fun MainScreen() {
                 0 -> DianDiScreen(DiaryViewModel(Application())) // 显示点滴内容
                 1 -> RiLiScreen() // 显示日历内容
                 3 -> NotesScreen() // 显示便签内容
-                4 -> FavoritesScreen() // 显示收藏内容
+                4 -> ShouChangScreen() // 显示收藏内容
             }
         }
     }
@@ -167,13 +167,7 @@ fun BottomNavigationBar(selectedItem: Int, onItemSelected: (Int) -> Unit) {
 
 
 
-@Composable
-fun FavoritesScreen() {
-    // 定义收藏页面内容
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("这是收藏页面内容")
-    }
-}
+
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
