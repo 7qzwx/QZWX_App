@@ -1,11 +1,12 @@
 package com.qzwx.diary
 
-import RiLiScreen
 import android.app.Application
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,6 +25,7 @@ import com.qzwx.diary.ui.XieRiJi
 import com.qzwx.diary.ui.XieBianQian
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,6 +39,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen() {
     // 记录当前选中的导航项，初始值为 0（点滴）
@@ -169,6 +172,7 @@ fun BottomNavigationBar(selectedItem: Int, onItemSelected: (Int) -> Unit) {
 
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 fun MainScreenPreview() {

@@ -22,7 +22,7 @@ class DatabaseCallback(
     private fun populateDatabase(diaryDao: DiaryDao) {
         CoroutineScope(Dispatchers.IO).launch {
             val defaultEntries = listOf(
-                DiaryEntry(timestamp = "10:00:00", riqi = "2024-08-01 星期四", title = "日记寄语", zishutongji = 648,content = "如果世界上有那么一种神奇的工具可以改变你的整个生活，" +"那就是你的日记。" +
+                DiaryEntry(timestamp = "10:00:00", riqi = "2024-08-01 星期四", title = "日记寄语", zishutongji = 648,content = "本篇字数统计不标准！！！   如果世界上有那么一种神奇的工具可以改变你的整个生活，" +"那就是你的日记。" +
                         "写日记是有方法的，用好这些方法，日记可以更好地服务于你，激发你无限的可能。当然，方法无限，最重要的还是坚持，从现在开始，每天不需要花很长时间，养成这个好习惯吧~\n"+"大多数人不记日记的另一个原因是他们不知道如何记日记。虽然日记怎么写都没错，但是确实有一些方法可以让你的这个习惯发挥出最大的作用。\n" +
                         "\n" +
                         "所以，如果你不清楚如何开始写日记、如何写日记，那我相信这篇文章能告诉你答案。\n" +
@@ -151,9 +151,7 @@ class DatabaseCallback(
                         "当你开始你自己的日记练习时，无比不要教条，积极改变方法，让它成为适合你的方法。尽管方法没有对错之分，但你依然应该尽量让它简单明了，因为只有这样，你才能真正养成写日记的习惯。\n" +
                         "\n" +
                         "即使你每天只有两分钟的空闲时间，你也可以开始写日记。关键是你要在你的生活范围内做你力所能及的事。"),
-                DiaryEntry(timestamp = "11:00:00", riqi = "2024-08-02 星期五", title = "Markdown简单语法",zishutongji = 648, content = "9 代码\n" +
-                        "行内代码用 `代码`包起来\n" +
-                        "多行代码用 ```代码 ```包起来" ))
+                DiaryEntry(timestamp = "11:00:00", riqi = "2024-08-02 星期五", title = "如何让富婆爱上我",zishutongji = 13, content = "我要知道我还会告诉你？？？" ))
             diaryDao.insertAll(defaultEntries)
         }
     }

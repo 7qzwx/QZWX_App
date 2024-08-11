@@ -3,25 +3,34 @@ package com.qzwx.diary
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.qzwx.diary.data.DiaryEntry
 import com.qzwx.diary.data.DiaryViewModel
+import kotlin.random.Random
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DianDiScreen(viewModel: DiaryViewModel) {
     val context = LocalContext.current
@@ -54,12 +63,14 @@ fun DianDiScreen(viewModel: DiaryViewModel) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DiaryTitleList(viewModel: DiaryViewModel) {
     val diaryEntries by viewModel.diaryEntries.observeAsState(initial = emptyList())
     val context = LocalContext.current
 
-    LazyColumn(
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Adaptive(150.dp),
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
@@ -86,6 +97,10 @@ fun DiaryEntryCard(
     var showFirstDialog by remember { mutableStateOf(false) }
     var showSecondDialog by remember { mutableStateOf(false) }
 
+    // 使用指定颜色集中的随机颜色，确保每次重组时都能生成新的颜色
+    val colors = listOf(Color(0xFFF0A0A0), Color(0xFFA0F0A0), Color(0xFFA0A0F0), Color(0xFFF0F0A0))
+    val backgroundColor = remember(diaryEntry.id) { colors.random() }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -102,47 +117,59 @@ fun DiaryEntryCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(7.dp)
+                .background(backgroundColor)
+                .height(150.dp) // 固定卡片高度为150
         ) {
+            // 标题部分
+            Text(
+                text = diaryEntry.title,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Italic
+                ),
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            // 添加分割线
+            Divider(
+                color = Color.Gray,
+                thickness = 1.dp,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
+
+            // 正文内容部分
+            Text(
+                text = diaryEntry.content,
+                style = MaterialTheme.typography.bodySmall, // 使用较小的字体
+                maxLines = 6, // 限制显示行数
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(4.dp).weight(1f) // 使用weight占满剩余空间
+            )
+
+            // 按钮部分
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.End) ,// 使按钮靠右对齐
+                horizontalArrangement = Arrangement.End
             ) {
-                Text(
-                    text = diaryEntry.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(1f)
-                )
-                // 保留编辑图标，但不实现点击事件
-                IconButton(onClick = { /* 编辑功能已被删除 */ }, modifier = Modifier.padding(0.dp)) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.svg_bianji),
-                        contentDescription = "编辑",
-                        modifier = Modifier.size(12.dp)
-                    )
-                }
                 // 删除按钮
-                IconButton(onClick = { showFirstDialog = true }, modifier = Modifier.padding(0.dp)) {
+                IconButton(onClick = { showFirstDialog = true }) {
                     Icon(
                         painter = painterResource(id = R.drawable.svg_shanchu),
                         contentDescription = "删除",
-                        modifier = Modifier.size(12.dp)
+                        modifier = Modifier.size(16.dp)
                     )
                 }
                 // 分享按钮
-                IconButton(onClick = { onShare() }, modifier = Modifier.padding(0.dp)) {
+                IconButton(onClick = { onShare() }) {
                     Icon(
                         painter = painterResource(id = R.drawable.svg_fenxiang),
                         contentDescription = "分享",
-                        modifier = Modifier.size(12.dp)
+                        modifier = Modifier.size(16.dp)
                     )
                 }
             }
-            Text(
-                text = diaryEntry.content,
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
         }
     }
 
