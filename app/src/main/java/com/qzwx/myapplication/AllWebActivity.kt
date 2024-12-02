@@ -1,56 +1,24 @@
 package com.qzwx.myapplication
 
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import com.qzwx.diary.theme.QZWXTheme
+import android.content.*
+import android.net.*
+import android.os.*
+import androidx.activity.*
+import androidx.activity.compose.*
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.*
+import androidx.compose.foundation.shape.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
+import androidx.compose.ui.draw.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.platform.*
+import androidx.compose.ui.res.*
+import androidx.compose.ui.text.style.*
+import androidx.compose.ui.unit.*
+import com.qzwx.diary.theme.*
 
 // 数据类用于存储链接、图标和描述信息
 data class LinkItem(val url: String, val iconResId: Int, val description: String)
@@ -76,11 +44,10 @@ fun AllWebScreen() {
         LinkItem("https://chatglm.cn/main/alltoolsdetail", R.drawable.svg_zhipuqingyan, "智谱清言"),
         LinkItem("https://www.github.com", R.drawable.svg_github, "GitHub"),
         LinkItem("https://yandex.com/", R.drawable.svg_sousuo, "俄罗斯引擎"),
-        LinkItem("https://musicjx.com", R.drawable.svg_music, "音乐下载①"),
-        LinkItem("https://flac.life", R.drawable.svg_music, "音乐下载②"),
-        LinkItem("https://www.gequbao.com", R.drawable.svg_music, "音乐下载③"),
-        LinkItem("https://music.itzo.cn", R.drawable.svg_music, "音乐下载④"),
-        LinkItem("https://music.alang.run", R.drawable.svg_music, "音乐房间"),
+        LinkItem("https://musicjx.com", R.drawable.svg_music, "音乐解析器"),
+        LinkItem("https://flac.life", R.drawable.svg_music, "无损生活"),
+        LinkItem("https://www.gequbao.com", R.drawable.svg_music, "歌曲宝"),
+        LinkItem("https://music.alang.run", R.drawable.svg_music, "听歌房"),
         LinkItem("https://cupfox.app/", R.drawable.svg_chabeihu, "茶杯狐"),
         LinkItem("https://www.p9yy.com/", R.drawable.svg_yinghshi, "P9影视"),
         LinkItem("https://ddys.one/", R.drawable.svg_yinghshi, "低端影视"),
@@ -100,7 +67,6 @@ fun AllWebScreen() {
             R.drawable.svg_web, "在线制作图标"
         )
     )
-
     var showDialog by remember { mutableStateOf(false) } // 控制对话框的显示
     var websiteName by remember { mutableStateOf("") } // 网站名称输入
     var websiteUrl by remember { mutableStateOf("") } // 网站网址输入
@@ -142,7 +108,6 @@ fun AllWebScreen() {
                 }
             }
         }
-
         // 悬浮添加按钮
         FloatingActionButton(
             onClick = { showDialog = true },
@@ -158,7 +123,6 @@ fun AllWebScreen() {
                 tint = Color.White
             )
         }
-
         // 对话框
         if (showDialog) {
             AlertDialog(
@@ -235,7 +199,6 @@ fun AllWebScreen() {
                             ),
                             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Left) // 居中对齐
                         )
-
                         // 显示错误信息
                         if (errorMessage.isNotEmpty()) {
                             Text(
