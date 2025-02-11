@@ -2,6 +2,8 @@ plugins {
     id("com.android.library") // 库模块插件
     kotlin("android")
     id("com.google.devtools.ksp")//添加此代码
+    alias(libs.plugins.compose.compiler)
+
 }
 
 android {

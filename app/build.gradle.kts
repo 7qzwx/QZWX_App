@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     id("com.google.devtools.ksp")//添加此代码
+    alias(libs.plugins.compose.compiler)
 }
 
 android {

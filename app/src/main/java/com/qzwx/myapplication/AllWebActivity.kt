@@ -67,11 +67,6 @@ fun AllWebScreen() {
             R.drawable.svg_web, "在线制作图标"
         )
     )
-    var showDialog by remember { mutableStateOf(false) } // 控制对话框的显示
-    var websiteName by remember { mutableStateOf("") } // 网站名称输入
-    var websiteUrl by remember { mutableStateOf("") } // 网站网址输入
-    var selectedIconIndex by remember { mutableStateOf(-1) } // -1 表示没有选中任何图标
-    var errorMessage by remember { mutableStateOf("") } // 错误信息
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -108,129 +103,7 @@ fun AllWebScreen() {
                 }
             }
         }
-        // 悬浮添加按钮
-        FloatingActionButton(
-            onClick = { showDialog = true },
-            modifier = Modifier
-                .align(Alignment.BottomEnd) // 显式使用 Modifier
-                .padding(16.dp)
-                .size(56.dp),
-            shape = RoundedCornerShape(28.dp) // 圆形按钮
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_add),
-                contentDescription = "添加网站",
-                tint = Color.White
-            )
-        }
-        // 对话框
-        if (showDialog) {
-            AlertDialog(
-                onDismissRequest = { showDialog = false },
-                title = { Text("添加网站") },
-                text = {
-                    Column {
-                        // 四个图标按钮
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            val iconResIds = listOf(
-                                R.drawable.svg_music1,
-                                R.drawable.svg_movie,
-                                R.drawable.svg_dongman,
-                                R.drawable.svg_web
-                            )
 
-                            iconResIds.forEachIndexed { index, iconResId ->
-                                IconButton(
-                                    onClick = {
-                                        selectedIconIndex = index // 记录选中的图标索引
-                                    },
-                                    modifier = Modifier.background(Color.Transparent) // 设置背景为透明
-                                ) {
-                                    Icon(
-                                        painter = painterResource(id = iconResId),
-                                        contentDescription = null,
-                                        modifier = Modifier.size(25.dp),
-                                        tint = if (selectedIconIndex == index) Color(0xFFFF8F00) else Color.Black // 根据是否选中改变图标颜色
-                                    )
-                                }
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-                        TextField(
-                            value = websiteName,
-                            onValueChange = { websiteName = it },
-                            label = { Text("网站名称") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .border(
-                                    BorderStroke(1.dp, Color.Transparent),
-                                    shape = RoundedCornerShape(0.dp)
-                                ), // 添加透明边框，避免背景颜色影响
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = Color.Transparent, // 设置背景色为透明
-                                focusedIndicatorColor = Color(0xFFEF6C00),
-                                focusedLabelColor = Color(0xFF49ACB8), // 设置聚焦时标签颜色
-                                unfocusedIndicatorColor = Color.Transparent,
-                            ),
-                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center) // 居中对齐
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        TextField(
-                            value = websiteUrl,
-                            onValueChange = { websiteUrl = it },
-                            label = { Text("网址") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .border(
-                                    BorderStroke(1.dp, Color.Transparent),
-                                    shape = RoundedCornerShape(0.dp)
-                                ), // 添加透明边框，避免背景颜色影响
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = Color.Transparent, // 设置背景色为透明
-                                focusedLabelColor = Color(0xFF49ACB8), // 设置聚焦时标签颜色
-                                focusedIndicatorColor = Color(0xFF6200EE),
-                                unfocusedIndicatorColor = Color.Transparent,
-                            ),
-                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Left) // 居中对齐
-                        )
-                        // 显示错误信息
-                        if (errorMessage.isNotEmpty()) {
-                            Text(
-                                text = errorMessage,
-                                color = Color.Red, // 错误信息颜色
-                                modifier = Modifier.padding(top = 8.dp)
-                            )
-                        }
-                    }
-                },
-                confirmButton = {
-                    Button(onClick = {
-                        if (websiteName.isBlank() || websiteUrl.isBlank() || selectedIconIndex == -1) {
-                            errorMessage = "请填写完整信息！(图标，名称，网址)"
-                        } else {
-                            // 在这里添加你的逻辑
-                            // 例如：将新网站添加到 linkItems 列表
-//                            val newItem = LinkItem(websiteUrl, iconResIds[selectedIconIndex], websiteName)
-                            // 在这里可以执行添加逻辑，比如更新状态或将新网站保存到列表中
-                            showDialog = false
-                        }
-                    }) {
-                        Text("添加")
-                    }
-                },
-                dismissButton = {
-                    Button(onClick = { showDialog = false }) {
-                        Text("取消")
-                    }
-                }
-            )
-        }
     }
 }
 

@@ -4,7 +4,7 @@ accompanistSystemuicontroller = "0.31.3-alpha"
 agp = "8.5.1"
 googleAccompanistPagerVersion = "0.30.0"
 googleAccompanistPagerIndicators = "0.30.0"
-kotlin = "1.9.0"
+kotlin = "2.0.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -67,4 +67,4 @@ androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
