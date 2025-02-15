@@ -44,6 +44,9 @@ fun AllWebScreen() {
         LinkItem("https://chatglm.cn/main/alltoolsdetail", R.drawable.svg_zhipuqingyan, "智谱清言"),
         LinkItem("https://www.github.com", R.drawable.svg_github, "GitHub"),
         LinkItem("https://yandex.com/", R.drawable.svg_sousuo, "俄罗斯引擎"),
+        LinkItem("https://www.mq59.com/", R.drawable.svg_rijiben, "搜书网站"),
+        LinkItem("https://heck.ai/", R.drawable.svg_gpt, "免费gpt"),
+        LinkItem("https://bz.zzzmh.cn/index", com.qzwx.diary.R.drawable.xieriji_bg, "壁纸网站"),
         LinkItem("https://musicjx.com", R.drawable.svg_music, "音乐解析器"),
         LinkItem("https://flac.life", R.drawable.svg_music, "无损生活"),
         LinkItem("https://www.gequbao.com", R.drawable.svg_music, "歌曲宝"),
@@ -65,26 +68,26 @@ fun AllWebScreen() {
         LinkItem(
             "https://www.logosc.cn/favicon-generator?s=%E9%A1%B5%E9%9D%A2",
             R.drawable.svg_web, "在线制作图标"
-        )
-    )
+                )
+                          )
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
-        ) {
+              ) {
             // 标题和网格内容
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
-            ) {
+               ) {
                 Text(
                     text = "下面是一些可能有用的网站：",
                     style = MaterialTheme.typography.titleLarge,
                     color = Color(0xFFFCAEAE), // 更深的颜色提高可读性
                     modifier = Modifier.padding(bottom = 16.dp)
-                )
+                    )
             }
 
             LazyVerticalGrid(
@@ -92,18 +95,17 @@ fun AllWebScreen() {
                 contentPadding = PaddingValues(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
+                            ) {
                 items(linkItems.size) { index ->
                     val item = linkItems[index]
                     LinkItemView(
                         link = item.url,
                         iconResId = item.iconResId,
                         description = item.description
-                    )
+                                )
                 }
             }
         }
-
     }
 }
 
@@ -121,16 +123,16 @@ fun LinkItemView(link: String, iconResId: Int, description: String) {
             .border(BorderStroke(1.dp, Color.Gray), shape = RoundedCornerShape(8.dp)),
         shape = RoundedCornerShape(8.dp),
         color = Color.White
-    ) {
+           ) {
         Column(
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+              ) {
             Image(
                 painter = painterResource(id = iconResId),
                 contentDescription = description,
                 modifier = Modifier.size(40.dp)
-            )
+                 )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = description,
@@ -138,7 +140,7 @@ fun LinkItemView(link: String, iconResId: Int, description: String) {
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Ellipsis, // 省略文本
                 maxLines = 1 // 最大行数
-            )
+                )
         }
     }
 }
