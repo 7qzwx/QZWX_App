@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
-import com.qzwx.diary.theme.*
+import com.qzwx.diary.ui.ui.theme.QZWXTheme
 
 // 数据类用于存储链接、图标和描述信息
 data class LinkItem(val url: String, val iconResId: Int, val description: String)

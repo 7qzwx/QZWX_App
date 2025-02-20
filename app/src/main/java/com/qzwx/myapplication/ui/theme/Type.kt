@@ -11,14 +11,12 @@ val provider = GoogleFont.Provider(
     providerPackage = "com.google.android.gms",
     certificates = R.array.com_google_android_gms_fonts_certs
 )
-
 val bodyFontFamily = FontFamily(
     Font(
         googleFont = GoogleFont("Amiko"),
         fontProvider = provider,
     )
 )
-
 val displayFontFamily = FontFamily(
     Font(
         googleFont = GoogleFont("Amaranth"),
@@ -28,7 +26,6 @@ val displayFontFamily = FontFamily(
 
 // Default Material 3 typography values
 val baseline = Typography()
-
 val AppTypography = Typography(
     displayLarge = baseline.displayLarge.copy(fontFamily = displayFontFamily),
     displayMedium = baseline.displayMedium.copy(fontFamily = displayFontFamily),

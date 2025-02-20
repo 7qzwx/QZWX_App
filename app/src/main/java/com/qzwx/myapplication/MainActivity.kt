@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.qzwx.diary.theme.QZWXTheme
+import com.qzwx.diary.ui.ui.theme.QZWXTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {

@@ -8,17 +8,9 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.runtime.Immutable
-import com.qzwx.diary.theme.ColorFamily
-import com.qzwx.diary.theme.ExtendedColorScheme
-
-
-@Immutable
-data class ExtendedColorScheme(
-    val customColor1: ColorFamily,
-)
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -57,7 +49,6 @@ private val lightScheme = lightColorScheme(
     surfaceContainerHigh = surfaceContainerHighLight,
     surfaceContainerHighest = surfaceContainerHighestLight,
 )
-
 private val darkScheme = darkColorScheme(
     primary = primaryDark,
     onPrimary = onPrimaryDark,
@@ -95,7 +86,6 @@ private val darkScheme = darkColorScheme(
     surfaceContainerHigh = surfaceContainerHighDark,
     surfaceContainerHighest = surfaceContainerHighestDark,
 )
-
 private val mediumContrastLightColorScheme = lightColorScheme(
     primary = primaryLightMediumContrast,
     onPrimary = onPrimaryLightMediumContrast,
@@ -133,7 +123,6 @@ private val mediumContrastLightColorScheme = lightColorScheme(
     surfaceContainerHigh = surfaceContainerHighLightMediumContrast,
     surfaceContainerHighest = surfaceContainerHighestLightMediumContrast,
 )
-
 private val highContrastLightColorScheme = lightColorScheme(
     primary = primaryLightHighContrast,
     onPrimary = onPrimaryLightHighContrast,
@@ -171,7 +160,6 @@ private val highContrastLightColorScheme = lightColorScheme(
     surfaceContainerHigh = surfaceContainerHighLightHighContrast,
     surfaceContainerHighest = surfaceContainerHighestLightHighContrast,
 )
-
 private val mediumContrastDarkColorScheme = darkColorScheme(
     primary = primaryDarkMediumContrast,
     onPrimary = onPrimaryDarkMediumContrast,
@@ -209,7 +197,6 @@ private val mediumContrastDarkColorScheme = darkColorScheme(
     surfaceContainerHigh = surfaceContainerHighDarkMediumContrast,
     surfaceContainerHighest = surfaceContainerHighestDarkMediumContrast,
 )
-
 private val highContrastDarkColorScheme = darkColorScheme(
     primary = primaryDarkHighContrast,
     onPrimary = onPrimaryDarkHighContrast,
@@ -248,80 +235,24 @@ private val highContrastDarkColorScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDarkHighContrast,
 )
 
-val extendedLight = ExtendedColorScheme(
-    customColor1 = ColorFamily(
-        customColor1Light,
-        onCustomColor1Light,
-        customColor1ContainerLight,
-        onCustomColor1ContainerLight,
-    ),
-)
-
-val extendedDark = ExtendedColorScheme(
-    customColor1 = ColorFamily(
-        customColor1Dark,
-        onCustomColor1Dark,
-        customColor1ContainerDark,
-        onCustomColor1ContainerDark,
-    ),
-)
-
-val extendedLightMediumContrast = ExtendedColorScheme(
-    customColor1 = ColorFamily(
-        customColor1LightMediumContrast,
-        onCustomColor1LightMediumContrast,
-        customColor1ContainerLightMediumContrast,
-        onCustomColor1ContainerLightMediumContrast,
-    ),
-)
-
-val extendedLightHighContrast = ExtendedColorScheme(
-    customColor1 = ColorFamily(
-        customColor1LightHighContrast,
-        onCustomColor1LightHighContrast,
-        customColor1ContainerLightHighContrast,
-        onCustomColor1ContainerLightHighContrast,
-    ),
-)
-
-val extendedDarkMediumContrast = ExtendedColorScheme(
-    customColor1 = ColorFamily(
-        customColor1DarkMediumContrast,
-        onCustomColor1DarkMediumContrast,
-        customColor1ContainerDarkMediumContrast,
-        onCustomColor1ContainerDarkMediumContrast,
-    ),
-)
-
-val extendedDarkHighContrast = ExtendedColorScheme(
-    customColor1 = ColorFamily(
-        customColor1DarkHighContrast,
-        onCustomColor1DarkHighContrast,
-        customColor1ContainerDarkHighContrast,
-        onCustomColor1ContainerDarkHighContrast,
-    ),
-)
-
 @Immutable
 data class ColorFamily(
-    val color: Color,
-    val onColor: Color,
-    val colorContainer: Color,
-    val onColorContainer: Color
+    val color : Color,
+    val onColor : Color,
+    val colorContainer : Color,
+    val onColorContainer : Color
 )
 
 val unspecified_scheme = ColorFamily(
     Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
 )
 
-// 使用 MaterialTheme 应用颜色方案
-
 @Composable
 fun QZWXTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme : Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable() () -> Unit
+    dynamicColor : Boolean = true,
+    content : @Composable() () -> Unit
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -329,8 +260,8 @@ fun QZWXTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> darkScheme
-        else -> lightScheme
+        darkTheme                                                      -> darkScheme
+        else                                                           -> lightScheme
     }
 
     MaterialTheme(

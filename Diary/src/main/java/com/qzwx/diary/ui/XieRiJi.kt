@@ -43,7 +43,7 @@ import com.qzwx.diary.MainActivity
 import com.qzwx.diary.R
 import com.qzwx.diary.data.DiaryEntry
 import com.qzwx.diary.data.DiaryViewModel
-import com.qzwx.diary.theme.QZWXTheme
+import com.qzwx.diary.ui.ui.theme.QZWXTheme
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*

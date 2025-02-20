@@ -20,9 +20,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModelProvider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.qzwx.diary.data.DiaryViewModel
-import com.qzwx.diary.theme.QZWXTheme
 import com.qzwx.diary.ui.XieRiJi
 import com.qzwx.diary.ui.XieBianQian
+import com.qzwx.diary.ui.ui.theme.QZWXTheme
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
