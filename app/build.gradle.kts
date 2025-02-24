@@ -1,18 +1,18 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("com.google.devtools.ksp")//添加此代码
+    id("com.google.devtools.ksp") version "2.0.0-1.0.24"
     alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "com.qzwx.myapplication"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.qzwx.myapplication"
-        minSdk = 25
-        targetSdk = 34
+        minSdk = 26
+        targetSdk = 35
         versionCode = 7
         versionName = "5.2.0"
 
@@ -32,11 +32,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
@@ -55,36 +55,29 @@ dependencies {
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
-
     // To use Kotlin Symbol Processing (KSP)
     ksp("androidx.room:room-compiler:$room_version")
-
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
-
     // optional - RxJava2 support for Room
     implementation("androidx.room:room-rxjava2:$room_version")
-
     // optional - RxJava3 support for Room
     implementation("androidx.room:room-rxjava3:$room_version")
-
     // optional - Guava support for Room, including Optional and ListenableFuture
     implementation("androidx.room:room-guava:$room_version")
-
     // optional - Test helpers
     testImplementation("androidx.room:room-testing:$room_version")
-
     // optional - Paging 3 Integration
     implementation("androidx.room:room-paging:$room_version")
 
 
-    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
-    implementation ("androidx.core:core-ktx:1.7.0")// 使用最新的版本号
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
+    implementation("androidx.core:core-ktx:1.7.0")// 使用最新的版本号
     implementation(project(":Diary"))
-    implementation (libs.com.google.accompanist.accompanist.pager2)
-    implementation (libs.accompanist.pager.indicators)
-    implementation (libs.com.google.accompanist.accompanist.pager2)
-    implementation (libs.accompanist.pager.indicators.v0300)
+    implementation(libs.com.google.accompanist.accompanist.pager2)
+    implementation(libs.accompanist.pager.indicators)
+    implementation(libs.com.google.accompanist.accompanist.pager2)
+    implementation(libs.accompanist.pager.indicators.v0300)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

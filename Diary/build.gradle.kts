@@ -1,18 +1,19 @@
+import org.gradle.api.JavaVersion.VERSION_11
+
 plugins {
     id("com.android.library") // 库模块插件
     kotlin("android")
-    id("com.google.devtools.ksp")//添加此代码
     alias(libs.plugins.compose.compiler)
-
+    id("com.google.devtools.ksp") version "2.0.0-1.0.24"
 }
 
 android {
     namespace = "com.qzwx.diary" // 使用命名空间替代 applicationId
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
-        targetSdk = 34
+        minSdk = 26
+        targetSdk = 35
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -30,11 +31,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = VERSION_11
+        targetCompatibility = VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
