@@ -32,6 +32,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core"))
+
     implementation("com.google.accompanist:accompanist-webview:0.35.0-alpha")
     implementation("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc") //日期选择器
     implementation("com.google.android.material:material:1.9.0") // 或者更新的版本

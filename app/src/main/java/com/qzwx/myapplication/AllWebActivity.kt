@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
-import com.qzwx.diary.ui.ui.theme.QZWXTheme
+import com.qzwx.core.theme.QZWX_AppTheme
 
 // 数据类用于存储链接、图标和描述信息
 data class LinkItem(val url : String, val iconResId : Int, val description : String)
@@ -27,7 +27,7 @@ class AllWebActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            QZWXTheme {
+            QZWX_AppTheme {
                 AllWebScreen()
             }
         }

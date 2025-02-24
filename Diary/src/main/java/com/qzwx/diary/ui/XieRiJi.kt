@@ -1,30 +1,22 @@
 package com.qzwx.diary.ui
 
-import android.app.Application
-import android.content.Intent
 import android.os.Bundle
 import android.view.ViewTreeObserver
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -32,29 +24,26 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.qzwx.diary.MainActivity
+import com.qzwx.core.theme.QZWX_AppTheme
 import com.qzwx.diary.R
 import com.qzwx.diary.data.DiaryEntry
 import com.qzwx.diary.data.DiaryViewModel
-import com.qzwx.diary.ui.ui.theme.QZWXTheme
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
 
 class XieRiJi : ComponentActivity() {
-    private val diaryViewModel: DiaryViewModel by viewModels()
+    private val diaryViewModel : DiaryViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            QZWXTheme {
+            QZWX_AppTheme {
                 DiaryScreen(diaryViewModel)
             }
         }
@@ -62,7 +51,7 @@ class XieRiJi : ComponentActivity() {
 }
 
 @Composable
-fun rememberImeState(): State<Boolean> {
+fun rememberImeState() : State<Boolean> {
     val imeState = remember { mutableStateOf(false) }
     val view = LocalView.current
 
@@ -83,11 +72,10 @@ fun rememberImeState(): State<Boolean> {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiaryScreen(diaryViewModel: DiaryViewModel) {
+fun DiaryScreen(diaryViewModel : DiaryViewModel) {
     val context = LocalContext.current
     val imeState = rememberImeState()
     val scrollState = rememberScrollState()
-
     var currentTime by remember { mutableStateOf(getCurrentTime()) }
     var currentDate by remember { mutableStateOf(getCurrentDate()) }
     var diaryTitle by remember { mutableStateOf("") }
@@ -95,7 +83,6 @@ fun DiaryScreen(diaryViewModel: DiaryViewModel) {
     var showDialog by remember { mutableStateOf(false) }
     var focusState by remember { mutableStateOf(false) }
     val size by animateFloatAsState(targetValue = if (focusState) 1f else 0.5f)
-
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = Color(0xFF7A8FDA))
 
@@ -105,7 +92,6 @@ fun DiaryScreen(diaryViewModel: DiaryViewModel) {
             delay(1000)
         }
     }
-
     val backgroundImage = painterResource(id = R.drawable.xieriji_bg)
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -146,7 +132,6 @@ fun DiaryScreen(diaryViewModel: DiaryViewModel) {
 //                    modifier = Modifier.fillMaxWidth()
 //                )
 //            }
-
             // 作者寄语
             Text(
                 text = "---愿有一天，当你翻阅此篇日记之际，能够唤起那刻时光的点点滴滴---",
@@ -160,7 +145,6 @@ fun DiaryScreen(diaryViewModel: DiaryViewModel) {
                     .padding(32.dp, 8.dp),
                 textAlign = TextAlign.Center
             )
-
 //            // 日记标题输入框
 //            OutlinedTextField(
 //                value = diaryTitle,
@@ -179,7 +163,6 @@ fun DiaryScreen(diaryViewModel: DiaryViewModel) {
 //                    unfocusedLabelColor = Color.Black
 //                )
 //            )
-
             // 日记内容输入框
             OutlinedTextField(
                 value = diaryContent,
@@ -198,7 +181,6 @@ fun DiaryScreen(diaryViewModel: DiaryViewModel) {
                 )
             )
         }
-
         // 保存按钮
         FloatingActionButton(
             onClick = {
@@ -224,7 +206,6 @@ fun DiaryScreen(diaryViewModel: DiaryViewModel) {
                 modifier = Modifier.padding(8.dp)
             )
         }
-
 //        // 显示对话框
 //        if (showDialog) {
 //            Dialog(onDismissRequest = { showDialog = false }) {
@@ -252,22 +233,14 @@ fun DiaryScreen(diaryViewModel: DiaryViewModel) {
 }
 
 // 获取当前时间
-fun getCurrentTime(): String {
+fun getCurrentTime() : String {
     val format = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
     return format.format(Date())
 }
 
 // 获取当前日期
-fun getCurrentDate(): String {
+fun getCurrentDate() : String {
     val dateFormat = SimpleDateFormat("yyyy-MM-dd  EEEE", Locale.getDefault())
     return dateFormat.format(Date())
 }
 
-// 预览
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    QZWXTheme {
-        DiaryScreen(DiaryViewModel(Application()))
-    }
-}

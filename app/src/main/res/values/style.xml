@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
+    <!-- 全透明 沉浸式主题样式 -->
+    <style name="QZWX_TransTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- 设置状态栏为绿色——已注释-->
+        <!-- <item name="android:statusBarColor" tools:targetApi="l">#4CAF50</item> -->
+
+        <!-- 设置状态栏半透明——解除注释 -->
+        <item name="android:windowTranslucentStatus">false</item>
+
+        <!-- 设置底部导航栏半透明，默认false黑色，设置true半透明 -->
+        <item name="android:windowTranslucentNavigation">true</item>
+
+    </style>
+
+
     <style name="Key">
         <item name="android:gravity">center</item>
         <item name="android:layout_width">70dp</item>

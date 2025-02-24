@@ -31,3 +31,4 @@ rootProject.name = "七种文学·APP"
 include(":app")
 include(":Diary")
 include(":feature_qiandaosystem")
+include(":core")

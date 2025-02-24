@@ -1,40 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET" />
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="ExtraText">
+    />
 
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32"
-        tools:ignore="ScopedStorage" />
 
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ico_applogo"
-        android:roundIcon="@mipmap/ico_applogo_round"
-        android:supportsRtl="true"
-        android:theme="@style/QZWX_APP"
-        tools:replace="android:icon">
+    <application>
         <activity
             android:name=".ui.RiJiXiangQing"
             android:exported="false"
             android:label="@string/title_activity_ri_ji_xiang_qing"
-            android:theme="@style/QZWX_APP" />
+            android:theme="@style/Theme.QZWX_APP"/>
         <activity
             android:name=".ui.XieRiJi"
             android:exported="false"
             android:label="@string/title_activity_xie_ri_ji"
-            android:theme="@style/QZWX_APP" />
+            android:theme="@style/Theme.QZWX_APP"/>
         <activity
             android:name=".ui.XieBianQian"
+            android:theme="@style/Theme.QZWX_APP"
             android:exported="false"
-            android:label="@string/title_activity_xie_bian_qian"
-            android:theme="@style/QZWX_APP" />
+            android:label="@string/title_activity_xie_bian_qian" />
         <activity
             android:name=".MainActivity"
+            android:theme="@style/Theme.QZWX_APP"
             android:exported="false" />
     </application>
 

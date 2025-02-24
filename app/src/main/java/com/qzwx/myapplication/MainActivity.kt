@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.qzwx.diary.ui.ui.theme.QZWXTheme
+import com.qzwx.core.theme.QZWX_AppTheme
 import com.qzwx.myapplication.navigation.NavGraph
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() // 启用边到边的布局
         setContent {
-            QZWXTheme {
+            QZWX_AppTheme {
                 MyApp()
             }
         }
