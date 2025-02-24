@@ -23,10 +23,11 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven("https://jitpack.io")
+        maven { url = uri("https://repo1.maven.org/maven2/") }
     }
 }
 
-rootProject.name = "QZWX_APP"
+rootProject.name = "七种文学·APP"
 include(":app")
 include(":Diary")
-
+include(":feature_qiandaosystem")

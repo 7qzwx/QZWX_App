@@ -21,10 +21,10 @@ import androidx.compose.ui.unit.*
 import com.qzwx.diary.ui.ui.theme.QZWXTheme
 
 // 数据类用于存储链接、图标和描述信息
-data class LinkItem(val url: String, val iconResId: Int, val description: String)
+data class LinkItem(val url : String, val iconResId : Int, val description : String)
 
 class AllWebActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             QZWXTheme {
@@ -68,26 +68,26 @@ fun AllWebScreen() {
         LinkItem(
             "https://www.logosc.cn/favicon-generator?s=%E9%A1%B5%E9%9D%A2",
             R.drawable.svg_web, "在线制作图标"
-                )
-                          )
+        )
+    )
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
-              ) {
+        ) {
             // 标题和网格内容
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
-               ) {
+            ) {
                 Text(
                     text = "下面是一些可能有用的网站：",
                     style = MaterialTheme.typography.titleLarge,
                     color = Color(0xFFFCAEAE), // 更深的颜色提高可读性
                     modifier = Modifier.padding(bottom = 16.dp)
-                    )
+                )
             }
 
             LazyVerticalGrid(
@@ -95,14 +95,14 @@ fun AllWebScreen() {
                 contentPadding = PaddingValues(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
+            ) {
                 items(linkItems.size) { index ->
                     val item = linkItems[index]
                     LinkItemView(
                         link = item.url,
                         iconResId = item.iconResId,
                         description = item.description
-                                )
+                    )
                 }
             }
         }
@@ -110,7 +110,7 @@ fun AllWebScreen() {
 }
 
 @Composable
-fun LinkItemView(link: String, iconResId: Int, description: String) {
+fun LinkItemView(link : String, iconResId : Int, description : String) {
     val context = LocalContext.current
     Surface(
         modifier = Modifier
@@ -123,16 +123,16 @@ fun LinkItemView(link: String, iconResId: Int, description: String) {
             .border(BorderStroke(1.dp, Color.Gray), shape = RoundedCornerShape(8.dp)),
         shape = RoundedCornerShape(8.dp),
         color = Color.White
-           ) {
+    ) {
         Column(
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-              ) {
+        ) {
             Image(
                 painter = painterResource(id = iconResId),
                 contentDescription = description,
                 modifier = Modifier.size(40.dp)
-                 )
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = description,
@@ -140,7 +140,7 @@ fun LinkItemView(link: String, iconResId: Int, description: String) {
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Ellipsis, // 省略文本
                 maxLines = 1 // 最大行数
-                )
+            )
         }
     }
 }

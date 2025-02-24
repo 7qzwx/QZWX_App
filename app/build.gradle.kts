@@ -10,7 +10,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.qzwx.myapplication"
+        applicationId = "com.qzwx.app"
         minSdk = 26
         targetSdk = 35
         versionCode = 7
@@ -52,6 +52,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.navigation:navigation-compose:2.7.7")
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
@@ -77,7 +78,6 @@ dependencies {
     implementation(libs.com.google.accompanist.accompanist.pager2)
     implementation(libs.accompanist.pager.indicators)
     implementation(libs.com.google.accompanist.accompanist.pager2)
-    implementation(libs.accompanist.pager.indicators.v0300)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

@@ -1,16 +1,13 @@
-package com.qzwx.myapplication
+package com.qzwx.myapplication.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -33,12 +30,16 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.*
+import com.qzwx.diary.MainActivity
+import com.qzwx.myapplication.AllWebActivity
+import com.qzwx.myapplication.JiSuanQi
+import com.qzwx.myapplication.R
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -168,7 +169,7 @@ fun ImageCarousel() {
 
         coroutineScope.launch {
             while (true) {
-                kotlinx.coroutines.delay(3000)
+                delay(3000)
                 val nextPage = (pagerState.currentPage + 1) % images.size
                 pagerState.animateScrollToPage(nextPage)
             }
@@ -217,11 +218,11 @@ fun CardItem(imageResId: Int, description: String) {
             .clickable {
                 when (description) {
                     "计算器" -> {
-                        val intent = Intent(context, com.qzwx.myapplication.JiSuanQi::class.java)
+                        val intent = Intent(context, JiSuanQi::class.java)
                         context.startActivity(intent)
                     }
                     "日记本" -> {
-                        val intent = Intent(context, com.qzwx.diary.MainActivity::class.java)
+                        val intent = Intent(context, MainActivity::class.java)
                         context.startActivity(intent)
                     }
                     // 你可以在这里处理其他卡片的点击事件
