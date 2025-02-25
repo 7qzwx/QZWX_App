@@ -2,16 +2,11 @@ package com.qzwx.myapplication
 
 import BottomNavItem
 import CustomBottomNavigationBar
-import android.Manifest
 import android.annotation.SuppressLint
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -21,58 +16,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.qzwx.core.theme.QZWX_AppTheme
-import com.qzwx.feature_qiandaosystem.broadcast.setReminder
 import com.qzwx.myapplication.navigation.NavGraph
+import com.qzwx.myapplication.notification.NotificationChannels
+import com.qzwx.myapplication.notification.NotificationHelper
 
-// CoreActivity.kt（主应用模块）
 class MainActivity : ComponentActivity() {
-    private val requestNotificationPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            // 权限已授予，设置提醒
-            setReminder(this, enabled = true)
-        } else {
-            // 权限被拒绝，无法设置提醒
-        }
-    }
-
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
+        // 创建通知渠道
+        NotificationChannels.createNotificationChannels(this)
+        // 设置定时提醒
+        NotificationHelper.setDailyReminder(this, enabled = true)
         setContent {
             QZWX_AppTheme {
                 Surface(modifier = Modifier.systemBarsPadding()) {
                     MyApp()
                 }
-            }
-        }
-        // 检查并请求通知权限（适用于 Android 13 及以上版本）
-        checkAndRequestNotificationPermission()
-    }
-
-    private fun createNotificationChannel() {
-        val channelId = "reminder_channel"
-        val channelName = "打卡提醒"
-        val channelDescription = "提醒用户打卡的通道"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val notificationManager =
-            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(
-            NotificationChannel(channelId, channelName, importance).apply {
-                description = channelDescription
-            }
-        )
-    }
-
-    private fun checkAndRequestNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                // 请求通知权限
-                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            } else {
-                // 权限已开启，设置提醒
-                setReminder(this, enabled = true)
             }
         }
     }
