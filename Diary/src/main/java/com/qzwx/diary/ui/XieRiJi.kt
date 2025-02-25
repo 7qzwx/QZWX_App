@@ -31,8 +31,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.qzwx.core.theme.QZWX_AppTheme
 import com.qzwx.diary.R
-import com.qzwx.diary.data.DiaryEntry
-import com.qzwx.diary.data.DiaryViewModel
+import com.qzwx.diary.room.DiaryEntry
+import com.qzwx.diary.room.DiaryViewModel
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*

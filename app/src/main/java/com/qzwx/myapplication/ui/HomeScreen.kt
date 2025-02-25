@@ -35,7 +35,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.pager.*
-import com.qzwx.diary.MainActivity
 import com.qzwx.myapplication.AllWebActivity
 import com.qzwx.myapplication.JiSuanQi
 import com.qzwx.myapplication.R
@@ -96,7 +95,6 @@ fun HomeScreen() {
                     )
                 }
             }//所有网址进入的页面按钮【上】结束----------------------
-
         }
     }
 }
@@ -113,7 +111,6 @@ fun ImageCarousel() {
     )
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
-
     val customFontFamily = remember {
         FontFamily(
             Font(R.font.qzwx_shouxie)
@@ -183,6 +180,7 @@ fun CardList() {
         Pair(R.drawable.svg_jisuanqi, "计算器"),
         Pair(R.drawable.svg_rijiben, "日记本"),
         Pair(R.drawable.svg_jizhangben, "记账本"),
+        Pair(com.qzwx.core.R.drawable.qzxt_qdxt, "签到系统"),
         Pair(R.drawable.svg_aixin, "❥(^_-)")
     )
 
@@ -202,7 +200,7 @@ fun CardList() {
 }
 
 @Composable
-fun CardItem(imageResId: Int, description: String) {
+fun CardItem(imageResId : Int, description : String) {
     val context = LocalContext.current // 获取当前的Context
     val customFontFamily = remember {
         FontFamily(
@@ -217,12 +215,18 @@ fun CardItem(imageResId: Int, description: String) {
             .shadow(8.dp, shape = RoundedCornerShape(12.dp)) // 调整阴影效果
             .clickable {
                 when (description) {
-                    "计算器" -> {
+                    "计算器"   -> {
                         val intent = Intent(context, JiSuanQi::class.java)
                         context.startActivity(intent)
                     }
-                    "日记本" -> {
-                        val intent = Intent(context, MainActivity::class.java)
+
+                    "日记本"   -> {
+
+                    }
+
+                    "签到系统" -> {
+                        val intent =
+                            Intent(context, com.qzwx.feature_qiandaosystem.QDXTActivity::class.java)
                         context.startActivity(intent)
                     }
                     // 你可以在这里处理其他卡片的点击事件

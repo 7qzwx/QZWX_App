@@ -2,11 +2,9 @@ package com.qzwx.diary
 
 import android.app.Application
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,21 +13,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.qzwx.core.theme.QZWX_AppTheme
-import com.qzwx.diary.data.DiaryViewModel
+import com.qzwx.diary.room.DiaryViewModel
 import com.qzwx.diary.ui.XieBianQian
 import com.qzwx.diary.ui.XieRiJi
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
-        val viewModel : DiaryViewModel =
-            ViewModelProvider(this, DiaryViewModel.DiaryViewModelFactory(application)).get(
-                DiaryViewModel::class.java)  //调用数据库在页面上可视初始化
+//        val viewModel : DiaryViewModel =
+//            ViewModelProvider(this, DiaryViewModel.DiaryViewModelFactory(application)).get(
+//                DiaryViewModel::class.java)  //调用数据库在页面上可视初始化
 
         setContent {
             QZWX_AppTheme {
@@ -115,7 +112,7 @@ fun MainScreen() {
         // 根据当前选中的导航项显示不同的内容
         Box(modifier = Modifier.padding(innerPadding)) {
             when (selectedItem) {
-                0 -> DianDiScreen(DiaryViewModel(Application())) // 显示点滴内容
+//                0 -> DianDiScreen(DiaryViewModel()) // 显示点滴内容
                 1 -> RiLiScreen() // 显示日历内容
                 3 -> NotesScreen() // 显示便签内容
                 4 -> ShouChangScreen() // 显示收藏内容

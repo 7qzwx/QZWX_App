@@ -19,7 +19,6 @@ import androidx.compose.ui.res.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
 import com.qzwx.core.theme.QZWX_AppTheme
-
 // 数据类用于存储链接、图标和描述信息
 data class LinkItem(val url : String, val iconResId : Int, val description : String)
 
@@ -40,13 +39,11 @@ fun AllWebScreen() {
     // 定义一些示例链接项
     val linkItems = listOf(
         LinkItem("https://7qzwx.github.io/WEB_YJY-1.4/", R.drawable.svg_gerenwangye, "七种文学"),
-        LinkItem("https://sharedchat.cn/", R.drawable.svg_gpt, "GPT3.5-4o"),
-        LinkItem("https://chatglm.cn/main/alltoolsdetail", R.drawable.svg_zhipuqingyan, "智谱清言"),
         LinkItem("https://www.github.com", R.drawable.svg_github, "GitHub"),
         LinkItem("https://yandex.com/", R.drawable.svg_sousuo, "俄罗斯引擎"),
         LinkItem("https://www.mq59.com/", R.drawable.svg_rijiben, "搜书网站"),
         LinkItem("https://heck.ai/", R.drawable.svg_gpt, "免费gpt"),
-        LinkItem("https://bz.zzzmh.cn/index", com.qzwx.diary.R.drawable.xieriji_bg, "壁纸网站"),
+        LinkItem("https://bz.zzzmh.cn/index", com.qzwx.core.R.drawable.app_bzwz, "壁纸网站"),
         LinkItem("https://musicjx.com", R.drawable.svg_music, "音乐解析器"),
         LinkItem("https://flac.life", R.drawable.svg_music, "无损生活"),
         LinkItem("https://www.gequbao.com", R.drawable.svg_music, "歌曲宝"),

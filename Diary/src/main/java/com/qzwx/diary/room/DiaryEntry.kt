@@ -1,4 +1,4 @@
-package com.qzwx.diary.data
+package com.qzwx.diary.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

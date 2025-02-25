@@ -12,12 +12,12 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
         maven("https://jitpack.io")
+
     }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-//        maven(url = "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/")
         maven { url = uri("https://maven.aliyun.com/repository/google") }
         maven { url = uri("https://maven.aliyun.com/repository/public") }
         google()
@@ -29,6 +29,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "七种文学·APP"
 include(":app")
-include(":Diary")
 include(":feature_qiandaosystem")
 include(":core")

@@ -10,7 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.qzwx.diary.data.DiaryViewModel
+import com.qzwx.diary.room.DiaryViewModel
 
 class XiuGaiRiJi : ComponentActivity() {
     private val viewModel: DiaryViewModel by viewModels() // 获取 ViewModel 实例

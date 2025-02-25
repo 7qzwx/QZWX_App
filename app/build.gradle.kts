@@ -52,6 +52,7 @@ android {
 }
 
 dependencies {
+
     implementation("androidx.navigation:navigation-compose:2.7.7")
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
@@ -74,8 +75,8 @@ dependencies {
 
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
     implementation("androidx.core:core-ktx:1.7.0")// 使用最新的版本号
-    implementation(project(":Diary"))
     implementation(project(":core"))
+    implementation(project(":feature_qiandaosystem"))
     implementation(libs.com.google.accompanist.accompanist.pager2)
     implementation(libs.accompanist.pager.indicators)
     implementation(libs.com.google.accompanist.accompanist.pager2)
