@@ -3,7 +3,10 @@ package com.qzwx.feature_qiandaosystem.ui
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +23,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -33,6 +41,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.qzwx.core.room.room_qiandaosystem.CheckIn
 import com.qzwx.core.room.room_qiandaosystem.CheckInRepository
+import com.qzwx.core.ui.BezierShapes
 import com.qzwx.feature_qiandaosystem.viewmodel.CheckInViewModel
 import com.qzwx.feature_qiandaosystem.viewmodel.CheckInViewModelFactory
 import kotlinx.coroutines.launch
@@ -321,7 +330,7 @@ fun CheckInList(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = LocalConfiguration.current.screenWidthDp.dp * 0.06f, //左右两边各有10%的边距
+            .padding(start = LocalConfiguration.current.screenWidthDp.dp * 0.06f,
                 end = LocalConfiguration.current.screenWidthDp.dp * 0.07f),
         contentPadding = paddingValues
     ) {
@@ -333,7 +342,7 @@ fun CheckInList(
                 onHistory = { onHistory(checkIn.name) },
                 onCheckIn = { onCheckIn(checkIn.name) },
                 onLockToggle = { onLockToggle(checkIn.name) },
-                onEdit = { onEdit(checkIn.name) } // 传递回调
+                onEdit = { onEdit(checkIn.name) }
             )
         }
     }
@@ -370,25 +379,40 @@ fun CheckInCard(
     }
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = 6.dp)
+            .fillMaxSize()
+            .clip(BezierShapes())
+            .shadow(2.dp, spotColor = Color.Black, ambientColor = Color.Black, clip = true)
+            .border(1.4.dp, Color(224, 166, 83, 255), BezierShapes())
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
+        Column(modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = " ${checkIn.name}",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
+                Row {
+                    Text(
+                        text = " ${checkIn.name}",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .align(Alignment.Bottom)
+                            .padding(start = 8.dp) // 与签到名称之间的水平距离
+                    ) {
+                        Text(
+                            text = "等级: $currentLevel",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
                 Row {
                     // 新增编辑按钮
                     IconButton(
@@ -402,8 +426,7 @@ fun CheckInCard(
                         )
                     }
                     IconButton(
-                        onClick = onLockToggle,
-                        enabled = checkIn.name != "签到" // 签到系统卡片不允许解锁
+                        onClick = onLockToggle
                     ) {
                         Icon(
                             imageVector = if (checkIn.isLocked) Icons.Default.Lock else Icons.Default.LockOpen,
@@ -413,31 +436,6 @@ fun CheckInCard(
                     }
                 }
             }
-            Text(
-                text = "连续签到天数: ${checkIn.consecutiveDays}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = "累计签到天数: ${checkIn.days}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = "累计经验值: ${checkIn.experience}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = "等级: $currentLevel",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = "上次签到日期: ${checkIn.lastCheckInDate}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
             LinearProgressIndicator(
                 progress = { expProgress },
                 modifier = Modifier
@@ -446,63 +444,120 @@ fun CheckInCard(
                 color = MaterialTheme.colorScheme.primary,
                 trackColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
             )
-            val currentDate = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
-            val isSignedToday = checkIn.lastCheckInDate == currentDate
-
-            Button(
-                onClick = {
-                    if (!isSignedToday) {
-                        onCheckIn()
-                    }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                enabled = !isSignedToday,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-            ) {
-                Text(
-                    text = if (isSignedToday) "已签到" else "签到",
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
+            Row(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically) {
+                Text(text = "连续打卡 ${checkIn.consecutiveDays} 天",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface)
+                Text(text = "累计 ${checkIn.consecutiveDays} 天",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface)
             }
 
+            Row(modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = checkIn.lastCheckInDate,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Absolute.Right, // 将按钮组放在行的末尾
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // 删除按钮
+                    Button(
+                        onClick = onDelete,
+                        enabled =  !checkIn.isLocked,  // 只有在未上锁时才允许删除
+                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
+                        modifier = Modifier.padding(end = 4.dp) // 添加按钮之间的间距
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "删除打卡类型",
+                            tint = if (!checkIn.isLocked) MaterialTheme.colorScheme.primary else Color.Gray
+                        )
+                    }
+                    // 重置按钮
+                    Button(
+                        onClick = onReset,
+                        enabled =  !checkIn.isLocked, // 未上锁时才允许重置
+                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary),
+                        modifier = Modifier.padding(end = 4.dp) // 添加按钮之间的间距
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "重置打卡记录",
+                            tint = if (!checkIn.isLocked) MaterialTheme.colorScheme.primary else Color.Gray
+                        )
+                    }
+                    // 历史按钮
+                    Button(
+                        onClick = onHistory,
+                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary),
+                        modifier = Modifier.padding(end = 4.dp) // 添加按钮之间的间距
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.History,
+                            contentDescription = "查看打卡历史",
+                            tint =  MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            }
+            // 累计经验值
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
-                TextButton(
-                    onClick = onDelete,
-                    enabled = checkIn.name != "签到" && !checkIn.isLocked,  //只有在未上锁时候才允许删除
-                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                // EXP 文本部分
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .height(35.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.secondary, // 背景颜色
+                            shape = RoundedCornerShape(2.dp) // 圆角
+                        )
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "删除打卡类型",
-                        tint = if (!checkIn.isLocked) MaterialTheme.colorScheme.primary else Color.Gray
+                    Text(
+                        "EXP：",
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(start = 10.dp)
                     )
-                    Text(text = "删除")
+                    Text(
+                        text = "${checkIn.experience}",
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(end = 10.dp)
+                    )
                 }
-                TextButton(
-                    onClick = onReset,
-                    enabled = checkIn.name != "签到" && !checkIn.isLocked, //未上锁时候才允许重置
-                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+                // 签到按钮部分
+                val currentDate = LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE)
+                val isSignedToday = checkIn.lastCheckInDate == currentDate
+
+                Button(
+                    modifier = Modifier.height(35.dp), shape = RoundedCornerShape(2.dp),
+                    onClick = {
+                        if (!isSignedToday) {
+                            onCheckIn()
+                        }
+                    },
+                    enabled = !isSignedToday,
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Refresh,
-                        contentDescription = "重置打卡记录",
-                        tint = if (!checkIn.isLocked) MaterialTheme.colorScheme.primary else Color.Gray
+                    Text(
+                        text = if (isSignedToday) "已签到" else "签到",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.bodySmall,
                     )
-                    Text(text = "重置")
-                }
-                TextButton(
-                    onClick = onHistory,
-                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.History,
-                        contentDescription = "查看打卡历史",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Text(text = "历史")
                 }
             }
         }
@@ -644,3 +699,4 @@ fun ShowToast(message : String?) {
         }
     }
 }
+

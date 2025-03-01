@@ -12,7 +12,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
@@ -33,7 +35,7 @@ class CheckInViewModel(private val checkInRepository : CheckInRepository) : View
                 experience = 0,
                 level = 1,
                 lastCheckInDate = "",
-                isLocked = name == "签到", // 如果是默认的签到类型，设置为锁定状态
+                isLocked = false, // 如果是默认的签到类型，设置为锁定状态
                 consecutiveDays = 0
             )
             checkInRepository.insertCheckIn(checkIn)
@@ -119,7 +121,7 @@ class CheckInViewModel(private val checkInRepository : CheckInRepository) : View
                 level = level,
                 lastCheckInDate = currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
                 consecutiveDays = newConsecutiveDays,
-                isLocked = name == "签到"
+                isLocked = false
             )
             // 更新数据库
             updateCheckIn(updatedCheckIn)
@@ -196,21 +198,6 @@ class CheckInViewModel(private val checkInRepository : CheckInRepository) : View
         }
     }
 
-    // 初始化默认打卡类型
-    init {
-        viewModelScope.launch {
-            createDefaultCheckInIfNotExists()
-        }
-    }
-
-    private suspend fun createDefaultCheckInIfNotExists() {
-        val defaultCheckInName = "签到"
-        val existingCheckIn = getCheckInByName(defaultCheckInName)
-        if (existingCheckIn == null) {
-            insertCheckIn(defaultCheckInName)
-        }
-    }
-
     // 切换打卡类型的锁定状态
     fun toggleLockCheckIn(checkInName : String) {
         viewModelScope.launch {
@@ -232,10 +219,24 @@ class CheckInViewModel(private val checkInRepository : CheckInRepository) : View
         }
     }
 
-    fun getCheckInHistoryByDate(date: LocalDate): Flow<List<CheckInHistory>> = flow {
+    fun getCheckInHistoryByDate(date : LocalDate) : Flow<List<CheckInHistory>> = flow {
         val history = checkInRepository.getCheckInHistoryByDate1(date.toString())
         emit(history)
     }
+
+    // 新增方法：获取签到数据用于热力日历
+// 新增方法：获取签到数据用于热力日历
+    suspend fun getCheckInData(startDate : YearMonth, endDate : YearMonth) : Map<LocalDate, Int> {
+        return withContext(Dispatchers.IO) {
+            val start = startDate.atDay(1).toString() // 转换为 String
+            val end = endDate.atEndOfMonth().toString() // 转换为 String
+            val checkInHistory = checkInRepository.getCheckInHistoryBetweenDates(start, end)
+            checkInHistory.groupingBy { LocalDate.parse(it.date) }
+                .eachCount()
+                .toMap()
+        }
+    }
+
 }
 
 /**​

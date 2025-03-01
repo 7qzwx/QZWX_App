@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.EventNote
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.Notes
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
@@ -47,7 +49,7 @@ fun SettingsDrawerContent(
         Spacer(Modifier.height(12.dp))
         // 经验值递增规则
         NavigationDrawerItem(
-            icon = { Icon(Icons.Default.EventNote, contentDescription = null) },
+            icon = { Icon(Icons.Default.Notes, contentDescription = null) },
             label = { Text("经验值递增规则") },
             selected = false,
             onClick = {
@@ -83,7 +85,7 @@ fun SettingsDrawerContent(
         }
         // 语言选择
         NavigationDrawerItem(
-            icon = { Icon(Icons.Default.Language, contentDescription = null) },
+            icon = { Icon(Icons.Default.CalendarMonth, contentDescription = null) },
             label = { Text("日历视图") },
             selected = false,
             onClick = {

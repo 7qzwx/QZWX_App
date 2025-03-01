@@ -1,7 +1,6 @@
 package com.qzwx.core.room.room_qiandaosystem
 
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
 
 /**CheckInRepository 就像一个 ​管家，负责声明所有操作名称。它定义了一系列的 ​任务清单，告诉管家该做什么。比如：
  *
@@ -30,4 +29,7 @@ interface CheckInRepository {
 
     // 新增方法：根据日期获取签到历史记录
     suspend fun getCheckInHistoryByDate1(date : String) : List<CheckInHistory>
+
+    // 新增方法：获取指定日期范围内的签到历史记录
+    fun getCheckInHistoryBetweenDates(start : String, end : String) : List<CheckInHistory>
 }

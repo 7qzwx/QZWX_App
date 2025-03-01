@@ -28,6 +28,7 @@ android {
 }
 
 dependencies {
+//    implementation("io.github.dautovicharis:charts-android:1.3.1")
     implementation("com.kizitonwose.calendar:compose:2.6.2")
     implementation(project(":core"))
     implementation("com.github.Breens-Mbaka:BeeTablesCompose:1.2.0") //自定义表格

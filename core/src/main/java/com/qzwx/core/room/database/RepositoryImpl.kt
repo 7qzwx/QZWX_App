@@ -7,7 +7,6 @@ import com.qzwx.core.room.room_qiandaosystem.CheckInRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
-import java.time.LocalDate
 
 /** CheckInRepositoryImpl 是 ​管家的具体执行者(助手)，它实现了 CheckInRepository 中定义的所有任务。
  *
@@ -64,7 +63,13 @@ class CheckInRepositoryImpl(private val checkInDao : CheckInDao) : CheckInReposi
     }
 
     // 新增方法：根据日期获取签到历史记录
-    override suspend fun getCheckInHistoryByDate1(date: String): List<CheckInHistory> {
+    override suspend fun getCheckInHistoryByDate1(date : String) : List<CheckInHistory> {
         return checkInDao.getCheckInHistoryByDate1(date)
+    }
+
+    // 在 CheckInRepository 的实现中添加
+    override fun getCheckInHistoryBetweenDates(start : String,
+        end : String) : List<CheckInHistory> {
+        return checkInDao.getCheckInHistoryBetweenDates(start, end)
     }
 }

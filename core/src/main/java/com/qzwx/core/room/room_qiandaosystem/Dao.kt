@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
 
 /**CheckInDao 就像是一个 ​打卡记录管理员，负责直接操作打卡记录表和打卡历史记录表。它提供了一系列方法，比如：
 
@@ -64,4 +63,9 @@ interface CheckInDao {
 
     @Query("SELECT * FROM check_in WHERE name = :name AND lastCheckInDate = :date")
     suspend fun getCheckInByNameAndDate(name : String, date : String) : CheckIn?
+
+
+    @Query("SELECT * FROM check_in_history WHERE date BETWEEN :start AND :end")
+    fun getCheckInHistoryBetweenDates(start: String, end: String): List<CheckInHistory>
+
 }
