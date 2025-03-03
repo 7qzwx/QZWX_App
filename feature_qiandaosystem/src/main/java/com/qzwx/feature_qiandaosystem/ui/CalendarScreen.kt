@@ -38,7 +38,7 @@ import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
-import com.qzwx.core.room.room_qiandaosystem.CheckInHistory
+import com.qzwx.feature_qiandaosystem.data.CheckInHistory
 import com.qzwx.feature_qiandaosystem.viewmodel.CheckInViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -50,7 +50,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CalendarScreen(modifier : Modifier = Modifier, viewModel : CheckInViewModel) {
+fun CalendarScreen(modifier: Modifier = Modifier, viewModel: CheckInViewModel) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusYears(1).withMonth(6) }
     val endMonth = remember { currentMonth.plusYears(1).withMonth(6) }
@@ -189,14 +189,16 @@ fun CalendarScreen(modifier : Modifier = Modifier, viewModel : CheckInViewModel)
                                 )
                                 Column {
                                     checkInHistory.forEachIndexed { index, history ->
-                                        Text(modifier = Modifier.padding(top = 10.dp),
+                                        Text(
+                                            modifier = Modifier.padding(top = 10.dp),
                                             text = " ${history.checkInName}  获得  Exp ${history.experience}",
                                             style = MaterialTheme.typography.bodyMedium
                                         )
                                         if (index < checkInHistory.size - 1) {
                                             Divider(
                                                 color = MaterialTheme.colorScheme.onSurface.copy(
-                                                    alpha = 0.1f),
+                                                    alpha = 0.1f
+                                                ),
                                                 thickness = 1.dp
                                             )
                                         }
@@ -224,11 +226,11 @@ fun CalendarScreen(modifier : Modifier = Modifier, viewModel : CheckInViewModel)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HeatMapCalendarView(
-    modifier : Modifier,
-    viewModel : CheckInViewModel,
-    startMonth : YearMonth,
-    endMonth : YearMonth,
-    currentMonth : YearMonth,
+    modifier: Modifier,
+    viewModel: CheckInViewModel,
+    startMonth: YearMonth,
+    endMonth: YearMonth,
+    currentMonth: YearMonth,
 ) {
     val state = rememberHeatMapCalendarState(
         startMonth = startMonth,
@@ -259,7 +261,7 @@ private fun HeatMapCalendarView(
 }
 
 @Composable
-private fun LevelBox(color : Color) {
+private fun LevelBox(color: Color) {
     Box(
         modifier = Modifier
             .size(18.dp)
@@ -270,7 +272,7 @@ private fun LevelBox(color : Color) {
 }
 
 @Composable
-private fun WeekHeader(dayOfWeek : DayOfWeek) {
+private fun WeekHeader(dayOfWeek: DayOfWeek) {
     Box(
         modifier = Modifier
             .height(18.dp)
@@ -287,9 +289,9 @@ private fun WeekHeader(dayOfWeek : DayOfWeek) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MonthHeader(
-    calendarMonth : CalendarMonth,
-    endDate : LocalDate,
-    state : HeatMapCalendarState,
+    calendarMonth: CalendarMonth,
+    endDate: LocalDate,
+    state: HeatMapCalendarState,
 ) {
     val density = LocalDensity.current
     val firstFullyVisibleMonth by remember {
@@ -312,15 +314,15 @@ private fun MonthHeader(
 }
 
 private fun getMonthWithYear(
-    layoutInfo : CalendarLayoutInfo,
-    daySize : Dp,
-    density : Density,
-) : YearMonth? {
+    layoutInfo: CalendarLayoutInfo,
+    daySize: Dp,
+    density: Density,
+): YearMonth? {
     val visibleItemsInfo = layoutInfo.visibleMonthsInfo
     return when {
-        visibleItemsInfo.isEmpty()    -> null
+        visibleItemsInfo.isEmpty() -> null
         visibleItemsInfo.count() == 1 -> visibleItemsInfo.first().month.yearMonth
-        else                          -> {
+        else -> {
             val firstItem = visibleItemsInfo.first()
             val daySizePx = with(density) { daySize.toPx() }
             if (
@@ -338,11 +340,11 @@ private fun getMonthWithYear(
 
 @Composable
 private fun SimpleCalendarTitle(
-    modifier : Modifier,
-    currentMonth : YearMonth,
-    goToPrevious : () -> Unit,
-    goToNext : () -> Unit,
-    goToCurrent : () -> Unit,
+    modifier: Modifier,
+    currentMonth: YearMonth,
+    goToPrevious: () -> Unit,
+    goToNext: () -> Unit,
+    goToCurrent: () -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -382,10 +384,10 @@ private fun SimpleCalendarTitle(
 
 @Composable
 fun DayContent(
-    day : CalendarDay,
-    viewModel : CheckInViewModel,
-    onDayClick : (LocalDate) -> Unit,
-    selectedDate : LocalDate?,
+    day: CalendarDay,
+    viewModel: CheckInViewModel,
+    onDayClick: (LocalDate) -> Unit,
+    selectedDate: LocalDate?,
 ) {
     val checkInHistoryByDate = remember { mutableStateOf<List<CheckInHistory>>(emptyList()) }
     val today = remember { LocalDate.now() }
@@ -446,7 +448,7 @@ fun DayContent(
 }
 
 @Composable
-fun DaysOfWeekTitle(daysOfWeek : List<DayOfWeek>) {
+fun DaysOfWeekTitle(daysOfWeek: List<DayOfWeek>) {
     Row(modifier = Modifier.fillMaxWidth()) {
         for (dayOfWeek in daysOfWeek) {
             Text(
@@ -458,7 +460,7 @@ fun DaysOfWeekTitle(daysOfWeek : List<DayOfWeek>) {
     }
 }
 
-fun YearMonth.displayText(short : Boolean = false) : String {
+fun YearMonth.displayText(short: Boolean = false): String {
     return if (short) {
         "${this.monthValue}月"
     } else {
@@ -466,7 +468,7 @@ fun YearMonth.displayText(short : Boolean = false) : String {
     }
 }
 
-private enum class Level(val color : Color) {
+private enum class Level(val color: Color) {
     Zero(Color(0xDDD4D6D9)),
     One(Color(0xFF9BE9A8)),
     Two(Color(0xFF40C463)),
@@ -474,12 +476,12 @@ private enum class Level(val color : Color) {
     Four(Color(0xFF216E3A)),
 }
 
-private fun getLevelFromCount(count : Int) : Level {
+private fun getLevelFromCount(count: Int): Level {
     return when {
         count == 0 -> Level.Zero
         count <= 3 -> Level.One
         count <= 6 -> Level.Two
         count <= 9 -> Level.Three
-        else       -> Level.Four
+        else -> Level.Four
     }
 }

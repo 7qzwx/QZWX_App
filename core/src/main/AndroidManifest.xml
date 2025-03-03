@@ -4,13 +4,12 @@
     tools:ignore="ExtraText">
     />
 
-    <application>
+    <application android:name=".QZWXApplication">
         <activity
             android:name=".CoreActivity"
-            android:theme="@style/Theme.QZWX_APP"
             android:exported="true"
             android:label="@string/app_name"
-           >
+            android:theme="@style/Theme.QZWX_APP">
 
         </activity>
     </application>

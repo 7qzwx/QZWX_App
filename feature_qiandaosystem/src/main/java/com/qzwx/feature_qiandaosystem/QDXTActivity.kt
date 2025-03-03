@@ -5,11 +5,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import com.qzwx.core.room.database.AppDatabase
-import com.qzwx.core.room.database.CheckInRepositoryImpl
-import com.qzwx.core.room.room_qiandaosystem.CheckInDao
-import com.qzwx.core.room.room_qiandaosystem.CheckInRepository
 import com.qzwx.core.theme.QZWX_AppTheme
+import com.qzwx.feature_qiandaosystem.data.AppDatabase
+import com.qzwx.feature_qiandaosystem.data.CheckInDao
+import com.qzwx.feature_qiandaosystem.data.CheckInRepository
+import com.qzwx.feature_qiandaosystem.data.CheckInRepositoryImpl
 import com.qzwx.feature_qiandaosystem.navigation.NavGraph
 
 class QDXTActivity : ComponentActivity() {

@@ -24,11 +24,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -39,9 +37,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.qzwx.core.room.room_qiandaosystem.CheckIn
-import com.qzwx.core.room.room_qiandaosystem.CheckInRepository
 import com.qzwx.core.ui.BezierShapes
+import com.qzwx.feature_qiandaosystem.data.CheckIn
+import com.qzwx.feature_qiandaosystem.data.CheckInRepository
 import com.qzwx.feature_qiandaosystem.viewmodel.CheckInViewModel
 import com.qzwx.feature_qiandaosystem.viewmodel.CheckInViewModelFactory
 import kotlinx.coroutines.launch
@@ -383,7 +381,8 @@ fun CheckInCard(
             .fillMaxSize()
             .clip(BezierShapes())
             .shadow(2.dp, spotColor = Color.Black, ambientColor = Color.Black, clip = true)
-            .border(1.4.dp, Color(224, 166, 83, 255), BezierShapes())
+            .border(1.4.dp, brush = Brush.verticalGradient(colors = listOf(Color(0xFFA18CD1),
+                Color(0xFFFBC2EB))), BezierShapes())
     ) {
         Column(modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -470,9 +469,9 @@ fun CheckInCard(
                     // 删除按钮
                     Button(
                         onClick = onDelete,
-                        enabled =  !checkIn.isLocked,  // 只有在未上锁时才允许删除
+                        enabled = !checkIn.isLocked,  // 只有在未上锁时才允许删除
                         colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
-                        modifier = Modifier.padding(end = 4.dp) // 添加按钮之间的间距
+                        modifier = Modifier
                     ) {
                         Icon(
                             imageVector = Icons.Default.Delete,
@@ -483,9 +482,9 @@ fun CheckInCard(
                     // 重置按钮
                     Button(
                         onClick = onReset,
-                        enabled =  !checkIn.isLocked, // 未上锁时才允许重置
+                        enabled = !checkIn.isLocked, // 未上锁时才允许重置
                         colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary),
-                        modifier = Modifier.padding(end = 4.dp) // 添加按钮之间的间距
+                        modifier = Modifier
                     ) {
                         Icon(
                             imageVector = Icons.Default.Refresh,
@@ -497,12 +496,12 @@ fun CheckInCard(
                     Button(
                         onClick = onHistory,
                         colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary),
-                        modifier = Modifier.padding(end = 4.dp) // 添加按钮之间的间距
+                        modifier = Modifier
                     ) {
                         Icon(
                             imageVector = Icons.Default.History,
                             contentDescription = "查看打卡历史",
-                            tint =  MaterialTheme.colorScheme.primary
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 }

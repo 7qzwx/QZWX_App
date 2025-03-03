@@ -1,5 +1,7 @@
 package com.qzwx.core
 
+import android.app.Application
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,4 +37,19 @@ fun Greeting(name : String, modifier : Modifier = Modifier) {
         text = "Hello $name!",
         modifier = modifier
     )
+}
+
+class QZWXApplication : Application() {
+    companion object {
+        private lateinit var context : Context
+
+        fun getContext() : Context {
+            return context
+        }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        context = applicationContext
+    }
 }

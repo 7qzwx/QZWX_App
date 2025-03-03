@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.breens.beetablescompose.BeeTablesCompose
-import com.qzwx.core.room.room_qiandaosystem.CheckInHistory
-import com.qzwx.core.room.room_qiandaosystem.CheckInRepository
+import com.qzwx.feature_qiandaosystem.data.CheckInHistory
+import com.qzwx.feature_qiandaosystem.data.CheckInRepository
 import com.qzwx.feature_qiandaosystem.viewmodel.CheckInViewModel
 import com.qzwx.feature_qiandaosystem.viewmodel.CheckInViewModelFactory
 /** 历史记录页面,用户点击页面的历史按钮会跳转到该页面   */

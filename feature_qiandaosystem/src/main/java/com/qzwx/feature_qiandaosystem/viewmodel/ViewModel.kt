@@ -3,9 +3,9 @@ package com.qzwx.feature_qiandaosystem.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.qzwx.core.room.room_qiandaosystem.CheckIn
-import com.qzwx.core.room.room_qiandaosystem.CheckInHistory
-import com.qzwx.core.room.room_qiandaosystem.CheckInRepository
+import com.qzwx.feature_qiandaosystem.data.CheckIn
+import com.qzwx.feature_qiandaosystem.data.CheckInHistory
+import com.qzwx.feature_qiandaosystem.data.CheckInRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,16 +18,15 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
-/**​
- * CheckInViewModel 是打卡系统的业务逻辑中心，负责处理所有和打卡相关的操作。
+/** CheckInViewModel 是打卡系统的业务逻辑中心，负责处理所有和打卡相关的操作。
  * 它通过 CheckInRepository 操作数据，并将结果提供给 UI 层。
  */
-class CheckInViewModel(private val checkInRepository : CheckInRepository) : ViewModel() {
+class CheckInViewModel(private val checkInRepository: CheckInRepository) : ViewModel() {
     // 获取所有打卡记录
-    val allCheckIns : Flow<List<CheckIn>> = checkInRepository.getAllCheckIns()
+    val allCheckIns: Flow<List<CheckIn>> = checkInRepository.getAllCheckIns()
 
     // 插入新的打卡类型
-    fun insertCheckIn(name : String) {
+    fun insertCheckIn(name: String) {
         viewModelScope.launch {
             val checkIn = CheckIn(
                 name = name,
@@ -43,7 +42,7 @@ class CheckInViewModel(private val checkInRepository : CheckInRepository) : View
     }
 
     // 更新打卡系统的名称
-    fun updateCheckInName(oldName : String, newName : String) {
+    fun updateCheckInName(oldName: String, newName: String) {
         viewModelScope.launch {
             // 检查新名称是否已存在
             val existingCheckIn = getCheckInByName(newName)
@@ -66,37 +65,35 @@ class CheckInViewModel(private val checkInRepository : CheckInRepository) : View
     }
 
     // 随机生成经验值（1-7）
-    fun getRandomExperience() : Int {
+    fun getRandomExperience(): Int {
         return Random.nextInt(1, 8) // 生成1到7之间的随机数
     }
 
     // 更新打卡记录
-    fun updateCheckIn(
-        checkIn : CheckIn
-    ) {
+    fun updateCheckIn(checkIn: CheckIn) {
         viewModelScope.launch {
-            checkInRepository.updateCheckIn(
-                checkIn
-            )
+            checkInRepository.updateCheckIn(checkIn)
         }
     }
 
     // 查询打卡类型是否存在
-    suspend fun getCheckInByName(name : String) : CheckIn? {
+    suspend fun getCheckInByName(name: String): CheckIn? {
         return checkInRepository.getCheckInByName(name)
     }
 
-    fun checkIn(name : String) {
+    fun checkIn(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val currentDate = LocalDate.now()
             val currentCheckIn = getCheckInByName(name)
             // 计算连续签到天数
             val newConsecutiveDays = if (currentCheckIn != null) {
-                val lastDate = if (currentCheckIn?.lastCheckInDate.isNullOrBlank()) {
+                val lastDate = if (currentCheckIn.lastCheckInDate.isNullOrBlank()) {
                     LocalDate.now().minusDays(1) // 默认为昨天
                 } else {
-                    LocalDate.parse(currentCheckIn.lastCheckInDate,
-                        DateTimeFormatter.ISO_LOCAL_DATE)
+                    LocalDate.parse(
+                        currentCheckIn.lastCheckInDate,
+                        DateTimeFormatter.ISO_LOCAL_DATE
+                    )
                 }
                 if (lastDate.isEqual(currentDate.minusDays(1))) currentCheckIn.consecutiveDays + 1 else 1
             } else {
@@ -140,12 +137,12 @@ class CheckInViewModel(private val checkInRepository : CheckInRepository) : View
     }
 
     // 新增方法：加载当前用户的打卡历史记录数
-    private suspend fun loadCheckInHistoryCount(checkInName : String) : Int {
+    private suspend fun loadCheckInHistoryCount(checkInName: String): Int {
         return checkInRepository.getCheckInHistory(checkInName).size
     }
 
     // 计算等级
-    private fun calculateLevel(totalExperience : Int) : Int {
+    private fun calculateLevel(totalExperience: Int): Int {
         val levelExp = arrayOf(50, 200, 500, 800, 1500, 3000)
         for (i in levelExp.indices) {
             if (totalExperience < levelExp[i]) {
@@ -156,7 +153,7 @@ class CheckInViewModel(private val checkInRepository : CheckInRepository) : View
     }
 
     // 删除打卡类型
-    fun deleteCheckIn(name : String) {
+    fun deleteCheckIn(name: String) {
         viewModelScope.launch {
             checkInRepository.deleteCheckIn(name)
             checkInRepository.deleteCheckInHistory(name)
@@ -164,7 +161,7 @@ class CheckInViewModel(private val checkInRepository : CheckInRepository) : View
     }
 
     // 重置打卡记录
-    fun resetCheckIn(name : String) {
+    fun resetCheckIn(name: String) {
         viewModelScope.launch {
             // 获取现有数据
             val existingCheckIn = checkInRepository.getCheckInByName(name)
@@ -177,21 +174,21 @@ class CheckInViewModel(private val checkInRepository : CheckInRepository) : View
                     lastCheckInDate = "",
                     consecutiveDays = 0
                 )
-                checkInRepository.updateCheckIn(resetCheckIn) // ✅ 使用对象更新
+                checkInRepository.updateCheckIn(resetCheckIn) // 使用对象更新
                 checkInRepository.deleteCheckInHistory(name)
             }
         }
     }
 
     // 插入打卡历史记录
-    fun insertCheckInHistory(checkInHistory : CheckInHistory) {
+    fun insertCheckInHistory(checkInHistory: CheckInHistory) {
         viewModelScope.launch(Dispatchers.IO) {
             checkInRepository.insertCheckInHistory(checkInHistory)
         }
     }
 
     // 检查打卡类型是否存在
-    fun checkIfCheckInExists(name : String, onResult : (Boolean) -> Unit) {
+    fun checkIfCheckInExists(name: String, onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
             val existingCheckIn = getCheckInByName(name)
             onResult(existingCheckIn != null)
@@ -199,34 +196,33 @@ class CheckInViewModel(private val checkInRepository : CheckInRepository) : View
     }
 
     // 切换打卡类型的锁定状态
-    fun toggleLockCheckIn(checkInName : String) {
+    fun toggleLockCheckIn(checkInName: String) {
         viewModelScope.launch {
             val checkIn = checkInRepository.getCheckInByName(checkInName)
             checkIn?.let {
                 val updated = it.copy(isLocked = !it.isLocked)
-                updateCheckIn(updated) // ✅ 使用对象更新方法
+                updateCheckIn(updated) // 使用对象更新方法
             }
         }
     }
 
     private val _checkInHistory = MutableStateFlow<List<CheckInHistory>>(emptyList())
-    val checkInHistory : StateFlow<List<CheckInHistory>> = _checkInHistory
+    val checkInHistory: StateFlow<List<CheckInHistory>> = _checkInHistory
 
     // 新增：加载历史记录的方法
-    fun loadCheckInHistory(checkInName : String) {
+    fun loadCheckInHistory(checkInName: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _checkInHistory.value = checkInRepository.getCheckInHistory(checkInName)
         }
     }
 
-    fun getCheckInHistoryByDate(date : LocalDate) : Flow<List<CheckInHistory>> = flow {
-        val history = checkInRepository.getCheckInHistoryByDate1(date.toString())
+    fun getCheckInHistoryByDate(date: LocalDate): Flow<List<CheckInHistory>> = flow {
+        val history = checkInRepository.getCheckInHistoryByDate(date.toString())
         emit(history)
     }
 
     // 新增方法：获取签到数据用于热力日历
-// 新增方法：获取签到数据用于热力日历
-    suspend fun getCheckInData(startDate : YearMonth, endDate : YearMonth) : Map<LocalDate, Int> {
+    suspend fun getCheckInData(startDate: YearMonth, endDate: YearMonth): Map<LocalDate, Int> {
         return withContext(Dispatchers.IO) {
             val start = startDate.atDay(1).toString() // 转换为 String
             val end = endDate.atEndOfMonth().toString() // 转换为 String
@@ -236,7 +232,6 @@ class CheckInViewModel(private val checkInRepository : CheckInRepository) : View
                 .toMap()
         }
     }
-
 }
 
 /**​
@@ -244,9 +239,9 @@ class CheckInViewModel(private val checkInRepository : CheckInRepository) : View
  * 负责根据需求创建 CheckInViewModel 的实例。
  */
 class CheckInViewModelFactory(
-    private val checkInRepository : CheckInRepository
+    private val checkInRepository: CheckInRepository
 ) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass : Class<T>) : T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(CheckInViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return CheckInViewModel(checkInRepository) as T

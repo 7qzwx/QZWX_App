@@ -2,214 +2,364 @@ package com.qzwx.myapplication.ui
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
+import android.widget.Toast
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.unit.sp
+import com.qzwx.core.QZWXApplication
 import com.qzwx.myapplication.R
-
-val linkItems = listOf(
-    LinkItem("https://7qzwx.github.io/WEB_YJY-1.4/", R.drawable.svg_gerenwangye, "七种文学"),
-    LinkItem("https://www.github.com", R.drawable.svg_github, "GitHub"),
-    LinkItem("https://yandex.com/", R.drawable.svg_sousuo, "俄罗斯引擎"),
-    LinkItem("https://www.mq59.com/", R.drawable.svg_rijiben, "搜书网站"),
-    LinkItem("https://heck.ai/", R.drawable.svg_gpt, "免费gpt"),
-    LinkItem("https://bz.zzzmh.cn/index", com.qzwx.core.R.drawable.app_bzwz, "壁纸网站"),
-    LinkItem("https://musicjx.com", R.drawable.svg_music, "音乐解析器"),
-    LinkItem("https://flac.life", R.drawable.svg_music, "无损生活"),
-    LinkItem("https://www.gequbao.com", R.drawable.svg_music, "歌曲宝"),
-    LinkItem("https://music.alang.run", R.drawable.svg_music, "听歌房"),
-    LinkItem("https://cupfox.app/", R.drawable.svg_chabeihu, "茶杯狐"),
-    LinkItem("https://www.p9yy.com/", R.drawable.svg_yinghshi, "P9影视"),
-    LinkItem("https://ddys.one/", R.drawable.svg_yinghshi, "低端影视"),
-    LinkItem("https://dianyi.ng/", R.drawable.svg_yinghshi, "电影先生"),
-    LinkItem("https://keai.cm/", R.drawable.svg_yinghshi, "可爱TV"),
-    LinkItem("https://www.haituw.com/", R.drawable.svg_yinghshi, "海兔影视"),
-    LinkItem("https://24pindao.tv/", R.drawable.svg_yinghshi, "美剧频道"),
-    LinkItem("https://69mj.com/", R.drawable.svg_yinghshi, "69美剧"),
-    LinkItem("https://www.netflixgc.com/", R.drawable.svg_yinghshi, "奈飞美剧"),
-    LinkItem("https://fitacg.com/", R.drawable.svg_dongman, "菲特动漫"),
-    LinkItem("http://www.dmd77.com/", R.drawable.svg_dongman, "动漫岛"),
-    LinkItem("http://buding22.com/", R.drawable.svg_dongman, "布丁动漫"),
-    LinkItem("https://m.agedm.org/#/", R.drawable.svg_dongman, "AGE动漫"),
-    LinkItem("https://m.agedm.org/#/", R.drawable.svg_dongman, "AGE动漫"),
-    LinkItem(
-        "https://www.logosc.cn/favicon-generator?s=%E9%A1%B5%E9%9D%A2",
-        R.drawable.svg_web, "在线制作图标"
-    )
-)
+import com.qzwx.myapplication.data.LinkEntity
+import com.qzwx.myapplication.viewmodel.LinkViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AllWebScreen() {
-//    val allWebsites by viewModel.allWebsites.collectAsState()
-    var showAddWebsiteDialog by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.background)
-            .fillMaxSize()
-            .systemBarsPadding()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
+fun AllWebScreen(linkViewModel : LinkViewModel) {
+    // 管理对话框的显示状态
+    var showDialog by remember { mutableStateOf(false) }
+    var showEditDialog by remember { mutableStateOf(false) }
+    // 用户输入的数据
+    var websiteName by remember { mutableStateOf("") }
+    var websiteUrl by remember { mutableStateOf("") }
+    var selectedIcon by remember { mutableStateOf(R.drawable.app_svg_web) }
+    var selectedLinkId by remember { mutableStateOf(0) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var linkToDelete by remember { mutableStateOf<LinkEntity?>(null) }
+    // 可供选择的默认图标
+    val defaultIcons = listOf(
+        R.drawable.svg_sousuo,
+        R.drawable.svg_rijiben,
+        R.drawable.svg_music,
+        R.drawable.svg_movie,
+        R.drawable.svg_dongman,
+        R.drawable.app_svg_web
+    )
+    // 显示添加链接的对话框
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("添加新链接", style = MaterialTheme.typography.titleLarge) },
+            text = {
+                Column {
+                    OutlinedTextField(
+                        value = websiteName,
+                        onValueChange = { websiteName = it },
+                        label = { Text("网站名称", style = MaterialTheme.typography.labelMedium) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = websiteUrl,
+                        onValueChange = { websiteUrl = it },
+                        label = { Text("网站地址", style = MaterialTheme.typography.labelMedium) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Text("选择图标：", style = MaterialTheme.typography.bodyMedium)
+                    LazyRow {
+                        items(defaultIcons.size) { index ->
+                            Box(
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .clickable {
+                                        selectedIcon = defaultIcons[index]
+                                    }
+                            ) {
+                                Image(
+                                    painter = painterResource(id = defaultIcons[index]),
+                                    contentDescription = "Icon $index",
+                                    modifier = Modifier.size(40.dp)
+                                )
+                                if (selectedIcon == defaultIcons[index]) {
+                                    Icon(
+                                        imageVector = Icons.Default.Check,
+                                        contentDescription = "Selected",
+                                        tint = Color.Green,
+                                        modifier = Modifier
+                                            .size(20.dp)
+                                            .offset(x = 20.dp, y = 20.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    if (websiteName.isNotBlank() && websiteUrl.isNotBlank()) {
+                        linkViewModel.insertLink(
+                            LinkEntity(
+                                url = websiteUrl,
+                                iconResId = selectedIcon,
+                                description = websiteName
+                            )
+                        )
+                        showDialog = false
+                        Toast.makeText(QZWXApplication.getContext(),
+                            "添加成功!",
+                            Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(QZWXApplication.getContext(),
+                            "网站名称和网址不能为空!",
+                            Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }) {
+                    Text("添加", style = MaterialTheme.typography.labelLarge)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text("取消", style = MaterialTheme.typography.labelLarge)
+                }
+            }
+        )
+    }
+    // 显示编辑链接的对话框
+    if (showEditDialog) {
+        AlertDialog(
+            onDismissRequest = { showEditDialog = false },
+            title = { Text("编辑链接", style = MaterialTheme.typography.titleLarge) },
+            text = {
+                Column {
+                    OutlinedTextField(
+                        value = websiteName,
+                        onValueChange = { websiteName = it },
+                        label = {
+                            Text("网站名称",
+                                style = MaterialTheme.typography.labelSmall)
+                        },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    OutlinedTextField(
+                        value = websiteUrl,
+                        onValueChange = { websiteUrl = it },
+                        label = {
+                            Text("网站地址",
+                                style = MaterialTheme.typography.labelSmall)
+                        },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Text("选择图标：", style = MaterialTheme.typography.bodyMedium)
+                    LazyRow {
+                        items(defaultIcons.size) { index ->
+                            Box(
+                                modifier = Modifier
+                                    .padding(4.dp)
+                                    .clickable {
+                                        selectedIcon = defaultIcons[index]
+                                    }
+                            ) {
+                                Image(
+                                    painter = painterResource(id = defaultIcons[index]),
+                                    contentDescription = "Icon $index",
+                                    modifier = Modifier.size(40.dp)
+                                )
+                                if (selectedIcon == defaultIcons[index]) {
+                                    Icon(
+                                        imageVector = Icons.Default.Check,
+                                        contentDescription = "Selected",
+                                        tint = Color.Green,
+                                        modifier = Modifier
+                                            .size(20.dp)
+                                            .offset(x = 20.dp, y = 20.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    linkViewModel.updateLink(
+                        LinkEntity(
+                            id = selectedLinkId,
+                            url = websiteUrl,
+                            iconResId = selectedIcon,
+                            description = websiteName
+                        )
+                    )
+                    showEditDialog = false
+                    Toast.makeText(QZWXApplication.getContext(),
+                        "修改成功!",
+                        Toast.LENGTH_SHORT)
+                        .show()
+                }) {
+                    Text("保存", style = MaterialTheme.typography.labelLarge)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEditDialog = false }) {
+                    Text("取消", style = MaterialTheme.typography.labelLarge)
+                }
+            }
+        )
+    }
+    // 显示删除确认对话框
+    if (showDeleteDialog && linkToDelete != null) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = {
+                Text("确认删除",
+                    style = MaterialTheme.typography.titleLarge)
+            },
+            text = {
+                Text("你确定要删除这个链接吗？",
+                    style = MaterialTheme.typography.bodyMedium)
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    linkToDelete?.let {
+                        linkViewModel.deleteLink(it.id)
+                        Toast.makeText(QZWXApplication.getContext(),
+                            "删除成功!",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                    showDeleteDialog = false
+                    linkToDelete = null // 清空要删除的链接
+                }) {
+                    Text("确认", style = MaterialTheme.typography.labelLarge)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showDeleteDialog = false
+                    linkToDelete = null // 清空要删除的链接
+                }) {
+                    Text("取消", style = MaterialTheme.typography.labelLarge)
+                }
+            }
+        )
+    }
+    Scaffold(containerColor = MaterialTheme.colorScheme.background,
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    websiteName = "" // 清空网站名称
+                    websiteUrl = "" // 清空网站地址
+                    selectedIcon = R.drawable.app_svg_web
+                    showDialog = true
+                },
+                shape = CircleShape,
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
-                Text(
-                    text = "下面是一些可能有用的网站：",
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "添加链接"
                 )
             }
-
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+        }
+    ) { padding ->
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
             ) {
-//                items(allWebsites.size) { index ->
-//                    val website = allWebsites[index]
-//                    LinkItemView(
-//                        link = website.url,
-//                        iconResId = website.iconResId,
-//                        description = website.name
-//                    )
-//                }
+                // 标题和网格内容
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "下面是一些可能有用的网站：",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = Color(0xFFFCAEAE), // 更深的颜色提高可读性
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                }
+                // 显示数据库中的链接
+                val links by linkViewModel.allLinks.collectAsState(initial = emptyList())
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(links) { link ->
+                        LinkItemView(
+                            link = link.url,
+                            iconResId = link.iconResId,
+                            description = link.description,
+                            onEditClick = {
+                                websiteName = link.description
+                                websiteUrl = link.url
+                                selectedIcon = link.iconResId
+                                selectedLinkId = link.id
+                                showEditDialog = true
+                            },
+                            onDeleteClick = {
+                                linkToDelete = link // 设置要删除的链接
+                                showDeleteDialog = true // 显示删除确认对话框
+                            }
+                        )
+                    }
+                }
             }
-        }
-
-        FloatingActionButton(
-            onClick = { showAddWebsiteDialog = true },
-            modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.BottomEnd)
-        ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "添加网站")
-        }
-
-        if (showAddWebsiteDialog) {
-            AddWebsiteDialog(
-                onAdd = { name, url ->
-//                    val newWebsite = WebsiteEntity(
-//                        url = url,
-//                        iconResId = R.drawable.svg_web, // 默认图标
-//                        name = name
-//                    )
-//                    viewModel.insertWebsite(newWebsite)
-                    showAddWebsiteDialog = false
-                },
-                onClose = { showAddWebsiteDialog = false }
-            )
         }
     }
 }
 
 @Composable
-fun AddWebsiteDialog(onAdd : (String, String) -> Unit, onClose : () -> Unit) {
-    var websiteName by remember { mutableStateOf("") }
-    var websiteUrl by remember { mutableStateOf("") }
-
-    AlertDialog(
-        onDismissRequest = onClose,
-        title = { Text("添加新网站") },
-        text = {
-            Column {
-                TextField(
-                    value = websiteName,
-                    onValueChange = { websiteName = it },
-                    label = { Text("网站名称") }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                TextField(
-                    value = websiteUrl,
-                    onValueChange = { websiteUrl = it },
-                    label = { Text("网站链接") }
-                )
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = {
-                if (websiteName.isNotBlank() && websiteUrl.isNotBlank()) {
-                    onAdd(websiteName, websiteUrl)
-                }
-            }) {
-                Text("添加")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onClose) {
-                Text("取消")
-            }
-        }
-    )
-}
-
-@Composable
-fun LinkItemView(link : String, iconResId : Int, description : String) {
+fun LinkItemView(
+    link : String,
+    iconResId : Int,
+    description : String,
+    onEditClick : () -> Unit,
+    onDeleteClick : () -> Unit
+) {
     val context = LocalContext.current
     Surface(
         modifier = Modifier
             .clickable {
-                // 打开网页链接
-                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+                // 确保链接以 http:// 或 https:// 开头
+                val validLink =
+                    if (link.startsWith("http://") || link.startsWith("https://")) {
+                        link
+                    } else {
+                        "http://$link"
+                    }
+                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(validLink)))
             }
             .padding(8.dp)
-            .shadow(4.dp, RoundedCornerShape(8.dp))
-            .border(BorderStroke(1.dp, Color.Gray), shape = RoundedCornerShape(8.dp)),
-        shape = RoundedCornerShape(8.dp),
-        color = Color.White
+            .shadow(8.dp, RoundedCornerShape(16.dp))
+            .border(BorderStroke(2.dp,
+                brush = Brush.verticalGradient(colors = listOf(Color(0xFFA18CD1),
+                    Color(0xFFFBC2EB)))),
+                shape = RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surface
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
@@ -225,9 +375,17 @@ fun LinkItemView(link : String, iconResId : Int, description : String) {
                 overflow = TextOverflow.Ellipsis, // 省略文本
                 maxLines = 1 // 最大行数
             )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                TextButton(onClick = onEditClick) {
+                    Text("编辑", style = MaterialTheme.typography.labelSmall)
+                }
+                TextButton(onClick = onDeleteClick) {
+                    Text("删除", style = MaterialTheme.typography.labelSmall)
+                }
+            }
         }
     }
 }
-
-// 数据类用于存储链接、图标和描述信息
-data class LinkItem(val url : String, val iconResId : Int, val description : String)

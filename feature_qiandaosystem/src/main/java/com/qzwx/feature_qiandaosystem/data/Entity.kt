@@ -1,4 +1,4 @@
-package com.qzwx.core.room.room_qiandaosystem
+package com.qzwx.feature_qiandaosystem.data
 
 import androidx.annotation.Keep
 import androidx.room.Entity
