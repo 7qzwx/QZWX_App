@@ -71,7 +71,7 @@ fun CalendarScreen(modifier: Modifier = Modifier, viewModel: CheckInViewModel) {
         topBar = {
             TopAppBar(
                 title = { Text("签到一览") },
-                colors = TopAppBarDefaults.smallTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     titleContentColor = MaterialTheme.colorScheme.onBackground
                 )
             )

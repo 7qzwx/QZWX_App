@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.TextFieldColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -268,13 +269,12 @@ fun EditCheckInDialog(
                     },
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
-                    colors = TextFieldDefaults.textFieldColors(
+                    colors = TextFieldDefaults.colors(
                         focusedTextColor = MaterialTheme.colorScheme.onSurface,
                         unfocusedTextColor = MaterialTheme.colorScheme.secondary,
-                        containerColor = MaterialTheme.colorScheme.surface,
                         focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colorScheme.primary
+                        cursorColor = MaterialTheme.colorScheme.primary,
+
                     ),
                     textStyle = TextStyle(
                         fontSize = 16.sp,
@@ -596,10 +596,9 @@ fun AddCheckInDialog(
                     },
                     singleLine = true,
                     shape = RoundedCornerShape(12.dp),
-                    colors = TextFieldDefaults.textFieldColors(
+                    colors = TextFieldDefaults.colors(
                         focusedTextColor = MaterialTheme.colorScheme.onSurface,
                         unfocusedTextColor = MaterialTheme.colorScheme.secondary,
-                        containerColor = MaterialTheme.colorScheme.surface,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         cursorColor = MaterialTheme.colorScheme.primary
