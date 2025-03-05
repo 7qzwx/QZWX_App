@@ -52,6 +52,7 @@ android {
 }
 
 dependencies {
+    implementation("com.exyte:animated-navigation-bar:1.0.0")
     implementation("org.burnoutcrew.composereorderable:reorderable:0.9.2")
     implementation("androidx.navigation:navigation-compose:2.7.7")
     val room_version = "2.6.1"

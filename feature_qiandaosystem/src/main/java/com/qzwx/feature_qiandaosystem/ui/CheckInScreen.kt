@@ -71,7 +71,6 @@ fun CheckInScreen(navController : NavHostController, checkInRepository : CheckIn
     // 侧边栏状态
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -86,7 +85,11 @@ fun CheckInScreen(navController : NavHostController, checkInRepository : CheckIn
     ) {
         Scaffold(
             topBar = {
-                TopAppBar(
+                TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onBackground
+                ),
                     title = { Text("打卡系统") },
                     navigationIcon = {
                         IconButton(onClick = { scope.launch { drawerState.open() } }) {
@@ -462,16 +465,15 @@ fun CheckInCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Absolute.Right, // 将按钮组放在行的末尾
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(2.dp),
+                    horizontalArrangement = Arrangement.Absolute.Right,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // 删除按钮
-                    Button(
+                    IconButton(
                         onClick = onDelete,
                         enabled = !checkIn.isLocked,  // 只有在未上锁时才允许删除
-                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
-                        modifier = Modifier
                     ) {
                         Icon(
                             imageVector = Icons.Default.Delete,
@@ -480,11 +482,9 @@ fun CheckInCard(
                         )
                     }
                     // 重置按钮
-                    Button(
+                    IconButton(
                         onClick = onReset,
                         enabled = !checkIn.isLocked, // 未上锁时才允许重置
-                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary),
-                        modifier = Modifier
                     ) {
                         Icon(
                             imageVector = Icons.Default.Refresh,
@@ -493,10 +493,8 @@ fun CheckInCard(
                         )
                     }
                     // 历史按钮
-                    Button(
+                    IconButton(
                         onClick = onHistory,
-                        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.primary),
-                        modifier = Modifier
                     ) {
                         Icon(
                             imageVector = Icons.Default.History,

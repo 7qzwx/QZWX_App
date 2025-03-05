@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -46,7 +45,7 @@ fun HomeScreen() {
     val context = LocalContext.current // 获取当前的Context
     LazyColumn(
         modifier = Modifier
-            .background(colorResource(id = R.color.zise))
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
             .padding(8.dp)
     ) {

@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.core.view.WindowCompat
 import com.qzwx.core.theme.QZWX_AppTheme
 import com.qzwx.feature_qiandaosystem.data.AppDatabase
 import com.qzwx.feature_qiandaosystem.data.CheckInDao
