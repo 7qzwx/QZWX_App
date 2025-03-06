@@ -35,6 +35,7 @@ android {
 
 dependencies {
     // 第三方库
+    api("me.nikhilchaudhari:composeNeumorphism:1.0.0-alpha02") //按钮悬浮与塌陷效果
     api(libs.exyte.animated.navigation.bar) // 动画导航栏
     api(libs.composereorderable.reorderable) // 可重排序的Compose组件
     api(libs.mpandroidchart) // MPAndroidChart图表库
@@ -43,7 +44,6 @@ dependencies {
     api(libs.calendar.compose) // Compose日历组件
     api(libs.accompanist.systemuicontroller.v0301) // Accompanist系统UI控制器
     api(libs.accompanist.pager.indicators) // Accompanist分页指示器
-
     // AndroidX库
     api(libs.androidx.material.icons.extended) // Material图标扩展
     api(libs.androidx.navigation.navigation.compose3) // Compose导航
@@ -78,7 +78,6 @@ dependencies {
     api(libs.androidx.constraintlayout) // ConstraintLayout
     api(libs.androidx.gridlayout) // GridLayout
     api(libs.androidx.navigation.runtime.ktx) // Navigation运行时KTX
-
     // 测试库
     api(libs.junit) // JUnit测试框架
 }

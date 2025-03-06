@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,7 +15,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,30 +46,33 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(navController : NavController) {
     val context = LocalContext.current // 获取当前的Context
-    LazyColumn(
+    LazyColumn(horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
             .padding(8.dp)
     ) {
         item {
-            Spacer(modifier = Modifier.height(16.dp))
             ImageCarousel()
-            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item { Spacer(modifier = Modifier.height(16.dp)) }
+        item {
             Text(
                 text = "这是一些功能的入口:",
                 style = MaterialTheme.typography.bodyMedium.copy(color = Color.LightGray),
-                modifier = Modifier.padding(bottom = 8.dp)
             )
-            CardList()
-            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item { CardList() }
+        item { Spacer(modifier = Modifier.height(16.dp)) }
+        item {
             Text(
                 text = "下面是一些可能用到的网址：",
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color.LightGray,
-                modifier = Modifier.padding(bottom = 8.dp)
+                color = Color.LightGray
             )
-            // 添加按钮-进入所有网址页面【下】开始---------------------------
+        }
+        // 添加按钮-进入所有网址页面【下】开始---------------------------
+        item {
             Button(
                 onClick = {
                     val intent = Intent(context, AllWebActivity::class.java)
@@ -77,8 +80,7 @@ fun HomeScreen(navController : NavController) {
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp)
-                    .height(48.dp) // 按钮高度
+                    .padding(top = 16.dp, start = 36.dp, end = 36.dp)
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -96,8 +98,11 @@ fun HomeScreen(navController : NavController) {
                         style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
                     )
                 }
-            } //所有网址进入的页面按钮【上】结束----------------------
-           Button(onClick = {navController.navigate(NavDestinations.BackUpScreen) }) { Text("数据备份") }
+            }
+        } //所有网址进入的页面按钮【上】结束----------------------
+        item { Spacer(modifier = Modifier.width(16.dp)) }
+        item {
+            Button(onClick = { navController.navigate(NavDestinations.BackUpScreen) }) { Text("数据备份") }
         }
     }
 }
@@ -144,7 +149,7 @@ fun ImageCarousel() {
                         fontFamily = customFontFamily,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onBackground,
                         shadow = Shadow(
                             color = Color.Black,
                             blurRadius = 4f
@@ -162,7 +167,7 @@ fun ImageCarousel() {
 
         HorizontalPagerIndicator(
             pagerState = pagerState,
-            activeColor = Color.White,
+            activeColor = MaterialTheme.colorScheme.onBackground,
             inactiveColor = Color.LightGray,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
