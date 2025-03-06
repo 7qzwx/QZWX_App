@@ -274,8 +274,7 @@ fun EditCheckInDialog(
                         unfocusedTextColor = MaterialTheme.colorScheme.secondary,
                         focusedIndicatorColor = Color.Transparent,
                         cursorColor = MaterialTheme.colorScheme.primary,
-
-                    ),
+                        ),
                     textStyle = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Normal
@@ -452,7 +451,7 @@ fun CheckInCard(
                 Text(text = "连续打卡 ${checkIn.consecutiveDays} 天",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface)
-                Text(text = "累计 ${checkIn.consecutiveDays} 天",
+                Text(text = "累计 ${checkIn.days} 天",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface)
             }

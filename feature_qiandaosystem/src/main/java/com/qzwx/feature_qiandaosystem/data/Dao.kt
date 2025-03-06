@@ -16,41 +16,47 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CheckInDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCheckIn(checkIn: CheckIn)
-
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateCheckIn(checkIn: CheckIn)
-
-    @Query("UPDATE checkinhistory SET checkInName = :newName WHERE checkInName = :oldName")
-    suspend fun updateCheckInHistoryName(oldName: String, newName: String)
-
-    @Query("SELECT * FROM checkin WHERE name = :name")
-    suspend fun getCheckInByName(name: String): CheckIn?
-
-    @Query("SELECT * FROM CheckIn")
-    fun getAllCheckIns(): Flow<List<CheckIn>>
+    suspend fun insertAllCheckIns(entities : List<CheckIn>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCheckInHistory(checkInHistory: CheckInHistory)
+    suspend fun insertAllCheckInHistories(entities : List<CheckInHistory>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCheckIn(checkIn : CheckIn)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateCheckIn(checkIn : CheckIn)
+
+    @Query("UPDATE checkinhistory SET checkInName = :newName WHERE checkInName = :oldName")
+    suspend fun updateCheckInHistoryName(oldName : String, newName : String)
+
+    @Query("SELECT * FROM checkin WHERE name = :name")
+    suspend fun getCheckInByName(name : String) : CheckIn?
+
+    @Query("SELECT * FROM CheckIn")
+    fun getAllCheckIns() : Flow<List<CheckIn>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCheckInHistory(checkInHistory : CheckInHistory)
 
     @Query("SELECT * FROM checkinhistory WHERE checkInName = :checkInName")
-    suspend fun getCheckInHistory(checkInName: String): List<CheckInHistory>
+    suspend fun getCheckInHistory(checkInName : String) : List<CheckInHistory>
 
     @Query("SELECT COUNT(*) FROM checkinhistory WHERE checkInName = :checkInName")
-    suspend fun getCheckInCount(checkInName: String): Int
+    suspend fun getCheckInCount(checkInName : String) : Int
 
     @Query("SELECT COUNT(*) FROM checkinhistory WHERE checkInName = :checkInName AND date = :date")
-    suspend fun getCheckInCountByDate(checkInName: String, date: String): Int
+    suspend fun getCheckInCountByDate(checkInName : String, date : String) : Int
 
     @Query("SELECT * FROM checkinhistory WHERE date = :date")
-    suspend fun getCheckInHistoryByDate(date: String): List<CheckInHistory>
+    suspend fun getCheckInHistoryByDate(date : String) : List<CheckInHistory>
 
     @Query("DELETE FROM checkinhistory WHERE checkInName = :name")
-    suspend fun deleteCheckInHistory(name: String)
+    suspend fun deleteCheckInHistory(name : String)
 
     @Query("DELETE FROM checkin WHERE name = :name")
-    suspend fun deleteCheckIn(name: String)
+    suspend fun deleteCheckIn(name : String)
 
     @Query("SELECT * FROM checkinhistory WHERE date BETWEEN :start AND :end")
-    fun getCheckInHistoryBetweenDates(start: String, end: String): List<CheckInHistory>
+    fun getCheckInHistoryBetweenDates(start : String, end : String) : List<CheckInHistory>
 }
