@@ -9,18 +9,18 @@ import androidx.room.RoomDatabase
  *
  * 外面通过它来访问app的数据内容 */
 @Database(entities = [CheckIn::class, CheckInHistory::class], version = 1)
-abstract class AppDatabase : RoomDatabase() {
+abstract class QZXTDatabase : RoomDatabase() {
     abstract fun checkInDao(): CheckInDao
 
     companion object {
         @Volatile
-        private var INSTANCE: AppDatabase? = null
+        private var INSTANCE: QZXTDatabase? = null
 
-        fun getInstance(context: Context): AppDatabase {
+        fun getInstance(context: Context): QZXTDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    AppDatabase::class.java,
+                    QZXTDatabase::class.java,
                     "Feature_QianDaoSystem"
                 )
                     .build()

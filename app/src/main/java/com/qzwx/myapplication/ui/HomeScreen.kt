@@ -14,6 +14,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -33,15 +34,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.google.accompanist.pager.*
 import com.qzwx.myapplication.AllWebActivity
 import com.qzwx.myapplication.JiSuanQi
 import com.qzwx.myapplication.R
+import com.qzwx.myapplication.navigation.NavDestinations
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController : NavController) {
     val context = LocalContext.current // 获取当前的Context
     LazyColumn(
         modifier = Modifier
@@ -83,7 +86,7 @@ fun HomeScreen() {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.svg_web), // 按钮图片
+                        painter = painterResource(id = R.drawable.app_svg_web), // 按钮图片
                         contentDescription = null,
                         modifier = Modifier.size(24.dp) // 图片大小
                     )
@@ -93,7 +96,8 @@ fun HomeScreen() {
                         style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
                     )
                 }
-            }//所有网址进入的页面按钮【上】结束----------------------
+            } //所有网址进入的页面按钮【上】结束----------------------
+           Button(onClick = {navController.navigate(NavDestinations.BackUpScreen) }) { Text("数据备份") }
         }
     }
 }

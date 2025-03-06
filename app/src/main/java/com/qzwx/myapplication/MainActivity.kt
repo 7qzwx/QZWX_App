@@ -11,10 +11,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.qzwx.core.theme.QZWX_AppTheme
 import com.qzwx.myapplication.components.BottomNavItem
 import com.qzwx.myapplication.components.CustomBottomNavigationBar
+import com.qzwx.myapplication.navigation.NavDestinations
 import com.qzwx.myapplication.navigation.NavGraph
 import com.qzwx.myapplication.notification.NotificationChannels
 import com.qzwx.myapplication.notification.NotificationHelper
@@ -42,19 +44,25 @@ class MainActivity : ComponentActivity() {
 fun MyApp() {
     // 定义底部导航栏的选项
     val items = listOf(
-        BottomNavItem("主页", R.drawable.svg_all, "home"),
-        BottomNavItem("音乐", R.drawable.svg_music1, "music"),
-        BottomNavItem("我的", R.drawable.svg_my, "profile")
+        BottomNavItem("主页", R.drawable.svg_all, NavDestinations.HOME),
+        BottomNavItem("音乐", R.drawable.svg_music1, NavDestinations.MUSIC),
+        BottomNavItem("我的", R.drawable.svg_my, NavDestinations.PROFILE)
     )
     val navController = rememberNavController()
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            CustomBottomNavigationBar(
-                items = items,
-                navController = navController
-            )
+            // 只在主页、音乐和我的页面显示底部导航栏
+            if (currentRoute in listOf(NavDestinations.HOME,
+                    NavDestinations.MUSIC,
+                    NavDestinations.PROFILE)) {
+                CustomBottomNavigationBar(
+                    items = items,
+                    navController = navController
+                )
+            }
         }
     ) {
         NavGraph(

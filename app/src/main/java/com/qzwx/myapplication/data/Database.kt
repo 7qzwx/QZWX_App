@@ -6,19 +6,19 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(entities = [LinkEntity::class], version = 1)
-abstract class AppDatabase : RoomDatabase() {
+abstract class WebAppDatabase : RoomDatabase() {
     abstract fun linkDao(): LinkDao
 
     companion object {
         @Volatile
-        private var INSTANCE: AppDatabase? = null
+        private var INSTANCE: WebAppDatabase? = null
 
-        fun getDatabase(context: Context): AppDatabase {
+        fun getDatabase(context: Context): WebAppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    AppDatabase::class.java,
-                    "app_database"
+                    WebAppDatabase::class.java,
+                    "web_database"
                 ).build()
                 INSTANCE = instance
                 instance

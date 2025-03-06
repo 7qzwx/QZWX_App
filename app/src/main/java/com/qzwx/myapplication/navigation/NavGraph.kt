@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.qzwx.myapplication.ui.DataBackUpScreen
 import com.qzwx.myapplication.ui.HomeScreen
 import com.qzwx.myapplication.ui.MusicScreen
 import com.qzwx.myapplication.ui.ProfileScreen
@@ -13,6 +14,7 @@ object NavDestinations {
     const val HOME = "home"
     const val MUSIC = "music"
     const val PROFILE = "profile"
+    const val BackUpScreen = "backupscreen"
 }
 
 //导航逻辑
@@ -23,13 +25,16 @@ fun NavGraph(navController : NavHostController) {
         startDestination = NavDestinations.HOME
     ) {
         composable(NavDestinations.HOME) {
-            HomeScreen()
+            HomeScreen(navController)
         }
         composable(NavDestinations.MUSIC) {
             MusicScreen()
         }
         composable(NavDestinations.PROFILE) {
             ProfileScreen()
+        }
+        composable(NavDestinations.BackUpScreen) {
+            DataBackUpScreen()
         }
     }
 }

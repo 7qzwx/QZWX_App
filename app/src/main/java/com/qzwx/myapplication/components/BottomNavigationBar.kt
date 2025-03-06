@@ -12,10 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,37 +36,31 @@ fun CustomBottomNavigationBar(
     items : List<BottomNavItem>,
     navController : NavHostController
 ) {
-    // 获取当前选中的项的索引
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    val selectedIndex = items.indexOfFirst { it.route == currentRoute }
-    // 新增变量，用于记录上一次选中的项的索引
-    var prevSelectedIndex by remember { mutableStateOf(0) }
-    // 使用第三方库的 AnimatedNavigationBar
+    val selectedIndex = items.indexOfFirst { it.route == currentRoute }.coerceAtLeast(0)
+
     AnimatedNavigationBar(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background.copy(alpha = 0.5f))
-            .padding(horizontal = 8.dp) // 添加了上下内边距
-            .height(68.dp), // 设置了导航栏的高度
+            .padding(horizontal = 8.dp)
+            .height(68.dp),
         selectedIndex = selectedIndex,
-        ballColor = MaterialTheme.colorScheme.primary, // 设置球的颜色
+        ballColor = MaterialTheme.colorScheme.primary,
         barColor = MaterialTheme.colorScheme.onPrimary.copy(0.5f),
-        cornerRadius = shapeCornerRadius(25.dp), // 设置导航栏的圆角为25dp
+        cornerRadius = shapeCornerRadius(25.dp),
         ballAnimation = Straight(
             spring(dampingRatio = 0.6f, stiffness = Spring.StiffnessVeryLow)
-        ) // 设置凹陷动画
+        )
     ) {
         items.forEachIndexed { index, item ->
-            // 修改了 Box 的内容
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .fillMaxSize() // 修改为填满整个区域
+                    .fillMaxSize()
                     .clickable(
-                        indication = null, // 禁用默认的涟漪效果
-                        interactionSource = MutableInteractionSource(), // 可选：禁用交互源
+                        indication = null,
+                        interactionSource = MutableInteractionSource()
                     ) {
-                        // 修改了点击事件
-                        prevSelectedIndex = selectedIndex // 更新上一次选中的索引
                         navController.navigate(item.route) {
                             popUpTo(navController.graph.startDestinationId) {
                                 saveState = true
