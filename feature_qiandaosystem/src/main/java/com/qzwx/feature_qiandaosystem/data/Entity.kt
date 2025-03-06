@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import java.time.LocalDate
 
 @Keep
-@Entity(tableName = "check_in")
+@Entity(tableName = "CheckIn")
 data class CheckIn(
     @PrimaryKey(autoGenerate = true) val id : Long = 0,
     val name : String,
@@ -19,7 +19,7 @@ data class CheckIn(
 )
 
 @Keep
-@Entity(tableName = "check_in_history")
+@Entity(tableName = "CheckInHistory")
 data class CheckInHistory(
     @PrimaryKey(autoGenerate = true) val id : Long = 0,
     val checkInName : String,

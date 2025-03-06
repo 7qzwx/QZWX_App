@@ -21,36 +21,36 @@ interface CheckInDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateCheckIn(checkIn: CheckIn)
 
-    @Query("UPDATE check_in_history SET checkInName = :newName WHERE checkInName = :oldName")
+    @Query("UPDATE checkinhistory SET checkInName = :newName WHERE checkInName = :oldName")
     suspend fun updateCheckInHistoryName(oldName: String, newName: String)
 
-    @Query("SELECT * FROM check_in WHERE name = :name")
+    @Query("SELECT * FROM checkin WHERE name = :name")
     suspend fun getCheckInByName(name: String): CheckIn?
 
-    @Query("SELECT * FROM check_in")
+    @Query("SELECT * FROM CheckIn")
     fun getAllCheckIns(): Flow<List<CheckIn>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCheckInHistory(checkInHistory: CheckInHistory)
 
-    @Query("SELECT * FROM check_in_history WHERE checkInName = :checkInName")
+    @Query("SELECT * FROM checkinhistory WHERE checkInName = :checkInName")
     suspend fun getCheckInHistory(checkInName: String): List<CheckInHistory>
 
-    @Query("SELECT COUNT(*) FROM check_in_history WHERE checkInName = :checkInName")
+    @Query("SELECT COUNT(*) FROM checkinhistory WHERE checkInName = :checkInName")
     suspend fun getCheckInCount(checkInName: String): Int
 
-    @Query("SELECT COUNT(*) FROM check_in_history WHERE checkInName = :checkInName AND date = :date")
+    @Query("SELECT COUNT(*) FROM checkinhistory WHERE checkInName = :checkInName AND date = :date")
     suspend fun getCheckInCountByDate(checkInName: String, date: String): Int
 
-    @Query("SELECT * FROM check_in_history WHERE date = :date")
+    @Query("SELECT * FROM checkinhistory WHERE date = :date")
     suspend fun getCheckInHistoryByDate(date: String): List<CheckInHistory>
 
-    @Query("DELETE FROM check_in_history WHERE checkInName = :name")
+    @Query("DELETE FROM checkinhistory WHERE checkInName = :name")
     suspend fun deleteCheckInHistory(name: String)
 
-    @Query("DELETE FROM check_in WHERE name = :name")
+    @Query("DELETE FROM checkin WHERE name = :name")
     suspend fun deleteCheckIn(name: String)
 
-    @Query("SELECT * FROM check_in_history WHERE date BETWEEN :start AND :end")
+    @Query("SELECT * FROM checkinhistory WHERE date BETWEEN :start AND :end")
     fun getCheckInHistoryBetweenDates(start: String, end: String): List<CheckInHistory>
 }

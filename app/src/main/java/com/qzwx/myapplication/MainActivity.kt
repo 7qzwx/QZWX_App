@@ -24,11 +24,11 @@ import com.qzwx.myapplication.notification.NotificationHelper
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState : Bundle?) {
-        super.onCreate(savedInstanceState) // 创建通知渠道
+        super.onCreate(savedInstanceState)
         NotificationChannels.createNotificationChannels(this)
         enableEdgeToEdge()
-        // 设置定时提醒
         NotificationHelper.setDailyReminder(this, enabled = true)
+
         setContent {
             QZWX_AppTheme {
                 Surface(modifier = Modifier.systemBarsPadding()) {
@@ -39,10 +39,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MyApp() {
-    // 定义底部导航栏的选项
     val items = listOf(
         BottomNavItem("主页", R.drawable.svg_all, NavDestinations.HOME),
         BottomNavItem("音乐", R.drawable.svg_music1, NavDestinations.MUSIC),
@@ -54,7 +54,6 @@ fun MyApp() {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            // 只在主页、音乐和我的页面显示底部导航栏
             if (currentRoute in listOf(NavDestinations.HOME,
                     NavDestinations.MUSIC,
                     NavDestinations.PROFILE)) {
@@ -65,8 +64,6 @@ fun MyApp() {
             }
         }
     ) {
-        NavGraph(
-            navController = navController
-        )
+        NavGraph(navController = navController)
     }
 }

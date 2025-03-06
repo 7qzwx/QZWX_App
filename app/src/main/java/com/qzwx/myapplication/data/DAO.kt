@@ -17,9 +17,9 @@ interface LinkDao {
     @Update
     suspend fun updateLink(link : LinkEntity)
 
-    @Query("DELETE FROM links WHERE id = :id")
+    @Query("DELETE FROM  linkentity WHERE id = :id")
     suspend fun deleteLink(id : Int)
 
-    @Query("SELECT * FROM links")
+    @Query("SELECT * FROM linkentity")
     fun getAllLinks() : Flow<List<LinkEntity>>
 }
