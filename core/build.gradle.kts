@@ -35,7 +35,7 @@ android {
 
 dependencies {
     // 第三方库
-    api("me.nikhilchaudhari:composeNeumorphism:1.0.0-alpha02") //按钮悬浮与塌陷效果
+    api(libs.composeneumorphism) //按钮悬浮与塌陷效果
     api(libs.exyte.animated.navigation.bar) // 动画导航栏
     api(libs.composereorderable.reorderable) // 可重排序的Compose组件
     api(libs.mpandroidchart) // MPAndroidChart图表库

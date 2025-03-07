@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.TextFieldColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -274,7 +273,7 @@ fun EditCheckInDialog(
                         unfocusedTextColor = MaterialTheme.colorScheme.secondary,
                         focusedIndicatorColor = Color.Transparent,
                         cursorColor = MaterialTheme.colorScheme.primary,
-                        ),
+                    ),
                     textStyle = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Normal

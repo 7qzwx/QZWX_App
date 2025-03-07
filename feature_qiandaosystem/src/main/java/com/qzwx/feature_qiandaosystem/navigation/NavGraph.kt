@@ -16,7 +16,7 @@ import com.qzwx.feature_qiandaosystem.viewmodel.CheckInViewModel
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun NavGraph(checkInRepository: CheckInRepository) {
+fun NavGraph(checkInRepository : CheckInRepository) {
     val navController = rememberNavController() // 创建 NavHostController
     val checkInViewModel = CheckInViewModel(checkInRepository) // 创建 ViewModel
     NavHost(navController = navController, startDestination = "check_in") {

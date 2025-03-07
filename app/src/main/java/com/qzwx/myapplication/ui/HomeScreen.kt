@@ -189,6 +189,7 @@ fun CardList() {
         Pair(R.drawable.svg_rijiben, "日记本"),
         Pair(R.drawable.svg_jizhangben, "记账本"),
         Pair(com.qzwx.core.R.drawable.qzxt_qdxt, "签到系统"),
+        Pair(com.qzwx.core.R.drawable.qzwx_words, "单词本"),
         Pair(R.drawable.svg_aixin, "❥(^_-)")
     )
 
@@ -235,6 +236,13 @@ fun CardItem(imageResId : Int, description : String) {
                     "签到系统" -> {
                         val intent =
                             Intent(context, com.qzwx.feature_qiandaosystem.QDXTActivity::class.java)
+                        context.startActivity(intent)
+                    }
+
+                    "单词本"   -> {
+                        val intent =
+                            Intent(context,
+                                com.qzwx.feature_wordsmemory.WordsMemoryActivity::class.java)
                         context.startActivity(intent)
                     }
                     // 你可以在这里处理其他卡片的点击事件

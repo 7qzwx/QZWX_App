@@ -13,8 +13,8 @@ android {
         applicationId = "com.qzwx.app"
         minSdk = 29
         targetSdk = 35
-        versionCode = 7
-        versionName = "5.2.0"
+        versionCode = 1
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -55,4 +55,5 @@ dependencies {
     ksp(libs.androidxRoomCompiler)
     implementation(project(":core"))
     implementation(project(":feature_qiandaosystem"))
+    implementation(project(":feature_wordsmemory"))
 }
