@@ -1,8 +1,10 @@
 package com.qzwx.myapplication.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.qzwx.feature_qiandaosystem.data.QZXTDatabase
 import com.qzwx.myapplication.data.LinkDao
 import com.qzwx.myapplication.data.LinkEntity
 import com.qzwx.myapplication.data.WebDefaultData
@@ -32,6 +34,18 @@ class LinkViewModel(private val linkDao : LinkDao) : ViewModel() {
         }
     }
 
+    fun insertAll(links : List<LinkEntity>) {
+        viewModelScope.launch {
+            linkDao.insertAll(links)
+        }
+    }
+
+    fun deleteAllLinks() {
+        viewModelScope.launch {
+            linkDao.deleteAllLinks()
+        }
+    }
+
     fun updateLink(link : LinkEntity) {
         viewModelScope.launch {
             linkDao.updateLink(link)
@@ -43,6 +57,8 @@ class LinkViewModel(private val linkDao : LinkDao) : ViewModel() {
             linkDao.deleteLink(id)
         }
     }
+
+
 }
 
 class LinkViewModelFactory(private val linkDao : LinkDao) : ViewModelProvider.Factory {

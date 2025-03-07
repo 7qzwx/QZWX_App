@@ -15,6 +15,18 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface CheckInDao {
+    @Query("SELECT * FROM CheckIn")
+    suspend fun getAllCheckInsSync() : List<CheckIn>
+
+    @Query("SELECT * FROM CheckInHistory")
+    suspend fun getAllCheckInHistoriesSync() : List<CheckInHistory>
+
+    @Query("DELETE FROM CheckIn")
+    suspend fun deleteAllCheckIns()
+
+    @Query("DELETE FROM CheckInHistory")
+    suspend fun deleteAllCheckInHistories()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllCheckIns(entities : List<CheckIn>)
 

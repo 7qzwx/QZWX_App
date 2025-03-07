@@ -1,7 +1,14 @@
 package com.qzwx.myapplication.ui
 
+import android.app.Activity
+import android.content.ContentUris
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Environment
+import android.provider.DocumentsContract
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -26,18 +33,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.qzwx.core.QZWXApplication
 import com.qzwx.myapplication.R
 import com.qzwx.myapplication.data.LinkEntity
 import com.qzwx.myapplication.viewmodel.LinkViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AllWebScreen(linkViewModel : LinkViewModel) {
+fun AllWebScreen(linkViewModel : LinkViewModel, activity : Activity) {
     // 管理对话框的显示状态
     var showDialog by remember { mutableStateOf(false) }
     var showEditDialog by remember { mutableStateOf(false) }
+    var showBackupDialog by remember { mutableStateOf(false) }
+    var showRestoreDialog by remember { mutableStateOf(false) }
     // 用户输入的数据
     var websiteName by remember { mutableStateOf("") }
     var websiteUrl by remember { mutableStateOf("") }
@@ -147,20 +166,14 @@ fun AllWebScreen(linkViewModel : LinkViewModel) {
                     OutlinedTextField(
                         value = websiteName,
                         onValueChange = { websiteName = it },
-                        label = {
-                            Text("网站名称",
-                                style = MaterialTheme.typography.labelSmall)
-                        },
+                        label = { Text("网站名称", style = MaterialTheme.typography.labelSmall) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
                     OutlinedTextField(
                         value = websiteUrl,
                         onValueChange = { websiteUrl = it },
-                        label = {
-                            Text("网站地址",
-                                style = MaterialTheme.typography.labelSmall)
-                        },
+                        label = { Text("网站地址", style = MaterialTheme.typography.labelSmall) },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -224,14 +237,8 @@ fun AllWebScreen(linkViewModel : LinkViewModel) {
     if (showDeleteDialog && linkToDelete != null) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = {
-                Text("确认删除",
-                    style = MaterialTheme.typography.titleLarge)
-            },
-            text = {
-                Text("你确定要删除这个链接吗？",
-                    style = MaterialTheme.typography.bodyMedium)
-            },
+            title = { Text("确认删除", style = MaterialTheme.typography.titleLarge) },
+            text = { Text("你确定要删除这个链接吗？", style = MaterialTheme.typography.bodyMedium) },
             confirmButton = {
                 TextButton(onClick = {
                     linkToDelete?.let {
@@ -241,7 +248,7 @@ fun AllWebScreen(linkViewModel : LinkViewModel) {
                             Toast.LENGTH_SHORT).show()
                     }
                     showDeleteDialog = false
-                    linkToDelete = null // 清空要删除的链接
+                    linkToDelete = null
                 }) {
                     Text("确认", style = MaterialTheme.typography.labelLarge)
                 }
@@ -249,19 +256,63 @@ fun AllWebScreen(linkViewModel : LinkViewModel) {
             dismissButton = {
                 TextButton(onClick = {
                     showDeleteDialog = false
-                    linkToDelete = null // 清空要删除的链接
+                    linkToDelete = null
                 }) {
                     Text("取消", style = MaterialTheme.typography.labelLarge)
                 }
             }
         )
     }
-    Scaffold(containerColor = MaterialTheme.colorScheme.background,
+    // 显示备份数据对话框
+    if (showBackupDialog) {
+        AlertDialog(
+            onDismissRequest = { showBackupDialog = false },
+            title = { Text("备份数据", style = MaterialTheme.typography.titleLarge) },
+            text = { Text("是否备份所有链接数据？", style = MaterialTheme.typography.bodyMedium) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showBackupDialog = false
+                    exportDatabaseFromLinkViewModel(linkViewModel, QZWXApplication.getContext())
+                }) {
+                    Text("备份", style = MaterialTheme.typography.labelLarge)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showBackupDialog = false }) {
+                    Text("取消", style = MaterialTheme.typography.labelLarge)
+                }
+            }
+        )
+    }
+    // 显示恢复数据对话框
+    if (showRestoreDialog) {
+        AlertDialog(
+            onDismissRequest = { showRestoreDialog = false },
+            title = { Text("恢复数据", style = MaterialTheme.typography.titleLarge) },
+            text = { Text("是否从文件恢复链接数据？", style = MaterialTheme.typography.bodyMedium) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showRestoreDialog = false
+                    importDatabaseToLinkViewModel(linkViewModel, activity)
+                }) {
+                    Text("恢复", style = MaterialTheme.typography.labelLarge)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showRestoreDialog = false }) {
+                    Text("取消", style = MaterialTheme.typography.labelLarge)
+                }
+            }
+        )
+    }
+
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    websiteName = "" // 清空网站名称
-                    websiteUrl = "" // 清空网站地址
+                    websiteName = ""
+                    websiteUrl = ""
                     selectedIcon = R.drawable.app_svg_web
                     showDialog = true
                 },
@@ -284,6 +335,19 @@ fun AllWebScreen(linkViewModel : LinkViewModel) {
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
+                // 添加导出和导入按钮
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    TextButton(onClick = { showBackupDialog = true }) {
+                        Text("导出数据", style = MaterialTheme.typography.labelLarge)
+                    }
+                    TextButton(onClick = { showRestoreDialog = true }) {
+                        Text("导入数据", style = MaterialTheme.typography.labelLarge)
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
                 // 标题和网格内容
                 Box(
                     modifier = Modifier.fillMaxWidth(),
@@ -292,7 +356,7 @@ fun AllWebScreen(linkViewModel : LinkViewModel) {
                     Text(
                         text = "下面是一些可能有用的网站：",
                         style = MaterialTheme.typography.titleLarge,
-                        color = Color(0xFFFCAEAE), // 更深的颜色提高可读性
+                        color = Color(0xFFFCAEAE),
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
                 }
@@ -317,8 +381,8 @@ fun AllWebScreen(linkViewModel : LinkViewModel) {
                                 showEditDialog = true
                             },
                             onDeleteClick = {
-                                linkToDelete = link // 设置要删除的链接
-                                showDeleteDialog = true // 显示删除确认对话框
+                                linkToDelete = link
+                                showDeleteDialog = true
                             }
                         )
                     }
@@ -327,6 +391,175 @@ fun AllWebScreen(linkViewModel : LinkViewModel) {
         }
     }
 }
+
+// 修改后的导出函数（增强版）
+fun exportDatabaseFromLinkViewModel(linkViewModel : LinkViewModel, context : Context) {
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val links = linkViewModel.allLinks.first()
+            val resolver = context.contentResolver
+            // 获取当前日期，格式化为 "XX月XX日"
+            val dateFormat = SimpleDateFormat("MM月dd日", Locale.getDefault())
+            val currentDate = dateFormat.format(Date())
+            // 1. 构建增强版文件元数据
+            val contentValues = ContentValues().apply {
+                put(MediaStore.Downloads.DISPLAY_NAME, "links_$currentDate.csv") // 修改文件名
+                put(MediaStore.Downloads.MIME_TYPE, "text/csv")
+                put(MediaStore.Downloads.RELATIVE_PATH, "Download/七种文学APP备份")
+                put(MediaStore.Downloads.IS_PENDING, 1)
+            }
+            // 2. 多维度文件清理
+            val backupDir = File("/storage/emulated/0/Download/七种文学APP备份/")
+            if (backupDir.exists() && backupDir.isDirectory) {
+                val files = backupDir.listFiles()
+                files?.forEach { file ->
+                    if (file.name.startsWith("links_") && file.name.endsWith(".csv")) {
+                        file.delete() // 删除旧文件
+                    }
+                }
+            }
+            // 3. 延迟写入机制（解决Android媒体库缓存问题）
+            delay(800)
+            // 4. 创建新文件（增强模式）
+            val newUri = resolver.insert(
+                MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+                contentValues.apply {
+                    put(MediaStore.Downloads.IS_PENDING, 0)
+                }
+            ) ?: throw IOException("无法创建文件")
+            // 5. 安全写入流程（强制覆盖模式）
+            resolver.openOutputStream(newUri, "wt")?.use { outputStream ->
+                outputStream.write("id,url,iconResId,description\n".toByteArray())
+                links.forEach { link ->
+                    val line = "${link.id},${link.url},${link.iconResId},${link.description}\n"
+                    outputStream.write(line.toByteArray())
+                }
+            }
+            // 6. 媒体库刷新机制（确保文件立即可见）
+            context.sendBroadcast(
+                Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, newUri)
+            )
+
+            withContext(Dispatchers.Main) {
+                Toast.makeText(
+                    context,
+                    "✅ 备份成功！路径：${getFilePathFromUri(context, newUri)}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        } catch (e : Exception) {
+            withContext(Dispatchers.Main) {
+                val errorMsg = when {
+                    e is SecurityException -> "请开启存储权限后再试"
+                    e is IOException       -> "文件系统访问失败，请检查目录权限"
+                    else                   -> "操作失败：${e.message?.take(50)}"
+                }
+                Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+}
+
+// 辅助函数：从 Uri 获取真实文件路径
+private fun getFilePathFromUri(context : Context, uri : Uri) : String {
+    return when {
+        DocumentsContract.isDocumentUri(context, uri) -> {
+            val docId = DocumentsContract.getDocumentId(uri)
+            when {
+                isExternalStorageDocument(uri) -> {
+                    val split = docId.split(":")
+                    "${Environment.getExternalStorageDirectory()}/${split[1]}"
+                }
+
+                isDownloadsDocument(uri)       -> {
+                    val contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"),
+                        docId.toLong()
+                    )
+                    getDataColumn(context, contentUri, null, null)
+                }
+
+                else                           -> uri.path ?: "未知路径"
+            }
+        }
+
+        else                                          -> uri.path ?: "未知路径"
+    }
+}
+
+private fun getDataColumn(
+    context : Context,
+    uri : Uri,
+    selection : String?,
+    selectionArgs : Array<String>?
+) : String {
+    var result = ""
+    context.contentResolver.query(uri, arrayOf("_data"), selection, selectionArgs, null)?.use {
+        if (it.moveToFirst()) {
+            result = it.getString(it.getColumnIndexOrThrow("_data"))
+        }
+    }
+    return result
+}
+
+private fun isExternalStorageDocument(uri : Uri) : Boolean {
+    return uri.authority == "com.android.externalstorage.documents"
+}
+
+private fun isDownloadsDocument(uri : Uri) : Boolean {
+    return uri.authority == "com.android.providers.downloads.documents"
+}
+
+// 导入数据的逻辑
+fun importDatabaseToLinkViewModel(linkViewModel : LinkViewModel, activity : Activity) {
+    val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+        type = "text/*"
+        addCategory(Intent.CATEGORY_OPENABLE)
+    }
+    activity.startActivityForResult(intent, REQUEST_CODE_IMPORT)
+}
+
+// 处理文件选择结果
+fun handleImportResult(linkViewModel : LinkViewModel, context : Context, data : Intent?) {
+    val uri = data?.data
+    if (uri == null) {
+        Toast.makeText(context, "未选择文件", Toast.LENGTH_SHORT).show()
+        return
+    }
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val reader = inputStream?.bufferedReader()
+            val lines = reader?.readLines() ?: emptyList()
+            val links = mutableListOf<LinkEntity>()
+            for (line in lines.drop(1)) {
+                val parts = line.split(",")
+                if (parts.size == 4) {
+                    val id = parts[0].toInt()
+                    val url = parts[1]
+                    val iconResId = parts[2].toInt()
+                    val description = parts[3]
+                    links.add(LinkEntity(id, url, iconResId, description))
+                }
+            }
+            // 清空数据库
+            linkViewModel.deleteAllLinks()
+            // 插入新数据
+            linkViewModel.insertAll(links)
+
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "数据导入成功", Toast.LENGTH_LONG).show()
+            }
+        } catch (e : Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "失败：咩有给我存储权限", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+}
+
+// 定义文件选择请求码
+const val REQUEST_CODE_IMPORT = 1001
 
 @Composable
 fun LinkItemView(
@@ -340,21 +573,23 @@ fun LinkItemView(
     Surface(
         modifier = Modifier
             .clickable {
-                // 确保链接以 http:// 或 https:// 开头
-                val validLink =
-                    if (link.startsWith("http://") || link.startsWith("https://")) {
-                        link
-                    } else {
-                        "http://$link"
-                    }
+                val validLink = if (link.startsWith("http://") || link.startsWith("https://")) {
+                    link
+                } else {
+                    "http://$link"
+                }
                 context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(validLink)))
             }
             .padding(8.dp)
             .shadow(8.dp, RoundedCornerShape(16.dp))
-            .border(BorderStroke(2.dp,
-                brush = Brush.verticalGradient(colors = listOf(Color(0xFFA18CD1),
-                    Color(0xFFFBC2EB)))),
-                shape = RoundedCornerShape(16.dp)),
+            .border(
+                BorderStroke(
+                    2.dp,
+                    brush = Brush.verticalGradient(colors = listOf(Color(0xFFA18CD1),
+                        Color(0xFFFBC2EB)))
+                ),
+                shape = RoundedCornerShape(16.dp)
+            ),
         shape = RoundedCornerShape(16.dp),
         color = MaterialTheme.colorScheme.surface
     ) {
@@ -372,8 +607,8 @@ fun LinkItemView(
                 text = description,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
-                overflow = TextOverflow.Ellipsis, // 省略文本
-                maxLines = 1 // 最大行数
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),

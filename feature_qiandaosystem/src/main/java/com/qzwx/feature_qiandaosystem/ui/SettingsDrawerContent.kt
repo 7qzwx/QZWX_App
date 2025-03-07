@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Backup
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.EventNote
-import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Notes
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.AlertDialog
@@ -30,7 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -83,13 +80,23 @@ fun SettingsDrawerContent(
                 }
             )
         }
-        // 语言选择
+        //日历视图
         NavigationDrawerItem(
             icon = { Icon(Icons.Default.CalendarMonth, contentDescription = null) },
             label = { Text("日历视图") },
             selected = false,
             onClick = {
                 navController.navigate("calendar")
+                closeDrawer()
+            }
+        )
+        NavigationDrawerItem(
+            icon = { Icon(Icons.Default.Backup, contentDescription = null) },
+            label = { Text("数据备份") },
+            selected = false,
+            onClick = {
+                navController.navigate("backupscreen")
+                closeDrawer()
             }
         )
     }

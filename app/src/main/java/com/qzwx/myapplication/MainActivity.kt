@@ -19,7 +19,6 @@ import com.qzwx.myapplication.components.CustomBottomNavigationBar
 import com.qzwx.myapplication.navigation.NavDestinations
 import com.qzwx.myapplication.navigation.NavGraph
 import com.qzwx.myapplication.notification.NotificationChannels
-import com.qzwx.myapplication.notification.NotificationHelper
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
@@ -27,7 +26,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         NotificationChannels.createNotificationChannels(this)
         enableEdgeToEdge()
-        NotificationHelper.setDailyReminder(this, enabled = true)
 
         setContent {
             QZWX_AppTheme {
@@ -38,7 +36,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
