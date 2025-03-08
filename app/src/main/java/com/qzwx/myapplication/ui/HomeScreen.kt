@@ -39,7 +39,6 @@ import com.google.accompanist.pager.*
 import com.qzwx.myapplication.AllWebActivity
 import com.qzwx.myapplication.JiSuanQi
 import com.qzwx.myapplication.R
-import com.qzwx.myapplication.navigation.NavDestinations
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -101,9 +100,6 @@ fun HomeScreen(navController : NavController) {
             }
         } //所有网址进入的页面按钮【上】结束----------------------
         item { Spacer(modifier = Modifier.width(16.dp)) }
-        item {
-            Button(onClick = { navController.navigate(NavDestinations.BackUpScreen) }) { Text("数据备份") }
-        }
     }
 }
 

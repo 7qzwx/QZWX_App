@@ -1,8 +1,12 @@
 package com.qzwx.feature_wordsmemory
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +23,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.bottombar.AnimatedBottomBar
@@ -31,10 +34,23 @@ import com.qzwx.core.theme.QZWX_AppTheme
 import com.qzwx.feature_wordsmemory.data.AppDatabase
 import com.qzwx.feature_wordsmemory.data.WordRepository
 import com.qzwx.feature_wordsmemory.navigation.NavGraph
+import com.qzwx.feature_wordsmemory.ui.handleWordsImportResult
 import com.qzwx.feature_wordsmemory.viewmodel.WordViewModel
 import com.qzwx.feature_wordsmemory.viewmodel.WordViewModelFactory
 
 class WordsMemoryActivity : ComponentActivity() {
+    // 注册文件选择结果的处理器，使用ActivityResultContracts
+    private val importWordsLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri : Uri? ->
+            if (uri != null) {
+                // 创建一个包含URI的Intent，传递给处理函数
+                val intent = Intent().apply { data = uri }
+                handleWordsImportResult(this, intent)
+            } else {
+                Toast.makeText(this, "未选择文件", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         val database = AppDatabase.getDatabase(this)
@@ -42,11 +58,22 @@ class WordsMemoryActivity : ComponentActivity() {
 
         setContent {
             QZWX_AppTheme {
-                val viewModel : WordViewModel = viewModel(
+                val viewModel : WordViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
                     factory = WordViewModelFactory(repository)
                 )
                 WMsystem(viewModel = viewModel)
             }
+        }
+    }
+
+    // 启动文件选择器，选择 CSV 文件
+    fun importWordsDatabase() {
+        try {
+            // 显示启动导入的Toast提示
+            Toast.makeText(this, "请选择备份的CSV文件", Toast.LENGTH_SHORT).show()
+            importWordsLauncher.launch("text/*") // 启动文件选择器选择 CSV 文件
+        } catch (e : Exception) {
+            Toast.makeText(this, "打开文件选择器失败: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 }
@@ -56,7 +83,7 @@ fun WMsystem(viewModel : WordViewModel) {
     val navController = rememberNavController()
     val items = listOf(
         Triple("主页", Icons.Default.Home, "homepage"),
-        Triple("复习", Icons.Default.Reviews, "reviewpage"),
+        Triple("单词库", Icons.Default.Reviews, "vocabularypage"),
         Triple("统计", Icons.Default.EvStation, "statisticpage"),
         Triple("设置", Icons.Default.Settings, "settingpage")
     )
@@ -66,42 +93,46 @@ fun WMsystem(viewModel : WordViewModel) {
     LaunchedEffect(currentRoute) {
         selectedItemIndex.value = items.indexOfFirst { it.third == currentRoute }
     }
+    // 只在 `homepage`, `vocabularypage`, `statisticpage`, `settingpage` 这些页面显示底部导航栏
+    val shouldShowBottomBar = currentRoute in items.map { it.third }
 
     Scaffold(
         bottomBar = {
-            AnimatedBottomBar(
-                selectedItem = selectedItemIndex.value,
-                indicatorStyle = IndicatorStyle.DOT,
-                containerShape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
-                indicatorColor = MaterialTheme.colorScheme.onSurface,
-                indicatorShape = RoundedCornerShape(25.dp),
-                containerColor = MaterialTheme.colorScheme.surface,
-            ) {
-                items.forEachIndexed { index, (label, icon, route) ->
-                    val selected = index == selectedItemIndex.value
-                    BottomBarItem(
-                        selected = selected,
-                        onClick = {
-                            selectedItemIndex.value = index
-                            navController.navigate(route) {
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true
+            if (shouldShowBottomBar) { // 只有在允许的页面才显示底部栏
+                AnimatedBottomBar(
+                    selectedItem = selectedItemIndex.value,
+                    indicatorStyle = IndicatorStyle.DOT,
+                    containerShape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
+                    indicatorColor = MaterialTheme.colorScheme.onSurface,
+                    indicatorShape = RoundedCornerShape(25.dp),
+                    containerColor = MaterialTheme.colorScheme.surface,
+                ) {
+                    items.forEachIndexed { index, (label, icon, route) ->
+                        val selected = index == selectedItemIndex.value
+                        BottomBarItem(
+                            selected = selected,
+                            onClick = {
+                                selectedItemIndex.value = index
+                                navController.navigate(route) {
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        imageVector = icon,
-                        label = label,
-                        visibleItem = VisibleItem.ICON,
-                        itemStyle = ItemStyle.STYLE1
-                    )
+                            },
+                            imageVector = icon,
+                            label = label,
+                            visibleItem = VisibleItem.ICON,
+                            itemStyle = ItemStyle.STYLE1
+                        )
+                    }
                 }
             }
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavGraph(navController = navController, viewModel = viewModel) // 传入 ViewModel
+            NavGraph(navController = navController, viewModel = viewModel)
         }
     }
 }

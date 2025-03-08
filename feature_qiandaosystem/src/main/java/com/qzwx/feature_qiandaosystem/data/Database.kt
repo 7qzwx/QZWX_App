@@ -1,6 +1,5 @@
 package com.qzwx.feature_qiandaosystem.data
 
-import android.app.Activity
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
@@ -14,7 +13,7 @@ import android.widget.Toast
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.qzwx.feature_qiandaosystem.viewmodel.CheckInViewModel
+import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -42,10 +41,29 @@ abstract class QZXTDatabase : RoomDatabase() {
                     context.applicationContext,
                     QZXTDatabase::class.java,
                     "Feature_QianDaoSystem"
-                )
+                ).addCallback(WordDatabaseCallback(context))
                     .build()
                 INSTANCE = instance
                 instance
+            }
+        }
+
+        // 数据库创建时候自动插入默认数据
+        private class WordDatabaseCallback(private val context : Context) :
+            Callback() {
+            override fun onCreate(db : SupportSQLiteDatabase) {
+                super.onCreate(db)
+                CoroutineScope(Dispatchers.IO).launch {
+                    val wordDao = getInstance(context).checkInDao()
+                    // 插入默认数据
+                    populateDatabase(wordDao)
+                }
+            }
+
+            private suspend fun populateDatabase(checkInDao : CheckInDao) {
+                defaultWords.forEach { checkin ->
+                    checkInDao.insertAllCheckIns(listOf(checkin))
+                }
             }
         }
 
@@ -155,10 +173,12 @@ abstract class QZXTDatabase : RoomDatabase() {
             return "com.android.providers.downloads.documents" == uri.authority
         }
 
-        private fun getDataColumn(context : Context,
+        private fun getDataColumn(
+            context : Context,
             uri : Uri,
             selection : String?,
-            selectionArgs : Array<String>?) : String {
+            selectionArgs : Array<String>?
+        ) : String {
             context.contentResolver.query(uri,
                 arrayOf(MediaStore.Downloads.DATA),
                 selection,
@@ -171,17 +191,15 @@ abstract class QZXTDatabase : RoomDatabase() {
             return "未知路径"
         }
 
-        // 导入覆盖操作
-        fun importDatabase(context: Context, uri: Uri) {
+        // 修改后的导入逻辑
+        fun importDatabase(context : Context, uri : Uri) {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    val resolver: ContentResolver = context.contentResolver
+                    val resolver : ContentResolver = context.contentResolver
                     val inputStream = resolver.openInputStream(uri)
                     val reader = BufferedReader(InputStreamReader(inputStream))
                     val lines = reader.readLines()
                     reader.close()
-
-                    // 解析 CSV 数据
                     val checkIns = mutableListOf<CheckIn>()
                     val checkInHistories = mutableListOf<CheckInHistory>()
                     var isCheckInSection = true
@@ -224,8 +242,6 @@ abstract class QZXTDatabase : RoomDatabase() {
                             }
                         }
                     }
-
-                    // 覆盖数据库中的数据
                     val checkInDao = getInstance(context).checkInDao()
                     checkInDao.deleteAllCheckIns()
                     checkInDao.deleteAllCheckInHistories()
@@ -235,13 +251,12 @@ abstract class QZXTDatabase : RoomDatabase() {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(context, "✅ 导入成功！", Toast.LENGTH_LONG).show()
                     }
-                } catch (e: Exception) {
+                } catch (e : Exception) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(context, "❌ 导入失败：${e.message}", Toast.LENGTH_LONG).show()
                     }
                 }
             }
         }
-
     }
 }

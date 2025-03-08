@@ -1,45 +1,46 @@
 package com.qzwx.feature_wordsmemory.ui
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.qzwx.feature_wordsmemory.components.BottomBar
-import com.qzwx.feature_wordsmemory.data.Word
 import com.qzwx.feature_wordsmemory.viewmodel.WordViewModel
 import java.util.Calendar
 
 @Composable
-fun HomePage(modifier : Modifier = Modifier,
-    navController : NavController,
-    viewModel : WordViewModel) {
-    // 从 ViewModel 中获取单词列表
-    val words by viewModel.allWords.collectAsState(initial = emptyList())
+fun HomePage(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    viewModel: WordViewModel
+) {
+    // Collect state from ViewModel using collectAsState
+    val allWordsCount by viewModel.allWordsCount.collectAsState(initial = 0)
+    val newWordsCount by viewModel.newWordsCount.collectAsState(initial = 0)
+    val familiarWordsCount by viewModel.familiarWordsCount.collectAsState(initial = 0)
+    val masteredWordsCount by viewModel.masteredWordsCount.collectAsState(initial = 0)
+    val toLearnWordsCount by viewModel.toLearnWordsCount.collectAsState(initial = 0)
+
+    // Get current time for greeting
     val calendar = Calendar.getInstance()
-    val hour = calendar.get(Calendar.HOUR_OF_DAY) // 获取当前小时（24小时制）
-    // 根据时间设置问候语
+    val hour = calendar.get(Calendar.HOUR_OF_DAY)
     val greeting = when (hour) {
         in 6..11  -> "早上好,开始新的一天吧!"
         in 12..17 -> "下午好,背背单词休息会!"
         in 18..23 -> "晚上好,回忆一下单词吧!"
         else      -> "凌晨了，早点休息吧！"
+    }
+
+    // Load data when the component is first composed
+    LaunchedEffect(key1 = Unit) {
+        viewModel.loadWordCounts()
     }
 
     Scaffold(
@@ -50,148 +51,108 @@ fun HomePage(modifier : Modifier = Modifier,
             }
         }
     ) { innerPadding ->
-        Column(modifier = Modifier.padding(innerPadding)) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 26.dp, start = 26.dp, end = 26.dp)
-                    .border(border = BorderStroke(2.dp, color = Color.Gray),
-                        shape = RoundedCornerShape(2.dp)),
-                horizontalArrangement = Arrangement.Center,
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                InfoCard(label = "已学单词", count = 30)
-                InfoCard(label = "单词库", count = 4)
-                InfoCard(label = "学习天数", count = 3)
+                // Title Section
+                Text(
+                    text = "单词统计",
+                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(top = 16.dp, bottom = 24.dp)
+                )
+
+                // Info Cards Section - Each item in a separate row
+                InfoCardRow(label = "全部单词", count = allWordsCount)
+                InfoCardRow(label = "生疏单词", count = newWordsCount)
+                InfoCardRow(label = "熟悉单词", count = familiarWordsCount)
+                InfoCardRow(label = "掌握单词", count = masteredWordsCount)
+                InfoCardRow(label = "待学习单词", count = toLearnWordsCount)
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // Start Learning Button - Centered and styled
+                Button(
+                    onClick = { navController.navigate("reviewpage") },
+                    modifier = Modifier
+                        .height(48.dp)
+                        .fillMaxWidth(0.8f)
+                        .padding(horizontal = 24.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                ) {
+                    Text(
+                        text = "开始学习",
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = { /*TODO: Start learning action*/ },
-                modifier = Modifier
-                    .height(48.dp)
-                    .padding(start = 56.dp, end = 56.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(text = "开始学习")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            WordList(words = words)
         }
     }
 }
 
 @Composable
-fun TopAppBar(greeting : String) {
+fun InfoCardRow(label: String, count: Int) {
+    // A card that displays label and count with padding and rounded corners
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 8.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(8.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = count.toString(),
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBar(greeting: String) {
     TopAppBar(
         title = {
-            Text(
-                text = greeting,
-                fontWeight = FontWeight.Bold,
-                fontStyle = FontStyle.Italic,
-                style = MaterialTheme.typography.h5
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = greeting,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Italic,
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
         },
         actions = {
             IconButton(onClick = { /* TODO: Filter action */ }) {
                 Icon(Icons.Default.FilterList, contentDescription = "Filter")
             }
         },
-        backgroundColor = MaterialTheme.colors.primarySurface,
-        elevation = 4.dp
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
     )
-}
-
-@Composable
-fun WordList(words : List<Word>) {
-    LazyColumn {
-        items(words) { word ->
-            WordCard(word = word)
-        }
-    }
-}
-
-@Composable
-fun WordCard(word : Word) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable { expanded = !expanded },
-        elevation = 4.dp,
-        shape = RoundedCornerShape(8.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = word.word,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
-                Chip(word.pos)
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = word.definition, // 直接显示完整释义
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
-            if (expanded) {
-                Spacer(modifier = Modifier.height(8.dp))
-                LinearProgressIndicator(
-                    modifier = Modifier.fillMaxWidth(),
-                    progress = 0.5f // 示例进度
-                )
-            }
-            IconButton(
-                onClick = { expanded = !expanded },
-                modifier = Modifier.align(Alignment.End)
-            ) {
-                Icon(Icons.Outlined.ExpandMore, contentDescription = "Expand")
-            }
-        }
-    }
-}
-
-@Composable
-fun Chip(text : String) {
-    Box(
-        modifier = Modifier
-            .background(Color.Blue, shape = RoundedCornerShape(16.dp))
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-    ) {
-        Text(
-            text = text,
-            color = Color.White,
-            fontSize = 12.sp
-        )
-    }
-}
-
-@Composable
-fun InfoCard(label : String, count : Int) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .width(100.dp)
-            .padding(5.dp)
-    ) {
-        Text(
-            text = label,
-            maxLines = 1,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = count.toString(),
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
-        )
-    }
 }

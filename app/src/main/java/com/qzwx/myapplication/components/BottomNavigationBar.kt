@@ -41,7 +41,7 @@ fun CustomBottomNavigationBar(
 
     AnimatedNavigationBar(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.5f))
+            .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(horizontal = 8.dp)
             .height(68.dp),
         selectedIndex = selectedIndex,
@@ -74,7 +74,7 @@ fun CustomBottomNavigationBar(
                     painter = painterResource(id = item.iconResId),
                     contentDescription = item.label,
                     modifier = Modifier.size(24.dp),
-                    tint = if (selectedIndex == index) MaterialTheme.colorScheme.primary else Color.Gray
+                    tint = if (selectedIndex == index) MaterialTheme.colorScheme.onPrimaryContainer else Color.Gray
                 )
             }
         }

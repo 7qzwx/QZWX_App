@@ -22,7 +22,7 @@ class QDXTActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val database : QZXTDatabase = QZXTDatabase.getInstance(this)
         val checkInDao : CheckInDao = database.checkInDao()
-        val checkInRepository : CheckInRepository = CheckInRepositoryImpl(checkInDao)
+        checkInRepository = CheckInRepositoryImpl(checkInDao)
 
         setContent {
             QZWX_AppTheme {
@@ -34,5 +34,4 @@ class QDXTActivity : ComponentActivity() {
             }
         }
     }
-
 }
