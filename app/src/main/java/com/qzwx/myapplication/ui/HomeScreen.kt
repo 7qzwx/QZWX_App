@@ -108,10 +108,10 @@ fun HomeScreen(navController : NavController) {
 @Composable
 fun ImageCarousel() {
     val images = listOf(
-        R.drawable.tp_lunbotu01,
-        R.drawable.tp_lunbotu02,
-        R.drawable.tp_lunbotu03,
-        R.drawable.tp_lunbotu04
+        R.drawable.shenli,
+        R.drawable.tp1,
+        R.drawable.tp2,
+        R.drawable.tp3
     )
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
@@ -181,11 +181,11 @@ fun ImageCarousel() {
 @Composable
 fun CardList() {
     val cardItems = listOf(
-        Pair(R.drawable.svg_jisuanqi, "计算器"),
-        Pair(R.drawable.svg_rijiben, "日记本"),
-        Pair(R.drawable.svg_jizhangben, "记账本"),
+        Pair(R.drawable.jisuanqiico, "计算器"),
+        Pair(R.drawable.diaryico, "日记本"),
+        Pair(R.drawable.accountico, "记账本"),
         Pair(com.qzwx.core.R.drawable.qzxt_qdxt, "签到系统"),
-        Pair(com.qzwx.core.R.drawable.qzwx_words, "单词本"),
+        Pair(R.drawable.wordsico, "单词本"),
         Pair(R.drawable.svg_aixin, "❥(^_-)")
     )
 

@@ -37,13 +37,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MyApp() {
     val items = listOf(
-        BottomNavItem("主页", R.drawable.svg_all, NavDestinations.HOME),
-        BottomNavItem("音乐", R.drawable.svg_music1, NavDestinations.MUSIC),
-        BottomNavItem("我的", R.drawable.svg_my, NavDestinations.PROFILE)
+        BottomNavItem("主页", R.drawable.land_plot, NavDestinations.HOME),
+        BottomNavItem("音乐", R.drawable.headphones, NavDestinations.MUSIC),
+        BottomNavItem("我的", R.drawable.user, NavDestinations.PROFILE)
     )
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route

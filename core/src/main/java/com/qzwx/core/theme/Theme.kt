@@ -16,20 +16,20 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 private val LightColorScheme = lightColorScheme(
     primary = primaryLight,
     onPrimary = onPrimaryLight,
-    primaryContainer = primaryContainerLight,
-    onPrimaryContainer = onPrimaryContainerLight,
+//    primaryContainer = primaryContainerLight,
+//    onPrimaryContainer = onPrimaryContainerLight,
     secondary = secondaryLight,
     onSecondary = onSecondaryLight,
-    secondaryContainer = secondaryContainerLight,
-    onSecondaryContainer = onSecondaryContainerLight,
+//    secondaryContainer = secondaryContainerLight,
+//    onSecondaryContainer = onSecondaryContainerLight,
     tertiary = tertiaryLight,
     onTertiary = onTertiaryLight,
-    tertiaryContainer = tertiaryContainerLight,
-    onTertiaryContainer = onTertiaryContainerLight,
+//    tertiaryContainer = tertiaryContainerLight,
+//    onTertiaryContainer = onTertiaryContainerLight,
     error = errorLight,
     onError = onErrorLight,
-    errorContainer = errorContainerLight,
-    onErrorContainer = onErrorContainerLight,
+//    errorContainer = errorContainerLight,
+//    onErrorContainer = onErrorContainerLight,
     background = backgroundLight,
     onBackground = onBackgroundLight,
     surface = surfaceLight,
@@ -40,20 +40,20 @@ private val LightColorScheme = lightColorScheme(
 private val DarkColorScheme = darkColorScheme(
     primary = primaryDark,
     onPrimary = onPrimaryDark,
-    primaryContainer = primaryContainerDark,
-    onPrimaryContainer = onPrimaryContainerDark,
+//    primaryContainer = primaryContainerDark,
+//    onPrimaryContainer = onPrimaryContainerDark,
     secondary = secondaryDark,
     onSecondary = onSecondaryDark,
-    secondaryContainer = secondaryContainerDark,
-    onSecondaryContainer = onSecondaryContainerDark,
+//    secondaryContainer = secondaryContainerDark,
+//    onSecondaryContainer = onSecondaryContainerDark,
     tertiary = tertiaryDark,
     onTertiary = onTertiaryDark,
-    tertiaryContainer = tertiaryContainerDark,
-    onTertiaryContainer = onTertiaryContainerDark,
+//    tertiaryContainer = tertiaryContainerDark,
+//    onTertiaryContainer = onTertiaryContainerDark,
     error = errorDark,
     onError = onErrorDark,
-    errorContainer = errorContainerDark,
-    onErrorContainer = onErrorContainerDark,
+//    errorContainer = errorContainerDark,
+//    onErrorContainer = onErrorContainerDark,
     background = backgroundDark,
     onBackground = onBackgroundDark,
     surface = surfaceDark,
@@ -76,14 +76,20 @@ fun QZWX_AppTheme(
         else                                                           -> LightColorScheme
     }
     // 设置系统状态栏颜色与背景一致
+    // 设置系统 状态栏颜色跟背景一致
     val systemUiController = rememberSystemUiController()
-    val sysColor = if (darkTheme) backgroundDark else backgroundLight
-    val darkIcons = !darkTheme
-
+    val syscolor = if (isSystemInDarkTheme()) {
+        backgroundDark
+    } else {
+        backgroundLight
+    }
+    val darkiconscolor = if (isSystemInDarkTheme()) {
+        false
+    } else true
     SideEffect {
         systemUiController.setStatusBarColor(
-            color = sysColor, // 状态栏颜色
-            darkIcons = darkIcons // 根据主题设置图标颜色
+            color = syscolor, // 状态栏
+            darkIcons = darkiconscolor, // 根据主题设置图标颜色
         )
     }
 

@@ -10,11 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.EvStation
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Reviews
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -22,6 +17,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -79,13 +76,13 @@ class WordsMemoryActivity : ComponentActivity() {
 }
 
 @Composable
-fun WMsystem(viewModel : WordViewModel) {
+fun WMsystem(viewModel: WordViewModel) {
     val navController = rememberNavController()
     val items = listOf(
-        Triple("主页", Icons.Default.Home, "homepage"),
-        Triple("单词库", Icons.Default.Reviews, "vocabularypage"),
-        Triple("统计", Icons.Default.EvStation, "statisticpage"),
-        Triple("设置", Icons.Default.Settings, "settingpage")
+        Triple("主页", R.drawable.nav_home, "homepage"),
+        Triple("单词库", R.drawable.nav_allwards, "vocabularypage"),
+        Triple("统计", R.drawable.nav_chart, "statisticpage"),
+        Triple("设置", R.drawable.nav_setting, "settingpage")
     )
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     val selectedItemIndex = remember { mutableStateOf(0) }
@@ -121,7 +118,7 @@ fun WMsystem(viewModel : WordViewModel) {
                                     restoreState = true
                                 }
                             },
-                            imageVector = icon,
+                            imageVector = ImageVector.vectorResource(id = icon), // 使用 vectorResource 加载图标
                             label = label,
                             visibleItem = VisibleItem.ICON,
                             itemStyle = ItemStyle.STYLE1

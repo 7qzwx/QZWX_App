@@ -8,7 +8,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -49,10 +48,10 @@ fun AddNewWordsPage(
     var definition by remember { mutableStateOf("") }
     var isBatchMode by remember { mutableStateOf(false) }
     var showSuccessMessage by remember { mutableStateOf(false) }
-    val posOptions = listOf("n", "v", "adj", "adv","其它")
-    val isFormValid = word.isNotBlank() && selectedPos.isNotBlank() && definition.isNotBlank() && !isWordError
+    val posOptions = listOf("n", "v", "adj", "adv", "其它")
+    val isFormValid =
+        word.isNotBlank() && selectedPos.isNotBlank() && definition.isNotBlank() && !isWordError
     val coroutineScope = rememberCoroutineScope()
-
     // 成功消息显示逻辑
     LaunchedEffect(showSuccessMessage) {
         if (showSuccessMessage) {
@@ -63,23 +62,23 @@ fun AddNewWordsPage(
 
     Surface(
         modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.surface)
+            .fillMaxSize(), color = androidx.compose.material3.MaterialTheme.colorScheme.surface
     ) {
         // 添加卡片效果包装整个表单
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(16.dp), contentAlignment = Alignment.Center
         ) {
             Card(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .wrapContentSize()
+                    .padding(16.dp),  // 适应内容大小,
                 shape = RoundedCornerShape(16.dp),
                 elevation = 4.dp
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
                         .padding(24.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally

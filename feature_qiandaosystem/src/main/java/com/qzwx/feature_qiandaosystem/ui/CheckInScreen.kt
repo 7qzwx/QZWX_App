@@ -376,7 +376,9 @@ fun CheckInCard(
             else -> 1f
         }
     }
-    Card(
+    Card(colors = CardDefaults.cardColors(
+        containerColor = MaterialTheme.colorScheme.surface.copy(0.9f) // 设置卡片背景颜色（只能使用单一颜色）
+    ),
         modifier = Modifier
             .padding(vertical = 6.dp)
             .fillMaxSize()
@@ -550,7 +552,7 @@ fun CheckInCard(
                 ) {
                     Text(
                         text = if (isSignedToday) "已签到" else "签到",
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onBackground,
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }
@@ -588,7 +590,7 @@ fun AddCheckInDialog(
                         Text(
                             "在这里输入名称吧!",
                             style = MaterialTheme.typography.bodyMedium.copy(
-                                color = MaterialTheme.colorScheme.secondary
+                                color = Color.Gray
                             )
                         )
                     },
@@ -596,10 +598,11 @@ fun AddCheckInDialog(
                     shape = RoundedCornerShape(12.dp),
                     colors = TextFieldDefaults.colors(
                         focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                        unfocusedTextColor = MaterialTheme.colorScheme.secondary,
-                        focusedIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
                         unfocusedIndicatorColor = Color.Transparent,
-                        cursorColor = MaterialTheme.colorScheme.primary
+                        cursorColor = MaterialTheme.colorScheme.primary,
+                        focusedContainerColor = Color.Transparent, // 获得焦点时的背景颜色
+                        unfocusedContainerColor = MaterialTheme.colorScheme.primary, // 未获得焦点时的背景颜色
                     ),
                     textStyle = TextStyle(
                         fontSize = 16.sp,
@@ -613,7 +616,7 @@ fun AddCheckInDialog(
                         style = MaterialTheme.typography.bodySmall.copy(
                             color = MaterialTheme.colorScheme.error
                         ),
-                        modifier = Modifier.padding(start = 4.dp)
+                        modifier = Modifier.padding(start = 4.dp, top = 12.dp)
                     )
                 }
             }

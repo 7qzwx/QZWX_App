@@ -2,6 +2,7 @@ package com.qzwx.feature_wordsmemory.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,6 +26,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -43,21 +46,17 @@ import me.saket.swipe.SwipeableActionsBox
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VocabularyPage(
-    navController: NavController,
-    viewModel: WordViewModel
+    navController : NavController,
+    viewModel : WordViewModel
 ) {
     // 控制是否显示释义
     val isGlobalDefinitionVisible = remember { mutableStateOf(false) }
-
     // 标签选择状态
     val selectedTag by viewModel.selectedTag.collectAsState()
-
     // 排序方式
     val sortOrder = remember { mutableStateOf("插入时间") }
-
     // 从 ViewModel 获取单词列表
     val words by viewModel.filteredWords.collectAsState(initial = emptyList())
-
     // 排序后的单词列表
     val sortedWords by remember {
         derivedStateOf {
@@ -70,18 +69,14 @@ fun VocabularyPage(
             }
         }
     }
-
     // 分步加载逻辑
     val loadSize = 30 // 每次加载的单词数量
     var loadedWordsCount by remember { mutableStateOf(loadSize) } // 当前已加载的单词数量
     val displayedWords = sortedWords.take(loadedWordsCount) // 当前显示的单词列表
-
     // 加载状态
     var isLoading by remember { mutableStateOf(false) }
-
     // LazyColumn 的滑动状态
     val lazyListState = rememberLazyListState()
-
     // 监听滑动位置，触发加载逻辑
     LaunchedEffect(lazyListState) {
         snapshotFlow { lazyListState.layoutInfo }
@@ -117,7 +112,10 @@ fun VocabularyPage(
                         fontSize = 26.sp
                     )
                 }
-            },
+            }, colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.background, // 设置背景颜色为主题的主色
+                titleContentColor = MaterialTheme.colorScheme.onPrimary // 设置标题颜色为 onPrimary
+            ),
             actions = {
                 IconButton(
                     onClick = {
@@ -137,12 +135,10 @@ fun VocabularyPage(
                 .background(MaterialTheme.colorScheme.background),
             windowInsets = WindowInsets(0.dp)
         )
-
         // 标签选择器
         FilterTagSection(selectedTag) { tag ->
             viewModel.setSelectedTag(tag)
         }
-
         // 单词数目和排序方式
         WordCountAndSortSection(
             wordCount = words.size,
@@ -151,7 +147,6 @@ fun VocabularyPage(
                 sortOrder.value = newOrder
             }
         )
-
         // 优化 LazyColumn 性能
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -176,7 +171,6 @@ fun VocabularyPage(
                         }
                     )
                 }
-
                 // 加载指示器
                 if (isLoading) {
                     item {
@@ -216,8 +210,16 @@ fun FilterTagSection(selectedTag : String, onTagSelected : (String) -> Unit) {
     OutlinedCard(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .border(
+                width = 2.dp,
+                brush = Brush.linearGradient(
+                    colors = listOf(Color(0xFF64B3F4), Color(0xFFC2E59C)), // 渐变色
+                    start = Offset(0f, 0f),
+                    end = Offset(100f, 100f)
+                ),
+                shape = RoundedCornerShape(12.dp) // 可选，控制圆角
+            )
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Text(
@@ -237,6 +239,18 @@ fun FilterTagSection(selectedTag : String, onTagSelected : (String) -> Unit) {
                         selected = selectedTag == tag,
                         onClick = { onTagSelected(tag) },
                         label = { Text(tag) },
+                        border = BorderStroke(
+                            width = 2.dp,
+                            brush = Brush.linearGradient(
+                                colors = listOf(
+                                    Color(0xFFD5DEE7), // 浅灰蓝
+                                    Color(0xFFFFAFBD), // 粉色
+                                    Color(0xFFC9FFBF)  // 浅绿色
+                                ),
+                                start = Offset(0f, 0f),
+                                end = Offset(100f, 100f) // 方向可调
+                            )
+                        ),
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = MaterialTheme.colorScheme.primary,
                             selectedLabelColor = MaterialTheme.colorScheme.onPrimary

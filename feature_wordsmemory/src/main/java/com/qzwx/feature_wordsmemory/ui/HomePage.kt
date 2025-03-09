@@ -2,9 +2,9 @@ package com.qzwx.feature_wordsmemory.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,11 +15,12 @@ import androidx.navigation.NavController
 import com.qzwx.feature_wordsmemory.viewmodel.WordViewModel
 import java.util.Calendar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(
-    modifier: Modifier = Modifier,
-    navController: NavController,
-    viewModel: WordViewModel
+    modifier : Modifier = Modifier,
+    navController : NavController,
+    viewModel : WordViewModel
 ) {
     // Collect state from ViewModel using collectAsState
     val allWordsCount by viewModel.allWordsCount.collectAsState(initial = 0)
@@ -27,7 +28,6 @@ fun HomePage(
     val familiarWordsCount by viewModel.familiarWordsCount.collectAsState(initial = 0)
     val masteredWordsCount by viewModel.masteredWordsCount.collectAsState(initial = 0)
     val toLearnWordsCount by viewModel.toLearnWordsCount.collectAsState(initial = 0)
-
     // Get current time for greeting
     val calendar = Calendar.getInstance()
     val hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -37,17 +37,19 @@ fun HomePage(
         in 18..23 -> "晚上好,回忆一下单词吧!"
         else      -> "凌晨了，早点休息吧！"
     }
-
     // Load data when the component is first composed
     LaunchedEffect(key1 = Unit) {
         viewModel.loadWordCounts()
     }
 
     Scaffold(
-        topBar = { TopAppBar(greeting) },
         floatingActionButton = {
-            FloatingActionButton(onClick = { navController.navigate("addnewwordspage") }) {
-                Icon(Icons.Default.Add, contentDescription = "Add Word")
+            FloatingActionButton(onClick = { navController.navigate("addnewwordspage") },
+                containerColor = MaterialTheme.colorScheme.primary,      // 设置背景色为主色
+                contentColor = MaterialTheme.colorScheme.onPrimary       // 设置图标颜色为 onPrimary
+            ) {
+                Icon(Icons.Default.Add,
+                    contentDescription = "Add Word")
             }
         }
     ) { innerPadding ->
@@ -55,7 +57,7 @@ fun HomePage(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            contentAlignment = Alignment.TopCenter
+            contentAlignment = Alignment.Center
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -68,7 +70,6 @@ fun HomePage(
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(top = 16.dp, bottom = 24.dp)
                 )
-
                 // Info Cards Section - Each item in a separate row
                 InfoCardRow(label = "全部单词", count = allWordsCount)
                 InfoCardRow(label = "生疏单词", count = newWordsCount)
@@ -77,7 +78,6 @@ fun HomePage(
                 InfoCardRow(label = "待学习单词", count = toLearnWordsCount)
 
                 Spacer(modifier = Modifier.height(32.dp))
-
                 // Start Learning Button - Centered and styled
                 Button(
                     onClick = { navController.navigate("reviewpage") },
@@ -99,7 +99,7 @@ fun HomePage(
 }
 
 @Composable
-fun InfoCardRow(label: String, count: Int) {
+fun InfoCardRow(label : String, count : Int) {
     // A card that displays label and count with padding and rounded corners
     Card(
         modifier = Modifier
@@ -132,7 +132,7 @@ fun InfoCardRow(label: String, count: Int) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBar(greeting: String) {
+fun TopAppBar(greeting : String) {
     TopAppBar(
         title = {
             Row(

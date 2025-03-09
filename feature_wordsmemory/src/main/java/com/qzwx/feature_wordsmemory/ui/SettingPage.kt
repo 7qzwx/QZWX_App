@@ -76,8 +76,8 @@ fun SimpleDesignCard() {
                 .size(400.dp, 350.dp)
                 .neumorphic(
                     neuShape = Pot.Rounded(6.dp),
-                    strokeWidth = 7.dp,
-                    neuInsets = NeuInsets(8.dp, 8.dp)
+                    strokeWidth = 6.dp,
+                    neuInsets = NeuInsets(1.dp, 1.dp)
                 )
         ) {
             Column(
@@ -99,8 +99,10 @@ fun SimpleDesignCard() {
                     text = "这是一个记单词功能,你可以在单词库中通过左右滑动快速删除/标记/收藏单词,效率高且方便直观!",
                     textAlign = TextAlign.Center,
                     modifier = Modifier
-                        .padding(8.dp)
-                        .neumorphic(neuShape = Pressed.Rounded(12.dp))
+                        .padding(16.dp)
+                        .neumorphic(neuShape = Pressed.Rounded(12.dp),
+                            neuInsets = NeuInsets(3.dp),
+                            strokeWidth = 1.dp)
                 )
 
                 Row(
@@ -111,15 +113,14 @@ fun SimpleDesignCard() {
                         onClick = {
                             exportWordsDatabase(context)
                         },
-                        modifier = Modifier.neumorphic(neuShape = Punched.Rounded())
+
                     ) {
                         Text(text = "导出")
                     }
                     Button(
                         onClick = {
                             activity?.importWordsDatabase() // 调用 Activity 中的 importWordsDatabase 方法
-                        },
-                        modifier = Modifier.neumorphic(neuShape = Punched.Rounded())
+                        }
                     ) {
                         Text(text = "导入")
                     }
@@ -129,7 +130,7 @@ fun SimpleDesignCard() {
     }
 }
 
-fun exportWordsDatabase(context: Context) {
+fun exportWordsDatabase(context : Context) {
     // 立即显示一个操作开始的Toast
     Toast.makeText(context, "开始导出单词...", Toast.LENGTH_SHORT).show()
 
@@ -138,7 +139,6 @@ fun exportWordsDatabase(context: Context) {
             // 获取数据库实例
             val db = AppDatabase.getDatabase(context)
             val wordDao = db.wordDao()
-
             // 使用first()获取一次性列表，而不是Flow
             val words = wordDao.getAllWords().first()
 
@@ -148,22 +148,19 @@ fun exportWordsDatabase(context: Context) {
                 }
                 return@launch
             }
-
             val resolver = context.contentResolver
             // 获取当前日期，格式化为 "XX月XX日"
             val dateFormat = SimpleDateFormat("MM月dd日", Locale.getDefault())
             val currentDate = dateFormat.format(Date())
-
             // 文件名和路径
             val fileName = "words_$currentDate.csv"
             val relativePath = "Download/七种文学APP备份"
-
             // 先尝试查找和删除已存在的同名文件
             try {
                 // 构建查询
-                val selection = "${MediaStore.Downloads.DISPLAY_NAME} = ? AND ${MediaStore.Downloads.RELATIVE_PATH} = ?"
+                val selection =
+                    "${MediaStore.Downloads.DISPLAY_NAME} = ? AND ${MediaStore.Downloads.RELATIVE_PATH} = ?"
                 val selectionArgs = arrayOf(fileName, "$relativePath/")
-
                 // 执行查询
                 resolver.query(
                     MediaStore.Downloads.EXTERNAL_CONTENT_URI,
@@ -176,8 +173,9 @@ fun exportWordsDatabase(context: Context) {
                     if (cursor.moveToFirst()) {
                         val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Downloads._ID)
                         val id = cursor.getLong(idColumn)
-                        val deleteUri = ContentUris.withAppendedId(MediaStore.Downloads.EXTERNAL_CONTENT_URI, id)
-
+                        val deleteUri =
+                            ContentUris.withAppendedId(MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+                                id)
                         // 删除文件
                         val deleteCount = resolver.delete(deleteUri, null, null)
                         if (deleteCount > 0) {
@@ -185,11 +183,10 @@ fun exportWordsDatabase(context: Context) {
                         }
                     }
                 }
-            } catch (e: Exception) {
+            } catch (e : Exception) {
                 // 删除失败，但我们继续创建新文件
                 e.printStackTrace()
             }
-
             // 构建文件元数据
             val contentValues = ContentValues().apply {
                 put(MediaStore.Downloads.DISPLAY_NAME, fileName)
@@ -199,20 +196,20 @@ fun exportWordsDatabase(context: Context) {
 
             try {
                 // 尝试创建目录（可能不需要，Android会自动创建）
-                val backupDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "七种文学APP备份")
+                val backupDir =
+                    File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                        "七种文学APP备份")
                 if (!backupDir.exists()) {
                     backupDir.mkdirs()
                 }
-            } catch (e: Exception) {
+            } catch (e : Exception) {
                 // 忽略目录创建失败，我们会使用MediaStore API
             }
-
             // 创建新文件URI
             val newUri = resolver.insert(
                 MediaStore.Downloads.EXTERNAL_CONTENT_URI,
                 contentValues
             ) ?: throw IOException("无法创建文件")
-
             // 写入文件
             resolver.openOutputStream(newUri)?.use { outputStream ->
                 outputStream.write("id,word,pos,definition,tag\n".toByteArray())
@@ -222,15 +219,12 @@ fun exportWordsDatabase(context: Context) {
                     val cleanPos = word.pos.replace(",", "，")
                     val cleanDef = word.definition.replace(",", "，")
                     val cleanTag = word.tag.replace(",", "，")
-
                     val line = "${word.id},$cleanWord,$cleanPos,$cleanDef,$cleanTag\n"
                     outputStream.write(line.toByteArray())
                 }
             }
-
             // 确保文件可见
             context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, newUri))
-
             // 获取实际保存的路径
             val filePath = "Download/七种文学APP备份/words_$currentDate.csv"
 
@@ -241,13 +235,13 @@ fun exportWordsDatabase(context: Context) {
                     Toast.LENGTH_LONG
                 ).show()
             }
-        } catch (e: Exception) {
+        } catch (e : Exception) {
             e.printStackTrace() // 打印详细错误信息以便调试
             withContext(Dispatchers.Main) {
                 val errorMsg = when {
                     e is SecurityException -> "请开启存储权限后再试"
-                    e is IOException -> "文件系统访问失败：${e.message}"
-                    else -> "导出失败：${e.message ?: "未知错误"}"
+                    e is IOException       -> "文件系统访问失败：${e.message}"
+                    else                   -> "导出失败：${e.message ?: "未知错误"}"
                 }
                 Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show()
             }

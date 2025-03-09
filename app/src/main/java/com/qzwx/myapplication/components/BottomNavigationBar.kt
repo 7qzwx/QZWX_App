@@ -5,6 +5,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,15 +39,21 @@ fun CustomBottomNavigationBar(
 ) {
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     val selectedIndex = items.indexOfFirst { it.route == currentRoute }.coerceAtLeast(0)
-
+    val barColor = if (isSystemInDarkTheme()) {
+        // 深色模式下的条形颜色
+        MaterialTheme.colorScheme.onPrimary.copy(0.1f)
+    } else {
+        // 浅色模式下的条形颜色
+        MaterialTheme.colorScheme.onBackground.copy(alpha = 0.01f)
+    }
     AnimatedNavigationBar(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 8.dp)
             .height(68.dp),
         selectedIndex = selectedIndex,
         ballColor = MaterialTheme.colorScheme.primary,
-        barColor = MaterialTheme.colorScheme.onPrimary.copy(0.5f),
+        barColor = barColor,
         cornerRadius = shapeCornerRadius(25.dp),
         ballAnimation = Straight(
             spring(dampingRatio = 0.6f, stiffness = Spring.StiffnessVeryLow)

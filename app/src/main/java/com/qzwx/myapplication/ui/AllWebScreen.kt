@@ -582,16 +582,27 @@ fun LinkItemView(
             }
             .padding(8.dp)
             .shadow(8.dp, RoundedCornerShape(16.dp))
+            .background(
+                brush =
+                Brush.linearGradient(
+                    colors = listOf(
+                        Color(0xFF2CD8D5), // 柔和紫色
+                        Color(0xFFC5C1FF), // 柔和橘粉色
+                        Color(0xFFFFBAC3)  // 柔和橘粉色
+                    )
+                ),
+                shape = RoundedCornerShape(16.dp)
+            )
             .border(
                 BorderStroke(
                     2.dp,
-                    brush = Brush.verticalGradient(colors = listOf(Color(0xFFA18CD1),
+                    brush = Brush.verticalGradient(colors = listOf(Color(0xFF7986CB),
                         Color(0xFFFBC2EB)))
                 ),
                 shape = RoundedCornerShape(16.dp)
             ),
         shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surface
+        color = Color.Transparent
     ) {
         Column(
             modifier = Modifier.padding(8.dp),
@@ -615,10 +626,14 @@ fun LinkItemView(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 TextButton(onClick = onEditClick) {
-                    Text("编辑", style = MaterialTheme.typography.labelSmall)
+                    Text("编辑",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onBackground)
                 }
                 TextButton(onClick = onDeleteClick) {
-                    Text("删除", style = MaterialTheme.typography.labelSmall)
+                    Text("删除",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onBackground)
                 }
             }
         }
