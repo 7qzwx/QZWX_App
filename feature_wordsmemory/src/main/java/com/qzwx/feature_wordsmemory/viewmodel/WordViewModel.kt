@@ -9,8 +9,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class WordViewModel(private val repository : WordRepository) : ViewModel() {
     val allWords : Flow<List<Word>> = repository.allWords
@@ -58,7 +60,6 @@ class WordViewModel(private val repository : WordRepository) : ViewModel() {
         repository.deleteWord(id)
     }
 
-    //单词统计
     // 单词统计
     private val _allWordsCount = MutableStateFlow(0) // 全部单词数量
     val allWordsCount = _allWordsCount.asStateFlow()
@@ -101,6 +102,19 @@ class WordViewModel(private val repository : WordRepository) : ViewModel() {
     // 获取除当前单词外的 3 个随机单词
     suspend fun getRandomWordsExcluding(currentWordId : Int) : List<Word> {
         return repository.getRandomWordsExcluding(currentWordId)
+    }
+
+    // 获取指定日期范围内每个日期的单词数量
+    suspend fun getWordsByDate(): Map<LocalDate, Int> {
+        val startDate = LocalDate.now().minusMonths(12)
+        val endDate = LocalDate.now()
+
+        // 获取数据库中的所有单词
+        val words = repository.getWordsByDate(startDate.toString(), endDate.toString()).first()
+
+        // 按日期进行分组并计算每个日期的单词数量
+        return words.groupBy { LocalDate.parse(it.insertDate) }
+            .mapValues { it.value.size }
     }
 }
 

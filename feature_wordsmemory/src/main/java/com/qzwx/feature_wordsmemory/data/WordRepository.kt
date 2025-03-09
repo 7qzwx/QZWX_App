@@ -1,6 +1,7 @@
 package com.qzwx.feature_wordsmemory.data
 
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 // 4. 更新 WordRepository 类，添加按标签查询和更新标签的方法
 class WordRepository(private val wordDao : WordDao) {
@@ -29,5 +30,9 @@ class WordRepository(private val wordDao : WordDao) {
     // 获取除当前单词外的 3 个随机单词
     suspend fun getRandomWordsExcluding(currentWordId : Int) : List<Word> {
         return wordDao.getRandomWordsExcluding(currentWordId)
+    }
+
+    fun getWordsByDate(startDate: String, endDate: String): Flow<List<Word>> {
+        return wordDao.getWordsByDate(startDate, endDate)
     }
 }

@@ -19,7 +19,7 @@ fun NavGraph(
     NavHost(navController = navController, startDestination = "homepage") {
         composable("homepage") { HomePage(viewModel = viewModel, navController = navController) }
         composable("vocabularypage") { VocabularyPage(navController = navController, viewModel) }
-        composable("statisticpage") { StatisticPage(navController = navController) }
+        composable("statisticpage") { StatisticPage(viewModel) }
         composable("settingpage") { SettingPage() }
         composable("reviewpage") {
             ReviewPage(navController = navController,

@@ -40,4 +40,6 @@ interface WordDao {
     @Insert
     suspend fun insertAll(words : List<Word>)
 
+    @Query("SELECT * FROM words WHERE insertDate BETWEEN :startDate AND :endDate ORDER BY insertDate ASC")
+    fun getWordsByDate(startDate : String, endDate : String) : Flow<List<Word>>
 }

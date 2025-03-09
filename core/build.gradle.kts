@@ -35,6 +35,7 @@ android {
 
 dependencies {
     // 第三方库
+    api (libs.compose.charts) //图表
     api(libs.swipe)  //左右滑动效果
     api(libs.composeneumorphism) //按钮悬浮与塌陷效果
     api(libs.exyte.animated.navigation.bar) // 动画导航栏

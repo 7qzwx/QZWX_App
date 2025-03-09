@@ -232,8 +232,6 @@ fun AddNewWordsPage(
                             )
                         }
                     )
-
-                    Spacer(modifier = Modifier.weight(1f))
                     // 成功消息
                     AnimatedVisibility(
                         visible = showSuccessMessage,
