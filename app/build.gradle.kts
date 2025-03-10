@@ -56,4 +56,5 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":feature_qiandaosystem"))
     implementation(project(":feature_wordsmemory"))
+    implementation(project(":Feature_TodoAndDone"))
 }

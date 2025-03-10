@@ -76,7 +76,7 @@ class WordsMemoryActivity : ComponentActivity() {
 }
 
 @Composable
-fun WMsystem(viewModel: WordViewModel) {
+fun WMsystem(viewModel : WordViewModel) {
     val navController = rememberNavController()
     val items = listOf(
         Triple("主页", R.drawable.nav_home, "homepage"),
