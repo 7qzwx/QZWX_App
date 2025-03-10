@@ -24,6 +24,9 @@ dependencyResolutionManagement {
         mavenCentral()
         maven("https://jitpack.io")
         maven { url = uri("https://repo1.maven.org/maven2/") }
+        flatDir {
+            dirs("core/libs")
+        }
     }
 }
 
