@@ -1,5 +1,10 @@
 package com.qzwx.feature_wordsmemory.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,6 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.FilterListOff
 import androidx.compose.material.icons.filled.HourglassEmpty
 import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material.icons.filled.Star
@@ -31,6 +38,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -51,6 +59,8 @@ fun VocabularyPage(
 ) {
     // 控制是否显示释义
     val isGlobalDefinitionVisible = remember { mutableStateOf(false) }
+    // 控制是否显示标签栏
+    var isTagSectionVisible by remember { mutableStateOf(true) }
     // 标签选择状态
     val selectedTag by viewModel.selectedTag.collectAsState()
     // 排序方式
@@ -77,6 +87,35 @@ fun VocabularyPage(
     var isLoading by remember { mutableStateOf(false) }
     // LazyColumn 的滑动状态
     val lazyListState = rememberLazyListState()
+    
+    // 修改滚动行为
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    
+    // 添加滚动状态
+    var isVisible by remember { mutableStateOf(true) }
+    var previousOffset by remember { mutableStateOf(0) }
+    var accumulatedOffset by remember { mutableStateOf(0f) }
+    
+    // 监听滚动位置
+    LaunchedEffect(lazyListState) {
+        snapshotFlow { lazyListState.firstVisibleItemIndex to lazyListState.firstVisibleItemScrollOffset }
+            .collect { (_, offset) ->
+                val delta = offset - previousOffset
+                previousOffset = offset
+                
+                // 计算累积偏移量
+                if (delta > 0) { // 向下滚动
+                    accumulatedOffset = 0f // 重置向上滚动的累积量
+                    isVisible = false
+                } else if (delta < 0) { // 向上滚动
+                    accumulatedOffset += -delta // 累积向上滚动的距离
+                    if (accumulatedOffset >= 100) { // 当向上滚动超过100像素时显示
+                        isVisible = true
+                    }
+                }
+            }
+    }
+
     // 监听滑动位置，触发加载逻辑
     LaunchedEffect(lazyListState) {
         snapshotFlow { lazyListState.layoutInfo }
@@ -94,62 +133,97 @@ fun VocabularyPage(
             }
     }
 
-    Column(
+    Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
-        // 标题栏
-        TopAppBar(
-            title = {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        "单词表",
-                        textAlign = TextAlign.Center,
-                        fontSize = 26.sp
-                    )
-                }
-            }, colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.background, // 设置背景颜色为主题的主色
-                titleContentColor = MaterialTheme.colorScheme.onPrimary // 设置标题颜色为 onPrimary
-            ),
-            actions = {
-                IconButton(
-                    onClick = {
-                        isGlobalDefinitionVisible.value = !isGlobalDefinitionVisible.value
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            Column {
+                // 标题栏
+                TopAppBar(
+                    title = {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                "单词表",
+                                textAlign = TextAlign.Center,
+                                fontSize = 26.sp,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
                     },
-                    modifier = Modifier.size(40.dp)
-                ) {
-                    Icon(
-                        imageVector = if (isGlobalDefinitionVisible.value) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                        contentDescription = if (isGlobalDefinitionVisible.value) "隐藏释义" else "显示释义",
-                        modifier = Modifier.size(20.dp)
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                        titleContentColor = MaterialTheme.colorScheme.onPrimary
+                    ),
+                    actions = {
+                        // 添加标签栏显示/隐藏按钮
+                        IconButton(
+                            onClick = { isTagSectionVisible = !isTagSectionVisible },
+                            modifier = Modifier.size(40.dp)
+                        ) {
+                            Icon(
+                                imageVector = if (isTagSectionVisible) Icons.Default.FilterListOff else Icons.Default.FilterList,
+                                contentDescription = if (isTagSectionVisible) "隐藏标签栏" else "显示标签栏",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                        // 释义显示/隐藏按钮
+                        IconButton(
+                            onClick = {
+                                isGlobalDefinitionVisible.value = !isGlobalDefinitionVisible.value
+                            },
+                            modifier = Modifier.size(40.dp)
+                        ) {
+                            Icon(
+                                imageVector = if (isGlobalDefinitionVisible.value) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                                contentDescription = if (isGlobalDefinitionVisible.value) "隐藏释义" else "显示释义",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    },
+                    scrollBehavior = scrollBehavior
+                )
+                
+                // 使用动画可见性控制
+                AnimatedVisibility(
+                    visible = isTagSectionVisible,
+                    enter = fadeIn() + expandVertically(
+                        expandFrom = Alignment.Top,
+                        initialHeight = { 0 }
+                    ),
+                    exit = fadeOut() + shrinkVertically(
+                        shrinkTowards = Alignment.Top,
+                        targetHeight = { 0 }
                     )
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.background)
+                    ) {
+                        FilterTagSection(selectedTag) { tag ->
+                            viewModel.setSelectedTag(tag)
+                        }
+                        WordCountAndSortSection(
+                            wordCount = words.size,
+                            currentSortOrder = sortOrder.value,
+                            onSortOrderChanged = { newOrder ->
+                                sortOrder.value = newOrder
+                            }
+                        )
+                    }
                 }
-            },
-            modifier = Modifier
-                .height(48.dp)
-                .background(MaterialTheme.colorScheme.background),
-            windowInsets = WindowInsets(0.dp)
-        )
-        // 标签选择器
-        FilterTagSection(selectedTag) { tag ->
-            viewModel.setSelectedTag(tag)
-        }
-        // 单词数目和排序方式
-        WordCountAndSortSection(
-            wordCount = words.size,
-            currentSortOrder = sortOrder.value,
-            onSortOrderChanged = { newOrder ->
-                sortOrder.value = newOrder
             }
-        )
+        }
+    ) { paddingValues ->
         // 优化 LazyColumn 性能
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             state = lazyListState

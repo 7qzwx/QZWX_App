@@ -24,7 +24,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
@@ -51,12 +50,7 @@ fun MusicScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFFFAFAFA),
-                        Color(0xFFF5F5F5)
-                    )
-                )
+                MaterialTheme.colorScheme.background
             )
     ) {
         LazyColumn(
@@ -78,14 +72,14 @@ fun MusicScreen() {
                 )
             }
             val cardItems = listOf(
-                Triple(R.drawable.jisuanqiico, "计算器", Color(0xFFFF6B6B)),
-                Triple(R.drawable.diaryico, "日记本", Color(0xFF4ECDC4)),
-                Triple(R.drawable.accountico, "记账本", Color(0xFFFFBE0B)),
-                Triple(com.qzwx.core.R.drawable.qzxt_qdxt, "签到系统", Color(0xFF845EC2)),
-                Triple(R.drawable.wordsico, "单词本", Color(0xFF00B4D8)),
-                Triple(R.drawable.svg_aixin, "❥(^_-)", Color(0xFFFF85A1)),
-                Triple(R.drawable.svg_aixin, "全部网站", Color(0xFF6C757D)),
-                Triple(R.drawable.svg_aixin, "Todo", Color(0xFF20C997))
+                Triple(R.drawable.jisuanqiico, "计算器", Color(0xFFF8B195)),    // 温暖珊瑚色
+                Triple(R.drawable.diaryico, "日记本", Color(0xFFF67280)),       // 柔和玫瑰色
+                Triple(R.drawable.accountico, "记账本", Color(0xFFFBC490)),     // 温暖杏色
+                Triple(com.qzwx.core.R.drawable.qzxt_qdxt, "签到系统", Color(0xFFE8D6CF)), // 柔和米色
+                Triple(R.drawable.wordsico, "单词本", Color(0xFFD6A2E8)),      // 淡雅紫色
+                Triple(R.drawable.svg_aixin, "❥(^_-)", Color(0xFFBEAEE2)),     // 柔和薰衣草色
+                Triple(R.drawable.svg_aixin, "全部网站", Color(0xFFCFBAF0)),   // 淡紫色
+                Triple(R.drawable.svg_aixin, "Todo", Color(0xFFC3B1E1))        // 柔和丁香色
             )
 
             items((cardItems.indices step 2).toList()) { i ->
@@ -124,6 +118,18 @@ fun MusicScreen() {
                                             "单词本"   -> {
                                                 val intent = Intent(context,
                                                     com.qzwx.feature_wordsmemory.WordsMemoryActivity::class.java)
+                                                context.startActivity(intent)
+                                            }
+
+                                            "日记本"   -> {
+                                                val intent = Intent(context,
+                                                    com.qzwx.feature_diary.DiaryActivity::class.java)
+                                                context.startActivity(intent)
+                                            }
+
+                                            "记账本"   -> {
+                                                val intent = Intent(context,
+                                                    com.qzwx.feature_accountbook.AccountBookActivity::class.java)
                                                 context.startActivity(intent)
                                             }
 

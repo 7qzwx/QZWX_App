@@ -54,6 +54,8 @@ android {
 dependencies {
     ksp(libs.androidxRoomCompiler)
     implementation(project(":core"))
+    implementation(project(":Feature_Diary"))
+    implementation(project(":Feature_AccountBook"))
     implementation(project(":feature_qiandaosystem"))
     implementation(project(":feature_wordsmemory"))
     implementation(project(":Feature_TodoAndDone"))
