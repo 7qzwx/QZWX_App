@@ -1,23 +1,18 @@
 package com.qzwx.core.theme
 
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.platform.LocalContext
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import android.os.*
+import androidx.compose.foundation.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.*
+import com.google.accompanist.systemuicontroller.*
 
 // 定义亮色主题
 private val LightColorScheme = lightColorScheme(
     primary = primaryLight,
     onPrimary = onPrimaryLight,
-//    primaryContainer = primaryContainerLight,
-//    onPrimaryContainer = onPrimaryContainerLight,
+primaryContainer = primaryContainerLight,
+    onPrimaryContainer = onPrimaryContainerLight,
     secondary = secondaryLight,
     onSecondary = onSecondaryLight,
 //    secondaryContainer = secondaryContainerLight,
@@ -40,8 +35,8 @@ private val LightColorScheme = lightColorScheme(
 private val DarkColorScheme = darkColorScheme(
     primary = primaryDark,
     onPrimary = onPrimaryDark,
-//    primaryContainer = primaryContainerDark,
-//    onPrimaryContainer = onPrimaryContainerDark,
+primaryContainer = primaryContainerDark,
+    onPrimaryContainer = onPrimaryContainerDark,
     secondary = secondaryDark,
     onSecondary = onSecondaryDark,
 //    secondaryContainer = secondaryContainerDark,
@@ -75,7 +70,6 @@ fun QZWX_AppTheme(
         darkTheme                                                      -> DarkColorScheme
         else                                                           -> LightColorScheme
     }
-    // 设置系统状态栏颜色与背景一致
     // 设置系统 状态栏颜色跟背景一致
     val systemUiController = rememberSystemUiController()
     val syscolor = if (isSystemInDarkTheme()) {
@@ -83,9 +77,7 @@ fun QZWX_AppTheme(
     } else {
         backgroundLight
     }
-    val darkiconscolor = if (isSystemInDarkTheme()) {
-        false
-    } else true
+    val darkiconscolor = !isSystemInDarkTheme()
     SideEffect {
         systemUiController.setStatusBarColor(
             color = syscolor, // 状态栏

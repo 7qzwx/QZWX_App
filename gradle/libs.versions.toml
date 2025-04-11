@@ -6,6 +6,8 @@ animatedNavigationBarVersion = "1.0.0"
 beetablescomposeVersion = "1.2.0"
 composeneumorphism = "1.0.0-alpha02"
 composeVersion = "2.6.2"
+constraintlayoutComposeVersion = "1.1.1"
+dotlottieAndroid = "0.6.2"
 googleAccompanistPagerIndicators = "0.30.0"
 kotlin = "2.1.0"
 coreKtx = "1.15.0"
@@ -55,6 +57,8 @@ calendar-compose = { module = "com.kizitonwose.calendar:compose", version.ref = 
 breens-mbaka-beetablescompose = { module = "com.github.Breens-Mbaka:BeeTablesCompose", version.ref = "beetablescomposeVersion" }
 composeneumorphism = { module = "me.nikhilchaudhari:composeNeumorphism", version.ref = "composeneumorphism" }
 composereorderable-reorderable = { module = "org.burnoutcrew.composereorderable:reorderable", version.ref = "reorderableVersion" }
+constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutComposeVersion" }
+dotlottie-android = { module = "com.github.LottieFiles:dotlottie-android", version.ref = "dotlottieAndroid" }
 exyte-animated-navigation-bar = { module = "com.exyte:animated-navigation-bar", version.ref = "animatedNavigationBarVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

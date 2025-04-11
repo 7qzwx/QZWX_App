@@ -28,6 +28,7 @@ android {
 
 dependencies {
     // 第三方库
+    api(libs.dotlottie.android) //lottie动画
     api(files("libs/compose-charts-android-0.1.2.aar"))
     api(libs.swipe)  //左右滑动效果
     api(libs.composeneumorphism) //按钮悬浮与塌陷效果
@@ -40,6 +41,7 @@ dependencies {
     api(libs.accompanist.systemuicontroller.v0301) // Accompanist系统UI控制器
     api(libs.accompanist.pager.indicators) // Accompanist分页指示器
     // AndroidX库
+    api(libs.constraintlayout.compose)  //约束布局
     api(libs.androidx.material.icons.extended) // Material图标扩展
     api(libs.androidx.navigation.navigation.compose3) // Compose导航
     api(libs.androidx.lifecycle.lifecycle.viewmodel.compose) // Compose ViewModel
