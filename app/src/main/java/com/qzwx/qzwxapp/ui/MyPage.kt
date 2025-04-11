@@ -15,9 +15,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.*
-import androidx.compose.ui.unit.*
 import androidx.core.content.*
-import androidx.navigation.NavController
+import androidx.navigation.*
 import com.qzwx.qzwxapp.navigation.*
 import com.qzwx.qzwxapp.notification.*
 
@@ -68,7 +67,7 @@ fun MyPage(navController : NavController) {
     Scaffold(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
-        , bottomBar = { QZWXBottomNavigation(navController=navController) }
+        , bottomBar = { AnimatedNavigationBarExample(navController = navController)}
     ) { PaddingValues ->
     Column(
         verticalArrangement = Arrangement.Center,

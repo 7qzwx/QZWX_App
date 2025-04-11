@@ -29,7 +29,7 @@ fun HomePage(navController : NavController) {
     Scaffold(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
-        , bottomBar = { QZWXBottomNavigation(navController=navController) }
+        , bottomBar = { AnimatedNavigationBarExample(navController = navController) }
     ) { PaddingValues ->
     val context = LocalContext.current // 获取当前的Context
     LazyColumn(horizontalAlignment = Alignment.CenterHorizontally,

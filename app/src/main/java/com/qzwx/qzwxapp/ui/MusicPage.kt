@@ -29,7 +29,7 @@ fun MusicPage(navController : NavController) {
     val context = LocalContext.current
     Scaffold(
         modifier = Modifier.background(MaterialTheme.colorScheme.background),
-        bottomBar = { QZWXBottomNavigation(navController = navController) }) { PaddingValues ->
+        bottomBar = { AnimatedNavigationBarExample(navController = navController) }) { PaddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
