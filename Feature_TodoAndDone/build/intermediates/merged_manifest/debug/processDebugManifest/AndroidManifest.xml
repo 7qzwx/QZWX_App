@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.qzwx.feature_todoanddone" >
+
+    <uses-sdk android:minSdkVersion="29" />
+
+    <application>
+        <activity
+            android:name="com.qzwx.feature_todoanddone.TodoAndDoneActivity"
+            android:exported="false"
+            android:label="@string/title_activity_todo_and_done"
+            android:theme="@style/Theme.QZWX_APP" />
+    </application>
+
+</manifest>

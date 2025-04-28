@@ -1,0 +1,21 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.qzwx.feature_todoanddone" >
+4
+5    <uses-sdk android:minSdkVersion="29" />
+6
+7    <application>
+7-->C:\Users\MECHREVO\Desktop\QZWX_APP\Feature_TodoAndDone\src\main\AndroidManifest.xml:4:5-10:19
+8        <activity
+8-->C:\Users\MECHREVO\Desktop\QZWX_APP\Feature_TodoAndDone\src\main\AndroidManifest.xml:5:9-9:53
+9            android:name="com.qzwx.feature_todoanddone.TodoAndDoneActivity"
+9-->C:\Users\MECHREVO\Desktop\QZWX_APP\Feature_TodoAndDone\src\main\AndroidManifest.xml:6:13-48
+10            android:exported="false"
+10-->C:\Users\MECHREVO\Desktop\QZWX_APP\Feature_TodoAndDone\src\main\AndroidManifest.xml:7:13-37
+11            android:label="@string/title_activity_todo_and_done"
+11-->C:\Users\MECHREVO\Desktop\QZWX_APP\Feature_TodoAndDone\src\main\AndroidManifest.xml:8:13-65
+12            android:theme="@style/Theme.QZWX_APP" />
+12-->C:\Users\MECHREVO\Desktop\QZWX_APP\Feature_TodoAndDone\src\main\AndroidManifest.xml:9:13-50
+13    </application>
+14
+15</manifest>
