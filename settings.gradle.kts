@@ -32,7 +32,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "七种文学·APP"
 include(":app")
-include(":feature_qiandaosystem")
 include(":core")
 include(":feature_wordsmemory")
 include(":Feature_Diary")
