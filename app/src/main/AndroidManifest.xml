@@ -27,11 +27,7 @@
         android:supportsRtl="true"
         tools:replace="android:icon"
         tools:targetApi="31">
-        <activity
-            android:name=".AllWebActivity"
-            android:exported="false"
-            android:label="@string/title_activity_all_web"
-            android:theme="@style/Theme.QZWX_APP" />
+
         <activity
             android:name=".JiSuanQi"
             android:exported="false"

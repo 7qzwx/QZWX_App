@@ -95,7 +95,7 @@ fun AllWebPage(linkViewModel: LinkViewModel, navController: NavController) {
             onDismiss = { showDialog = false },
             onConfirm = { name, url ->
                 if (name.isNotBlank() && url.isNotBlank()) {
-                    linkViewModel.insertLink(LinkEntity(url = url, iconResId = 0, description = name))
+                    linkViewModel.insertLink(LinkEntity(url = url, description = name))
                     Toast.makeText(context, "添加成功!", Toast.LENGTH_SHORT).show()
                     showDialog = false
                 } else {
@@ -111,7 +111,7 @@ fun AllWebPage(linkViewModel: LinkViewModel, navController: NavController) {
             initialUrl = websiteUrl,
             onDismiss = { showEditDialog = false },
             onConfirm = { name, url ->
-                linkViewModel.updateLink(LinkEntity(id = selectedLinkId, url = url, iconResId = 0, description = name))
+                linkViewModel.updateLink(LinkEntity(id = selectedLinkId, url = url, description = name))
                 Toast.makeText(context, "修改成功!", Toast.LENGTH_SHORT).show()
                 showEditDialog = false
             }
@@ -235,12 +235,11 @@ fun handleImportResult(linkViewModel: LinkViewModel, context: Context, uri: Uri)
             val links = mutableListOf<LinkEntity>()
             for (line in lines.drop(1)) {
                 val parts = line.split(",")
-                if (parts.size == 4) {
+                if (parts.size >= 3) {
                     val id = parts[0].toInt()
                     val url = parts[1]
-                    val iconResId = parts[2].toInt()
-                    val description = parts[3]
-                    links.add(LinkEntity(id, url, iconResId, description))
+                    val description = parts[parts.size - 1]
+                    links.add(LinkEntity(id, url, description))
                 }
             }
             // 清空数据库
@@ -296,9 +295,9 @@ fun exportDatabaseFromLinkViewModel(linkViewModel: LinkViewModel, context: Conte
             ) ?: throw IOException("无法创建文件")
             // 5. 安全写入流程（强制覆盖模式）
             resolver.openOutputStream(newUri, "wt")?.use { outputStream ->
-                outputStream.write("id,url,iconResId,description\n".toByteArray())
+                outputStream.write("id,url,description\n".toByteArray())
                 links.forEach { link ->
-                    val line = "${link.id},${link.url},${link.iconResId},${link.description}\n"
+                    val line = "${link.id},${link.url},${link.description}\n"
                     outputStream.write(line.toByteArray())
                 }
             }

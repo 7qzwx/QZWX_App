@@ -6,6 +6,5 @@ import androidx.room.*
 data class LinkEntity(
     @PrimaryKey(autoGenerate = true) val id : Int = 0,
     val url : String,
-    val iconResId : Int,
     val description : String
 )

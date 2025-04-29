@@ -17,17 +17,29 @@
 
 
 
-
-## 记账功能模块
-### HomePage页面
-- 组件左右padding为12.dp,卡片展示用到了约束布局.
-
-
 # 通知功能：
+
 1. 通知发送时间
-软件会在每天的两个固定时间点自动发送通知：
-早上6:00 - 早晨打卡提醒
-晚上18:00（下午6:00） - 晚间打卡提醒
-这些时间设置在NotificationHelper.kt文件中的setDailyReminder方法中定义；
+  软件会在每天的两个固定时间点自动发送通知：
+  早上6:00 - 早晨打卡提醒
+  晚上18:00（下午6:00） - 晚间打卡提醒
+  这些时间设置在NotificationHelper.kt文件中的setDailyReminder方法中定义；
 2. 通知内容修改位置
-通知内容定义在ReminderReceiver.kt文件中的onReceive方法里。
+  通知内容定义在ReminderReceiver.kt文件中的onReceive方法里。
+
+------
+
+# 与其它APP集合
+
+## QTodo
+
+1. 已单独与QTodo形成关联，点击对应按钮可以跳转对应APP；
+
+
+
+## 
+
+
+
+
+

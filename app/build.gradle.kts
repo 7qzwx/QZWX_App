@@ -1,3 +1,7 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -13,8 +17,8 @@ android {
         applicationId = "com.qzwx.app"
         minSdk = 29
         targetSdk = 35
-        versionCode = 5
-        versionName = "1.1.5"
+        versionCode = 6
+        versionName = "1.1.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -30,6 +34,21 @@ android {
                 "proguard-rules.pro"
             )
         }
+        //自定义打包apk名称
+ applicationVariants.all {
+        val variant = this
+        variant.outputs.map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                val outputFileName =
+                    "QZWX_App${variant.versionName}_${
+                        SimpleDateFormat(
+                            "MMdd",
+                            Locale.getDefault()
+                        ).format(Date())
+                    }.apk"
+                output.outputFileName = outputFileName
+            }
+    }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

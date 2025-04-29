@@ -13,7 +13,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.qzwx.feature_accountbook.AccountBookActivity
 import com.qzwx.feature_diary.DiaryActivity
-import com.qzwx.feature_qiandaosystem.QDXTActivity
 import com.qzwx.feature_wordsmemory.WordsMemoryActivity
 import com.qzwx.qzwxapp.JiSuanQi
 
@@ -113,9 +112,16 @@ private fun buildAppItemsList(
             color = colorScheme.errorContainer,
             textColor = colorScheme.onErrorContainer,
             description = "养成打卡好习惯",
-            onClick = {
-                val intent = Intent(context, QDXTActivity::class.java)
-                context.startActivity(intent)
+           onClick = {
+                try {
+                    // 使用Action启动外部应用
+                    val intent = Intent("com.qzwx.qcheckin.LAUNCH")
+                    context.startActivity(intent)
+                    
+                } catch (e: Exception) {
+                    // 更新提示内容，使用防重复函数
+                    showToastWithDebounce("无法打开，请确定是否下载QCheckIn，可前往GitHub下载！")
+                }
             }
         ),
         AppItem(
