@@ -125,13 +125,20 @@ private fun buildAppItemsList(
             }
         ),
         AppItem(
-            title = "单词本",
+            title = "QWordRecord",
             color = colorScheme.inversePrimary,
             textColor = colorScheme.primary,
-            description = "学习与记忆单词",
-            onClick = {
-                val intent = Intent(context, WordsMemoryActivity::class.java)
-                context.startActivity(intent)
+            description = "记录与记忆单词",
+             onClick = {
+                try {
+                    // 使用Action启动外部应用
+                    val intent = Intent("qzwx.app.QWordRecord.LAUNCH")
+                    context.startActivity(intent)
+
+                } catch (e: Exception) {
+                    // 更新提示内容，使用防重复函数
+                    showToastWithDebounce("无法打开，请确定是否下载QWordRecord，可前往GitHub下载！")
+                }
             }
         ),
         AppItem(
