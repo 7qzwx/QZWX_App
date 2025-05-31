@@ -22,6 +22,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
@@ -223,23 +224,14 @@ fun GridAppCard(app: AppItem) {
                 scaleY = scale
             }
             .pointerInput(Unit) {
-                awaitPointerEventScope {
-                    while (true) {
-                        val event = awaitPointerEvent()
-                        when {
-                            event.type == androidx.compose.ui.input.pointer.PointerEventType.Press -> {
-                                isPressed = true
-                            }
-                            event.type == androidx.compose.ui.input.pointer.PointerEventType.Release -> {
-                                isPressed = false
-                                app.onClick()
-                            }
-                            event.type == androidx.compose.ui.input.pointer.PointerEventType.Exit -> {
-                                isPressed = false
-                            }
-                        }
-                    }
-                }
+                detectTapGestures(
+                    onPress = { 
+                        isPressed = true
+                        tryAwaitRelease()
+                        isPressed = false
+                    },
+                    onTap = { app.onClick() }
+                )
             },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = app.color)
@@ -300,23 +292,14 @@ fun ListAppCard(app: AppItem) {
                 scaleY = scale
             }
             .pointerInput(Unit) {
-                awaitPointerEventScope {
-                    while (true) {
-                        val event = awaitPointerEvent()
-                        when {
-                            event.type == androidx.compose.ui.input.pointer.PointerEventType.Press -> {
-                                isPressed = true
-                            }
-                            event.type == androidx.compose.ui.input.pointer.PointerEventType.Release -> {
-                                isPressed = false
-                                app.onClick()
-                            }
-                            event.type == androidx.compose.ui.input.pointer.PointerEventType.Exit -> {
-                                isPressed = false
-                            }
-                        }
-                    }
-                }
+                detectTapGestures(
+                    onPress = { 
+                        isPressed = true
+                        tryAwaitRelease()
+                        isPressed = false
+                    },
+                    onTap = { app.onClick() }
+                )
             },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = app.color)
@@ -379,23 +362,14 @@ fun StaggeredAppCard(app: AppItem) {
                 scaleY = scale
             }
             .pointerInput(Unit) {
-                awaitPointerEventScope {
-                    while (true) {
-                        val event = awaitPointerEvent()
-                        when {
-                            event.type == androidx.compose.ui.input.pointer.PointerEventType.Press -> {
-                                isPressed = true
-                            }
-                            event.type == androidx.compose.ui.input.pointer.PointerEventType.Release -> {
-                                isPressed = false
-                                app.onClick()
-                            }
-                            event.type == androidx.compose.ui.input.pointer.PointerEventType.Exit -> {
-                                isPressed = false
-                            }
-                        }
-                    }
-                }
+                detectTapGestures(
+                    onPress = { 
+                        isPressed = true
+                        tryAwaitRelease()
+                        isPressed = false
+                    },
+                    onTap = { app.onClick() }
+                )
             },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = app.color)
@@ -430,4 +404,3 @@ fun StaggeredAppCard(app: AppItem) {
         }
     }
 }
-
