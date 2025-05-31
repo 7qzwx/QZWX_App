@@ -1,4 +1,4 @@
-package qzwx.app.core.theme
+package qzwx.app.qzwxapp.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -6,7 +6,8 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.app.core.R
+
+import qzwx.app.qzwxapp.R
 
 val customFontFamily = FontFamily(
     Font(R.font.hw_bold),

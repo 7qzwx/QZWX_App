@@ -32,4 +32,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "七种文学·APP"
 include(":app")
-include(":core")

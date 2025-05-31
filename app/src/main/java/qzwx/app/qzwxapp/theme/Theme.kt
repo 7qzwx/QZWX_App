@@ -1,4 +1,4 @@
-package qzwx.app.core.theme
+package qzwx.app.qzwxapp.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

@@ -11,7 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import qzwx.app.core.QZWXApplication
+import qzwx.app.qzwxapp.QZWXApplication
 import qzwx.app.qzwxapp.JiSuanQi
 
 // 记录上次Toast显示时间

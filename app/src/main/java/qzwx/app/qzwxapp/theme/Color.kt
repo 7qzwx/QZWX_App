@@ -1,4 +1,4 @@
-package qzwx.app.core.theme
+package qzwx.app.qzwxapp.theme
 
 import androidx.compose.ui.graphics.Color
 

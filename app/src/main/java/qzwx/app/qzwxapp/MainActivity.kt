@@ -8,11 +8,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.navigation.compose.rememberNavController
-import qzwx.app.core.theme.QZWX_AppTheme
 import qzwx.app.qzwxapp.navigation.NavGraph
 import qzwx.app.qzwxapp.notification.NotificationChannels
 import qzwx.app.qzwxapp.notification.NotificationHelper
 import qzwx.app.qzwxapp.notification.NotificationPermissionHelper
+import qzwx.app.qzwxapp.theme.QZWX_AppTheme
 
 class MainActivity : ComponentActivity() {
     

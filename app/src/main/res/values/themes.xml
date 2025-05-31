@@ -14,5 +14,6 @@
 
     <style name="Theme.Calculator" parent="Base.Theme.Calculator" />
 
+    <style name="Theme.QZWX_APP" parent="android:Theme.Material.Light.NoActionBar" />
 
 </resources>

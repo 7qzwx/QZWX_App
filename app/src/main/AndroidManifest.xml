@@ -41,12 +41,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
         <!-- 注册通知相关接收器 -->
-        <receiver 
-            android:name=".notification.ReminderReceiver" 
+        <receiver
+            android:name=".notification.ReminderReceiver"
             android:exported="false" />
-            
+
         <receiver
             android:name=".notification.BootReceiver"
             android:exported="true">
