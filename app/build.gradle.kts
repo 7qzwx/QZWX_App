@@ -10,15 +10,15 @@ plugins {
 }
 
 android {
-    namespace = "com.qzwx.qzwxapp"
+    namespace = "qzwx.app.qzwxapp"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.qzwx.app"
+        applicationId = "qzwx.app.qzwxapp"
         minSdk = 29
         targetSdk = 35
-        versionCode = 6
-        versionName = "1.1.6"
+        versionCode = 7
+        versionName = "1.2.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -35,20 +35,20 @@ android {
             )
         }
         //自定义打包apk名称
- applicationVariants.all {
-        val variant = this
-        variant.outputs.map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
-            .forEach { output ->
-                val outputFileName =
-                    "QZWX_App${variant.versionName}_${
-                        SimpleDateFormat(
-                            "MMdd",
-                            Locale.getDefault()
-                        ).format(Date())
-                    }.apk"
-                output.outputFileName = outputFileName
-            }
-    }
+        applicationVariants.all {
+            val variant = this
+            variant.outputs.map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+                .forEach { output ->
+                    val outputFileName =
+                        "QZWX_App_${variant.versionName}_${
+                            SimpleDateFormat(
+                                "MMdd",
+                                Locale.getDefault()
+                            ).format(Date())
+                        }.apk"
+                    output.outputFileName = outputFileName
+                }
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -73,7 +73,4 @@ android {
 dependencies {
     ksp(libs.androidxRoomCompiler)
     implementation(project(":core"))
-    implementation(project(":Feature_Diary"))
-    implementation(project(":Feature_AccountBook"))
-    implementation(project(":feature_wordsmemory"))
 }

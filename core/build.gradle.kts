@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.qzwx.core"
+    namespace = "com.app.core"
     compileSdk = 35
 
     defaultConfig {
@@ -23,6 +23,10 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+    buildTypes {
+        create("applicationVariants") {
+        }
     }
 }
 
