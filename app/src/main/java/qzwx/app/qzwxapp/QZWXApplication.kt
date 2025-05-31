@@ -5,9 +5,9 @@ import android.content.*
 
 class QZWXApplication : Application() {
     companion object {
-        private lateinit var context : Context
+        private lateinit var context: Context
 
-        fun getContext() : Context {
+        fun getContext(): Context {
             return context
         }
     }

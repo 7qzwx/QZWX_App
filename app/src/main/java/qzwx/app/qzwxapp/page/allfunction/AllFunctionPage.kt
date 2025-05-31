@@ -91,11 +91,7 @@ private fun buildAppItemsList(
             textColor = colorScheme.onSecondaryContainer,
             description = "记录生活的点滴",
             onClick = {
-                Toast.makeText(
-                    QZWXApplication.getContext(),
-                    "日记本功能待完善！",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showToastWithDebounce("功能正在开发中")
             }
         ),
         AppItem(
@@ -133,19 +129,19 @@ private fun buildAppItemsList(
             }
         ),
         AppItem(
-            title = "QWordRecord",
+            title = "Q单词本",
             color = colorScheme.inversePrimary,
             textColor = colorScheme.primary,
             description = "记录与记忆单词",
             onClick = {
                 try {
                     // 使用Action启动外部应用
-                    val intent = Intent("qzwx.app.QWordRecord.LAUNCH")
+                    val intent = Intent("qzwx.app.qword.LAUNCH")
                     context.startActivity(intent)
 
                 } catch (e: Exception) {
                     // 更新提示内容，使用防重复函数
-                    showToastWithDebounce("无法打开，请确定是否下载QWordRecord，可前往GitHub下载！")
+                    showToastWithDebounce("无法打开，请确定是否下载，可前往GitHub下载！")
                 }
             }
         ),
