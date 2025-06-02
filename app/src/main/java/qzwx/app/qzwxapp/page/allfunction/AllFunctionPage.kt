@@ -96,10 +96,8 @@ private fun buildAppItemsList(
             }
         ),
         AppItem(
-//            title = "记账本",
             color = colorScheme.tertiaryContainer,
             textColor = colorScheme.onTertiaryContainer,
-//            description = "管理您的财务状况",
             backgroundImage = R.drawable.qaccount, // 添加记账本背景图片
             onClick = {
                 try {
@@ -113,6 +111,7 @@ private fun buildAppItemsList(
                 }
             }
         ),
+
         AppItem(
 //            title = "签到系统",
             color = colorScheme.errorContainer,
@@ -150,10 +149,8 @@ private fun buildAppItemsList(
             }
         ),
         AppItem(
-//            title = "Todo",
             color = colorScheme.surfaceVariant,
             textColor = colorScheme.onSurfaceVariant,
-//            description = "任务清单管理",
             backgroundImage = R.drawable.qtodo, // 添加Todo背景图片
             onClick = {
                 try {
@@ -167,6 +164,22 @@ private fun buildAppItemsList(
             }
         ),
         AppItem(
+            color = colorScheme.tertiaryContainer,
+            textColor = colorScheme.onTertiaryContainer,
+            backgroundImage = R.drawable.qimage, // 添加记账本背景图片
+            onClick = {
+                try {
+                    // 使用Action启动外部应用
+                    val intent = Intent("qzwx.app.qimage.LAUNCH")
+                    context.startActivity(intent)
+
+                } catch (e: Exception) {
+                    // 更新提示内容，使用防重复函数
+                    showToastWithDebounce("无法打开，请确定是否下载QImage，可前往GitHub下载！")
+                }
+            }
+        ),
+        AppItem(
             title = "全部网站",
             color = colorScheme.inverseSurface,
             textColor = colorScheme.inverseOnSurface,
@@ -175,6 +188,7 @@ private fun buildAppItemsList(
                 navController.navigate("AllWebPage")
             }
         )
+
     )
 }
 
