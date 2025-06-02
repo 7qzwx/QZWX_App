@@ -17,8 +17,8 @@ android {
         applicationId = "qzwx.app.qzwxapp"
         minSdk = 29
         targetSdk = 35
-        versionCode = 7
-        versionName = "1.2.1"
+        versionCode = 8
+        versionName = "1.2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -40,12 +40,7 @@ android {
             variant.outputs.map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
                 .forEach { output ->
                     val outputFileName =
-                        "QZWX_App_${variant.versionName}_${
-                            SimpleDateFormat(
-                                "MMdd",
-                                Locale.getDefault()
-                            ).format(Date())
-                        }.apk"
+                        "QZWX_App_${variant.versionName}.apk"
                     output.outputFileName = outputFileName
                 }
         }
@@ -83,6 +78,11 @@ dependencies {
     implementation(libs.calendar.compose) // Compose日历组件
     implementation(libs.accompanist.systemuicontroller.v0301) // Accompanist系统UI控制器
     implementation(libs.accompanist.pager.indicators) // Accompanist分页指示器
+
+    // DataStore 依赖
+    implementation("androidx.datastore:datastore-preferences:1.1.7")
+    implementation("androidx.datastore:datastore-preferences-core:1.1.7")
+
     // AndroidX库
     implementation(libs.constraintlayout.compose)  //约束布局
     implementation(libs.androidx.material.icons.extended) // Material图标扩展
@@ -121,3 +121,4 @@ dependencies {
     // 测试库
     implementation(libs.junit) // JUnit测试框架
 }
+

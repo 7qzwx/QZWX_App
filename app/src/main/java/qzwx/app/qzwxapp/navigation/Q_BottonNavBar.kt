@@ -3,53 +3,36 @@ package qzwx.app.qzwxapp.navigation
 import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,9 +44,7 @@ import kotlinx.coroutines.launch
  * 导航项数据类
  */
 data class NavigationItem(
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val description: String,
+    val icon: ImageVector,
     val route: String
 )
 
@@ -76,21 +57,15 @@ fun MainContent(
     navController: NavController,
     navigationItems: List<NavigationItem> = listOf(
         NavigationItem(
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
-            description = "首页",
+            icon = Icons.Rounded.Home,
             route = "HomePage"
         ),
         NavigationItem(
-            selectedIcon = Icons.Filled.Favorite,
-            unselectedIcon = Icons.Outlined.Favorite,
-            description = "收藏",
+            icon = Icons.Rounded.Favorite,
             route = "MusicPage"
         ),
         NavigationItem(
-            selectedIcon = Icons.Filled.Person,
-            unselectedIcon = Icons.Outlined.Person,
-            description = "个人",
+            icon = Icons.Rounded.Person,
             route = "MyPage"
         )
     ),
@@ -101,22 +76,22 @@ fun MainContent(
     val currentRoute = navBackStackEntry?.destination?.route
 
     // 根据当前路由设置选中的索引
-    val initialPage = when(currentRoute) {
+    val initialPage = when (currentRoute) {
         "HomePage" -> 0
         "MusicPage" -> 1
         "MyPage" -> 2
         else -> 0
     }
-    
+
     // 使用PagerState管理页面状态
     val pagerState = rememberPagerState(
         initialPage = initialPage,
         pageCount = { navigationItems.size }
     )
-    
+
     // 使用协程处理页面切换
     val coroutineScope = rememberCoroutineScope()
-    
+
     // 处理返回按钮直接退出应用
     DisposableEffect(Unit) {
         val activity = navController.context as? ComponentActivity
@@ -125,99 +100,125 @@ fun MainContent(
                 activity?.finish()
             }
         }
-        
+
         activity?.onBackPressedDispatcher?.addCallback(callback)
-        
+
         onDispose {
             callback.remove()
         }
     }
-    
+
     // 当导航变化时，更新Pager页面
     LaunchedEffect(currentRoute) {
-        val newIndex = when(currentRoute) {
+        val newIndex = when (currentRoute) {
             "HomePage" -> 0
             "MusicPage" -> 1
             "MyPage" -> 2
             else -> null
         }
-        
+
         if (newIndex != null && newIndex != pagerState.currentPage) {
             pagerState.animateScrollToPage(newIndex)
         }
     }
 
-    Column(
+    // 使用Surface确保整个屏幕应用正确的背景颜色
+    Surface(
+        color = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize()
     ) {
-        // 内容区域
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-        ) {
-            // 滑动页面
+        Box(modifier = Modifier.fillMaxSize()) {
+            // 内容区域 - 添加底部padding以避免内容被导航栏遮挡
             HorizontalPager(
                 state = pagerState,
-                modifier = Modifier.fillMaxSize()
+                // 添加底部padding，确保内容不会被导航栏遮挡
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 70.dp)
             ) { page ->
                 content(page)
             }
-        }
-        
-        // 底部导航栏
-        ModernBottomNavigation(
-            pagerState = pagerState,
-            navigationItems = navigationItems,
-            onTabSelected = { index ->
+
+            // 底部导航栏 - 缩小宽度，调整padding使其紧贴按钮
+            BlurredBottomNavigation(
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .width(270.dp)  // 缩小导航栏宽度
+                    .height(65.dp)  // 控制导航栏高度
+                    .align(Alignment.BottomCenter),
+                pagerState = pagerState,
+                items = navigationItems
+            ) { index ->
                 coroutineScope.launch {
                     pagerState.animateScrollToPage(index)
                 }
-                
-                // 移除路由导航，仅保留页面滑动切换
-                // navController.navigate(navigationItems[index].route) {
-                //     popUpTo(navController.graph.startDestinationId) {
-                //         saveState = true
-                //     }
-                //     launchSingleTop = true
-                //     restoreState = true
-                // }
             }
-        )
+        }
     }
 }
 
 /**
- * 现代风格底部导航栏
+ * 带高斯模糊效果的底部导航栏
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ModernBottomNavigation(
+fun BlurredBottomNavigation(
+    modifier: Modifier = Modifier,
     pagerState: PagerState,
-    navigationItems: List<NavigationItem>,
-    onTabSelected: (Int) -> Unit
+    items: List<NavigationItem>,
+    onItemClick: (Int) -> Unit
 ) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colorScheme.background,
-        tonalElevation = 8.dp,
-        shadowElevation = 8.dp,
+    val selectedIndex = pagerState.currentPage
+    val density = LocalDensity.current
+    val dcolor0f = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
+    val dcolor1f = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.9f)
+    val hcolor0f = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+    // 高斯模糊背景的导航栏
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(28.dp))
+            .graphicsLayer {
+                this.alpha = 0.9f  // 增加一点透明度效果
+            }
+            // 创建模糊效果背景
+            .drawWithCache {
+                onDrawWithContent {
+                    // 创建带梯度的背景，模拟模糊效果
+                    val gradient = Brush.verticalGradient(
+                        0f to dcolor0f,
+                        1f to dcolor1f,
+                        tileMode = TileMode.Clamp
+                    )
+
+                    // 绘制渐变背景
+                    drawRect(gradient)
+
+                    // 添加高光效果增强视觉体感
+                    val highlightGradient = Brush.radialGradient(
+                        0f to hcolor0f,
+                        1f to Color.Transparent,
+                        radius = size.width * 0.8f,
+                        center = center.copy(y = 0f)
+                    )
+                    drawRect(highlightGradient, blendMode = BlendMode.SrcOver)
+
+                    // 绘制内容
+                    drawContent()
+                }
+            }
+            .padding(horizontal = 8.dp, vertical = 8.dp)  // 减小内边距，使导航栏更紧凑
     ) {
+        // 导航项容器
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-                .height(64.dp)
-                .clip(RoundedCornerShape(32.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f)),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
+            horizontalArrangement = Arrangement.SpaceEvenly,  // 改为SpaceEvenly使按钮均匀紧凑排列
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            navigationItems.forEachIndexed { index, item ->
-                ModernNavItem(
+            items.forEachIndexed { index, item ->
+                NavItem(
                     item = item,
-                    isSelected = pagerState.currentPage == index,
-                    onSelected = { onTabSelected(index) }
+                    isSelected = index == selectedIndex,
+                    onClick = { onItemClick(index) }
                 )
             }
         }
@@ -225,95 +226,67 @@ fun ModernBottomNavigation(
 }
 
 /**
- * 现代风格导航项
+ * 单个导航项
  */
 @Composable
-fun ModernNavItem(
+fun NavItem(
     item: NavigationItem,
     isSelected: Boolean,
-    onSelected: () -> Unit
+    onClick: () -> Unit
 ) {
-    val scale by animateFloatAsState(
-        targetValue = if (isSelected) 1.2f else 1f,
-        animationSpec = spring(
-            dampingRatio = 0.6f,
-            stiffness = Spring.StiffnessLow
-        ),
-        label = "scaleAnimation"
+    // 移除缩放动画，只保留透明度动画
+    val textAlpha by animateFloatAsState(
+        targetValue = if (isSelected) 1f else 0.6f,
+        animationSpec = tween(300),
+        label = "text_alpha"
     )
 
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
         modifier = Modifier
-            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .width(60.dp)  // 减小导航项宽度
+            .clip(RoundedCornerShape(16.dp))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
-                onClick = onSelected
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally
+                onClick = onClick
+            )
     ) {
+        // 图标
         Box(
-            modifier = Modifier
-                .size(48.dp)
-                .background(
-                    color = if (isSelected) 
-                        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f)
-                    else
-                        Color.Transparent,
-                    shape = CircleShape
-                ),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
         ) {
+            // 选中状态的背景光效
+            if (isSelected) {
+                Box(
+                    modifier = Modifier
+                        .size(28.dp)  // 减小背景光效大小
+                        .background(
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                            RoundedCornerShape(8.dp)
+                        )
+                )
+            }
+
             Icon(
-                imageVector = if (isSelected) item.selectedIcon else item.unselectedIcon,
-                contentDescription = item.description,
-                tint = if (isSelected) 
-                    MaterialTheme.colorScheme.primary 
-                else 
-                    MaterialTheme.colorScheme.onSurfaceVariant,
+                imageVector = item.icon,
+                contentDescription = null,
+                tint = if (isSelected)
+                    MaterialTheme.colorScheme.primary
+                else
+                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                 modifier = Modifier
-                    .size(24.dp)
-                    .scale(scale)
+                    .size(22.dp)  // 减小图标大小
             )
         }
-        
-        // 只在选中时显示文字
-        AnimatedVisibility(visible = isSelected) {
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = item.description,
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.Bold,
-                fontSize = 10.sp
-            )
-        }
+
     }
 }
-
-/**
- * 可点击修饰符（无涟漪效果）
- */
-@Composable
-@SuppressLint("ModifierFactoryUnreferencedReceiver")
-fun Modifier.noRippleClickable(
-    onClick: () -> Unit
-) = clickable(
-    interactionSource = remember { MutableInteractionSource() },
-    indication = null,
-    onClick = onClick
-)
 
 /**
  * 旋转修饰符
  */
 fun Modifier.rotate(degrees: Float) = graphicsLayer(rotationZ = degrees)
 
-/**
- * 示例用法：
- *
- * @Composable
- * fun MyApp() {
- *     MainContent()
- * }
- */

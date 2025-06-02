@@ -68,9 +68,9 @@ object NotificationHelper {
         }
 
         if (enabled) {
-            // 设置早上 6 点提醒
+            // 设置早上 8 点提醒
             val morningCalendar = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, 6)
+                set(Calendar.HOUR_OF_DAY, 8)
                 set(Calendar.MINUTE, 0)
                 set(Calendar.SECOND, 0)
                 if (timeInMillis < System.currentTimeMillis()) {
@@ -105,9 +105,9 @@ object NotificationHelper {
                 Toast.makeText(context, "设置早上提醒失败: ${e.message}", Toast.LENGTH_SHORT).show()
             }
 
-            // 设置晚上 6 点提醒
+            // 设置晚上 8 点提醒
             val eveningCalendar = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, 18)
+                set(Calendar.HOUR_OF_DAY, 20)
                 set(Calendar.MINUTE, 0)
                 set(Calendar.SECOND, 0)
                 if (timeInMillis < System.currentTimeMillis()) {
@@ -239,7 +239,7 @@ object NotificationHelper {
         val notification = NotificationCompat.Builder(
             context,
             NotificationChannels.REMINDER_CHANNEL_ID
-        ).setSmallIcon(com.app.core.R.drawable.qzxt_qdxt)
+        ).setSmallIcon(qzwx.app.qzwxapp.R.drawable.svg_gerenwangye)
             .setContentTitle(title)
             .setContentText(content)
             .setContentIntent(pendingIntent)  // 添加点击操作
@@ -261,3 +261,4 @@ object NotificationHelper {
         }
     }
 }
+

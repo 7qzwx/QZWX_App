@@ -27,6 +27,11 @@ import androidx.compose.ui.text.font.*
 import androidx.compose.ui.text.style.*
 import androidx.compose.ui.unit.*
 import kotlin.random.Random
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import qzwx.app.qzwxapp.R
 
 // 展示模式枚举
 enum class DisplayMode {
@@ -35,11 +40,12 @@ enum class DisplayMode {
 
 // 应用项数据类
 data class AppItem(
-    val title: String,
+    val title: String?="",
     val color: Color,
     val textColor: Color,
-    val description: String,
-    val onClick: () -> Unit
+    val description: String?="",
+    val onClick: () -> Unit,
+    val backgroundImage: Int? = null
 )
 
 /**
@@ -71,7 +77,6 @@ fun FunctionTopBar(
             }
         },
         actions = {
-            // 列表视图按钮
             IconButton(
                 onClick = { onModeChange(DisplayMode.LIST) },
                 colors = IconButtonDefaults.iconButtonColors(
@@ -87,7 +92,6 @@ fun FunctionTopBar(
                 )
             }
             
-            // 网格视图按钮
             IconButton(
                 onClick = { onModeChange(DisplayMode.GRID) },
                 colors = IconButtonDefaults.iconButtonColors(
@@ -103,7 +107,6 @@ fun FunctionTopBar(
                 )
             }
             
-            // 瀑布流视图按钮
             IconButton(
                 onClick = { onModeChange(DisplayMode.STAGGERED) },
                 colors = IconButtonDefaults.iconButtonColors(
@@ -136,7 +139,6 @@ fun FunctionContent(
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
-        // 列表视图
         AnimatedVisibility(
             visible = currentDisplayMode == DisplayMode.LIST,
             enter = fadeIn(),
@@ -155,7 +157,6 @@ fun FunctionContent(
             }
         }
         
-        // 网格视图
         AnimatedVisibility(
             visible = currentDisplayMode == DisplayMode.GRID,
             enter = fadeIn(),
@@ -176,7 +177,6 @@ fun FunctionContent(
             }
         }
         
-        // 瀑布流视图
         AnimatedVisibility(
             visible = currentDisplayMode == DisplayMode.STAGGERED,
             enter = fadeIn(),
@@ -218,7 +218,7 @@ fun GridAppCard(app: AppItem) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(130.dp)
+            .aspectRatio(1f)
             .graphicsLayer {
                 scaleX = scale
                 scaleY = scale
@@ -234,35 +234,58 @@ fun GridAppCard(app: AppItem) {
                 )
             },
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = app.color)
+        colors = CardDefaults.cardColors(
+            containerColor = if (app.backgroundImage == null) app.color else Color.Transparent
+        )
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = app.title,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = app.textColor
-                ),
-                textAlign = TextAlign.Center
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            Text(
-                text = app.description,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = app.textColor.copy(alpha = 0.8f)
-                ),
-                textAlign = TextAlign.Center,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (app.backgroundImage != null) {
+                Image(
+                    painter = painterResource(id = app.backgroundImage),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.4f))
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                app.title?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = app.textColor
+                        ),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                app.description?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = app.textColor.copy(alpha = 0.8f)
+                        ),
+                        textAlign = TextAlign.Center,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
         }
     }
 }
@@ -302,32 +325,55 @@ fun ListAppCard(app: AppItem) {
                 )
             },
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = app.color)
+        colors = CardDefaults.cardColors(
+            containerColor = if (app.backgroundImage == null) app.color else Color.Transparent
+        )
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = app.title,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = app.textColor
-                ),
-                modifier = Modifier.weight(1f)
-            )
-            
-            Text(
-                text = app.description,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = app.textColor.copy(alpha = 0.8f)
-                ),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(start = 8.dp)
-            )
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (app.backgroundImage != null) {
+                Image(
+                    painter = painterResource(id = app.backgroundImage),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.4f))
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                app.title?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = app.textColor
+                        ),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                app.description?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = app.textColor.copy(alpha = 0.8f)
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+            }
         }
     }
 }
@@ -338,11 +384,6 @@ fun ListAppCard(app: AppItem) {
 @Composable
 fun StaggeredAppCard(app: AppItem) {
     var isPressed by remember { mutableStateOf(false) }
-    
-    // 为瀑布流创建随机高度
-    val randomHeight = remember {
-        100 + Random.nextInt(80, 150)
-    }
     
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.95f else 1f,
@@ -356,7 +397,7 @@ fun StaggeredAppCard(app: AppItem) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(randomHeight.dp)
+            .aspectRatio(1f)
             .graphicsLayer {
                 scaleX = scale
                 scaleY = scale
@@ -372,35 +413,58 @@ fun StaggeredAppCard(app: AppItem) {
                 )
             },
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = app.color)
+        colors = CardDefaults.cardColors(
+            containerColor = if (app.backgroundImage == null) app.color else Color.Transparent
+        )
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = app.title,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = app.textColor
-                ),
-                textAlign = TextAlign.Center
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            Text(
-                text = app.description,
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = app.textColor.copy(alpha = 0.8f)
-                ),
-                textAlign = TextAlign.Center,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis
-            )
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (app.backgroundImage != null) {
+                Image(
+                    painter = painterResource(id = app.backgroundImage),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.4f))
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                app.title?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.titleLarge.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = app.textColor
+                        ),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                app.description?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = app.textColor.copy(alpha = 0.8f)
+                        ),
+                        textAlign = TextAlign.Center,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+            }
         }
     }
 }

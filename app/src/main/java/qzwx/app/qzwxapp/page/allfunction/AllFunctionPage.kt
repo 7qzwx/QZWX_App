@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import qzwx.app.qzwxapp.QZWXApplication
 import qzwx.app.qzwxapp.JiSuanQi
+import qzwx.app.qzwxapp.R
 
 // 记录上次Toast显示时间
 private var lastToastTime = 0L
@@ -95,10 +96,11 @@ private fun buildAppItemsList(
             }
         ),
         AppItem(
-            title = "记账本",
+//            title = "记账本",
             color = colorScheme.tertiaryContainer,
             textColor = colorScheme.onTertiaryContainer,
-            description = "管理您的财务状况",
+//            description = "管理您的财务状况",
+            backgroundImage = R.drawable.qaccount, // 添加记账本背景图片
             onClick = {
                 try {
                     // 使用Action启动外部应用
@@ -112,10 +114,11 @@ private fun buildAppItemsList(
             }
         ),
         AppItem(
-            title = "签到系统",
+//            title = "签到系统",
             color = colorScheme.errorContainer,
             textColor = colorScheme.onErrorContainer,
-            description = "养成打卡好习惯",
+//            description = "养成打卡好习惯",
+            backgroundImage = R.drawable.qcheckin, // 添加签到系统背景图片
             onClick = {
                 try {
                     // 使用Action启动外部应用
@@ -129,10 +132,11 @@ private fun buildAppItemsList(
             }
         ),
         AppItem(
-            title = "Q单词本",
+//            title = "Q单词本",
             color = colorScheme.inversePrimary,
             textColor = colorScheme.primary,
-            description = "记录与记忆单词",
+//            description = "记录与记忆单词",
+            backgroundImage = R.drawable.qword, // 添加Q单词本背景图片
             onClick = {
                 try {
                     // 使用Action启动外部应用
@@ -146,10 +150,11 @@ private fun buildAppItemsList(
             }
         ),
         AppItem(
-            title = "Todo",
+//            title = "Todo",
             color = colorScheme.surfaceVariant,
             textColor = colorScheme.onSurfaceVariant,
-            description = "任务清单管理",
+//            description = "任务清单管理",
+            backgroundImage = R.drawable.qtodo, // 添加Todo背景图片
             onClick = {
                 try {
                     // 使用Action启动外部应用

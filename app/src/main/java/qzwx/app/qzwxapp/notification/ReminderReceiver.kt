@@ -14,20 +14,21 @@ import androidx.core.app.NotificationManagerCompat
 import java.util.Calendar
 
 class ReminderReceiver : BroadcastReceiver() {
-    @SuppressLint("ServiceCast",
-                  "ScheduleExactAlarm",
-                  "MissingPermission"
+    @SuppressLint(
+        "ServiceCast",
+        "ScheduleExactAlarm",
+        "MissingPermission"
     )
-    override fun onReceive(context : Context, intent : Intent) {
+    override fun onReceive(context: Context, intent: Intent) {
         // 判断通知类型，早晚显示不同内容
         val notificationType = intent.getStringExtra("notification_type") ?: "morning"
         val title = "打卡提醒"
         val content = if (notificationType == "morning") {
-            "早上好！开始新的一天，请记得打卡签到！"
+            "七种文学提醒您：新的一天开始啦！今天又是元气满满的一天哦~"
         } else {
-            " 下午了哦，别忘了完成今天的打卡签到！"
+            "七种文学提醒您：已经很晚了哦！好好休息吧，我会一直陪着你嘟~"
         }
-         
+
         // 创建启动应用的意图
         val launchIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)
         val pendingIntent = PendingIntent.getActivity(
@@ -36,9 +37,9 @@ class ReminderReceiver : BroadcastReceiver() {
             launchIntent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
-        
+
         val notificationManager = NotificationManagerCompat.from(context)
-        
+
         if (notificationManager.areNotificationsEnabled()) {
             val notification = NotificationCompat.Builder(
                 context,
@@ -51,7 +52,7 @@ class ReminderReceiver : BroadcastReceiver() {
                 .setCategory(NotificationCompat.CATEGORY_REMINDER) // 设置为提醒类别
                 .setAutoCancel(true)
                 .build()
-                
+
             try {
                 notificationManager.notify(
                     if (notificationType == "morning") 0 else 1,
@@ -67,7 +68,7 @@ class ReminderReceiver : BroadcastReceiver() {
                 }
             }
         }
-        
+
         // 设置下一次通知，确保即使应用关闭也能继续接收通知
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val nextIntent = Intent(context, ReminderReceiver::class.java).apply {
@@ -83,17 +84,17 @@ class ReminderReceiver : BroadcastReceiver() {
         // 正确设置24小时后的同一时间点
         val nextCalendar = Calendar.getInstance().apply {
             add(Calendar.DAY_OF_YEAR, 1) // 添加一天
-            
+
             // 根据通知类型设置正确的小时
             if (notificationType == "morning") {
-                set(Calendar.HOUR_OF_DAY, 6)
+                set(Calendar.HOUR_OF_DAY, 8)
             } else {
-                set(Calendar.HOUR_OF_DAY, 18)
+                set(Calendar.HOUR_OF_DAY, 23)
             }
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
         }
-        
+
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (alarmManager.canScheduleExactAlarms()) {
@@ -118,10 +119,12 @@ class ReminderReceiver : BroadcastReceiver() {
         } catch (e: Exception) {
             e.printStackTrace()
             try {
-                Toast.makeText(context, "设置下一次通知失败: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "设置下一次通知失败: ${e.message}", Toast.LENGTH_SHORT)
+                    .show()
             } catch (e2: Exception) {
                 e2.printStackTrace()
             }
         }
     }
 }
+

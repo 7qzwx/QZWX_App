@@ -10,7 +10,7 @@ import qzwx.app.qzwxapp.data.WebAppDatabase
 import qzwx.app.qzwxapp.page.allfunction.AllFunctionPage
 import qzwx.app.qzwxapp.page.allweb.AllWebPage
 import qzwx.app.qzwxapp.page.home.HomePage
-import qzwx.app.qzwxapp.ui.MyPage
+import qzwx.app.qzwxapp.page.mypage.MyPage
 import qzwx.app.qzwxapp.viewmodel.LinkViewModel
 
 
@@ -26,12 +26,12 @@ fun NavGraph(navController: NavHostController) {
         composable("SplashPage") {
             SplashPage(navController)
         }
-        
+
         // 主屏幕容器 - 包含底部导航和所有主要页面
         composable("MainScreen") {
             MainScreen(navController)
         }
-        
+
         // 全部网站页面
         composable("AllWebPage") {
             val context = navController.context
@@ -39,7 +39,7 @@ fun NavGraph(navController: NavHostController) {
             val linkViewModel = LinkViewModel(linkDao)
             AllWebPage(linkViewModel, navController)
         }
-        
+
         // 深层链接或外部导航的目标路由
         // 注意：这些路由通常不会从MainScreen内部导航到
         // 而是从外部或通知等入口进入
@@ -59,8 +59,8 @@ fun MainScreen(navController: NavHostController) {
         navController = navController
     ) { page ->
         when (page) {
-            0 -> HomePage()
-            1 -> AllFunctionPage(navController)
+            0 -> AllFunctionPage(navController)
+            1 -> HomePage()
             2 -> MyPage(navController)
         }
     }
